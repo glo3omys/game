@@ -6,13 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/pg_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        tools:ignore="MissingConstraints" />
+
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0초"
+        android:textSize="40dp"
+        android:id="@+id/time_tv"
+        app:layout_constraintTop_toBottomOf="@id/pg_bar"
+        android:gravity="center_horizontal"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/time_tv"
+        tools:ignore="MissingConstraints"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:text="0"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/cnt_tv"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cnt_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignBottom="@+id/cnt_tv"
+            android:text="CLICK"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:id="@+id/radioGroup"
+            tools:ignore="MissingConstraints">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_10"
+                android:text="10초"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_20"
+                android:text="20초"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_30"
+                android:text="30초"/>
+
+        </RadioGroup>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/startBtn"
+            android:text="START"
+            android:layout_toRightOf="@+id/radioGroup"
+            android:layout_marginLeft="50dp"
+            tools:ignore="MissingConstraints" />
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

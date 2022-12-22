@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.databinding.ActivityTaptapBinding
 import java.util.*
@@ -34,13 +36,17 @@ class TaptapActivity : AppCompatActivity() {
         mBinding = ActivityTaptapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val countTextView = binding.cntTv
-        val secTextView = binding.timeTv
+        val countTextView = binding.tvCnt
+        val secTextView = binding.tvTime
 
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
 
-        binding.cntButton.setOnClickListener {
+        binding.btnHome.setOnClickListener {
+            val nextIntent = Intent(this, MainActivity::class.java)
+            startActivity(nextIntent)
+        }
+        binding.btnCnt.setOnClickListener {
             cnt += 1
             countTextView.text = cnt.toString()
         }
@@ -50,44 +56,55 @@ class TaptapActivity : AppCompatActivity() {
                 R.id.sec_20 -> time = 20
                 R.id.sec_30 -> time = 30
             }
+            if (binding.radioGroup.checkedRadioButtonId != -1)
+                binding.btnStart.isEnabled = true
         }
-        binding.startBtn.setOnClickListener {
+        binding.btnStart.setOnClickListener {
             if (binding.radioGroup.checkedRadioButtonId == -1)
                 Toast.makeText(this@TaptapActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else
-                startTimer(mDialogView, mBuilder)
+            else {
+                time *= 100
+                binding.pgBar.max = time
+                binding.btnPause.isEnabled = true
+                binding.btnStart.isEnabled = false
+                //startTimer(mDialogView, mBuilder)
+                runTimer(mDialogView, mBuilder)
+            }
         }
-        binding.rstBtn.setOnClickListener() {
+        binding.btnReset.setOnClickListener() {
+            cnt = 0
+            time = 0
             stopTimer()
         }
+        binding.btnPause.setOnClickListener {
+            pauseTimer(mDialogView, mBuilder)
+        }
+    }
 
+    private fun pauseTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+        var pauseBtn = binding.btnPause
+        if (pauseBtn.text == "PAUSE") {
+            pauseBtn.text = "PLAY"
+            timerTask?.cancel()
+            binding.btnCnt.isEnabled = false
+            //binding.cntButton.isVisible = false
+        }
+        else {
+            //binding.cntButton.isVisible = true
+            pauseBtn.text = "PAUSE"
+            runTimer(mDialogView, mBuilder)
+        }
     }
 
     private fun stopTimer() {
-        val countTextView = binding.cntTv
-        val secTextView = binding.timeTv
-        val progressBar = binding.pgBar
-
-        cnt = 0
-        time = 0
-
-        //countTextView.setText("0")
-        //secTextView.setText("0초")
         timerTask?.cancel()
-        binding.radioGroup.clearCheck()
-        countTextView.text = "0"
-        secTextView.text = "0초"
+        init()
     }
 
-    private fun startTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
-        val countTextView = binding.cntTv
-        val secTextView = binding.timeTv
+    private fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+        binding.btnCnt.isEnabled = true
+        val secTextView = binding.tvTime
         val progressBar = binding.pgBar
-
-        countTextView.text = "0"
-        //time = binding.radioGroup.checkedRadioButtonId
-        time *= 100
-        progressBar.max = time
 
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
@@ -100,23 +117,37 @@ class TaptapActivity : AppCompatActivity() {
             }
             if (time <= 0) {
                 runOnUiThread {
+                    //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
+
                     secTextView.text = "0초"
                     timerTask?.cancel()
-                    time = 0
-                    binding.radioGroup.clearCheck()
 
-                    mDialogView.findViewById<TextView>(R.id.tv_score).setText(cnt.toString())
+                    //mDialogView.findViewById<TextView>(R.id.tv_score).setText(cnt.toString())
+                    mDialogView.findViewById<TextView>(R.id.tv_score).text = cnt.toString()
                     mBuilder.setView(mDialogView)
                         .setTitle("Score")
 
                     var mAlertDialog = mBuilder.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
                     okButton.setOnClickListener {
-                        cnt = 0
+                        init()
                         mAlertDialog.dismiss()
                     }
                 }
             }
         }
+    }
+
+    private fun init() {
+        time = 0
+        cnt = 0
+        binding.radioGroup.clearCheck()
+        binding.tvCnt.text = "0"
+        binding.tvTime.text = "0초"
+        binding.btnPause.text = "PAUSE"
+        binding.btnPause.isEnabled = false
+        binding.btnCnt.isEnabled = false
+        binding.btnStart.isEnabled = false
+        timerTask?.cancel()
     }
 }

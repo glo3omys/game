@@ -26,6 +26,7 @@
                 android:value="" />
         </activity>
         <activity android:name=".TaptapActivity"/>
+        <activity android:name=".BalloonActivity"/>
     </application>
 
 </manifest>

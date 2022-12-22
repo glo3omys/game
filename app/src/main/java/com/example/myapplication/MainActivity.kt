@@ -18,5 +18,10 @@ class MainActivity : AppCompatActivity() {
             val nextIntent = Intent(this, TaptapActivity::class.java)
             startActivity(nextIntent)
         }
+        val balloonbtn = findViewById<Button>(R.id.goto_balloon)
+        balloonbtn.setOnClickListener {
+            val nextIntent = Intent(this, BalloonActivity::class.java)
+            startActivity(nextIntent)
+        }
     }
 }

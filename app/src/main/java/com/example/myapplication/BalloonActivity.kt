@@ -36,36 +36,13 @@ class BalloonActivity: AppCompatActivity() {
 
     private fun initRecycler() {
         binding.rvBalloon.adapter = balloonAdapter
-        val range = (1..5)
-        for (i in 1..16) {
-            datas.apply { add(BalloonData(name = range.random())) }
-        }
+
         datas.apply {
+            val range = (1..5)
+            for (i in 1..16) {
+               add(BalloonData(name = range.random())) }
             balloonAdapter.datas = datas
             balloonAdapter.notifyDataSetChanged()
         }
-        /*datas.apply {
-            add(BalloonData(name = 1))
-            add(BalloonData(name = 2))
-            add(BalloonData(name = 3))
-            add(BalloonData(name = 4))
-            add(BalloonData(name = 5))
-            add(BalloonData(name = 6))
-            add(BalloonData(name = 7))
-            add(BalloonData(name = 8))
-            add(BalloonData(name = 9))
-            add(BalloonData(name = 10))
-            add(BalloonData(name = 11))
-            add(BalloonData(name = 12))
-            add(BalloonData(name = 13))
-            add(BalloonData(name = 14))
-            add(BalloonData(name = 15))
-            add(BalloonData(name = 16))
-
-            balloonAdapter.datas = datas
-            balloonAdapter.notifyDataSetChanged()
-        }
-
-         */
     }
 }

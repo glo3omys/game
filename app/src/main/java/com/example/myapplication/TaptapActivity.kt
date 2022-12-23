@@ -11,7 +11,8 @@ import android.widget.ProgressBar
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+//import androidx.appcompat.app.AlertDialog
+import android.app.AlertDialog
 import androidx.core.view.isVisible
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.databinding.ActivityTaptapBinding
@@ -27,6 +28,7 @@ class TaptapActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var cnt = 0
+    var isOver = false
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +43,9 @@ class TaptapActivity : AppCompatActivity() {
 
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
-
+        mBuilder.setView(mDialogView)
+            .setTitle("Score")
+        mAlertDialog =  mBuilder.create()
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
@@ -101,7 +105,7 @@ class TaptapActivity : AppCompatActivity() {
         init()
     }
 
-    private fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+    fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
         binding.btnCnt.isEnabled = true
         val secTextView = binding.tvTime
         val progressBar = binding.pgBar
@@ -115,24 +119,20 @@ class TaptapActivity : AppCompatActivity() {
                 secTextView.text = "$sec" + "초"
                 progressBar.progress = time
             }
-            if (time <= 0) {
+            if (time <= 0 && !isOver) {
+                isOver = true
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
-
                     secTextView.text = "0초"
-                    timerTask?.cancel()
-
-                    //mDialogView.findViewById<TextView>(R.id.tv_score).setText(cnt.toString())
                     mDialogView.findViewById<TextView>(R.id.tv_score).text = cnt.toString()
-                    mBuilder.setView(mDialogView)
-                        .setTitle("Score")
 
-                    var mAlertDialog = mBuilder.show()
+                    mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
                     okButton.setOnClickListener {
                         init()
                         mAlertDialog.dismiss()
                     }
+                    timerTask?.cancel()
                 }
             }
         }
@@ -141,6 +141,7 @@ class TaptapActivity : AppCompatActivity() {
     private fun init() {
         time = 0
         cnt = 0
+        isOver = false
         binding.radioGroup.clearCheck()
         binding.tvCnt.text = "0"
         binding.tvTime.text = "0초"

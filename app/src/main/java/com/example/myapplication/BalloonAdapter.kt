@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class BalloonAdapter(private val context: Context) :
@@ -29,11 +30,10 @@ class BalloonAdapter(private val context: Context) :
             4 -> holder.itemView.setBackgroundColor(Color.GREEN)
             5 -> holder.itemView.setBackgroundColor(Color.YELLOW)
         }
-        /*holder.itemView.setOnClickListener() {
-
+        holder.itemView.setOnClickListener() {
+            /* compare color, score++ */
+            Toast.makeText(this.context, position.toString(), Toast.LENGTH_SHORT).show()
         }
-
-         */
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

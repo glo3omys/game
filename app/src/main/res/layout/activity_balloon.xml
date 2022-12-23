@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="30dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+
         tools:listitem="@layout/balloon_recycler"
         app:layout_constraintTop_toBottomOf="@+id/btn_home"
         tools:ignore="MissingConstraints" />

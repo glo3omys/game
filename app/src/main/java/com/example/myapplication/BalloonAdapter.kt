@@ -1,18 +1,16 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class BalloonAdapter(private val context: Context) :
+//class BalloonAdapter(private val context: Context) :
+class BalloonAdapter(private val context: BalloonActivity) :
     RecyclerView.Adapter<BalloonAdapter.ViewHolder>()
 {
-
     var datas = mutableListOf<BalloonData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,24 +21,28 @@ class BalloonAdapter(private val context: Context) :
     override fun getItemCount(): Int = datas.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position], position)
-        when (datas[position].name) {
-            1 -> holder.itemView.setBackgroundColor(Color.RED)
-            2 -> holder.itemView.setBackgroundColor(Color.BLUE)
-            3 -> holder.itemView.setBackgroundColor(Color.GRAY)
-            4 -> holder.itemView.setBackgroundColor(Color.GREEN)
-            5 -> holder.itemView.setBackgroundColor(Color.YELLOW)
+        when (datas[position].name.toString()) {
+            "RED" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.RED.RGB.toString()))
+            "ORANGE" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.ORANGE.RGB.toString()))
+            "YELLOW" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.YELLOW.RGB.toString()))
+            "GREEN" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.GREEN.RGB.toString()))
+            "BLUE" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.BLUE.RGB.toString()))
         }
+
         holder.itemView.setOnClickListener() {
             /* compare color, score++ */
-            Toast.makeText(this.context, position.toString(), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this.context, position.toString(), Toast.LENGTH_SHORT).show()
+            holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.BLACK.RGB.toString()))
+            context.popBalloon(datas[position].name)
         }
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val balloon: Button = itemView.findViewById(R.id.btn_rv)
         fun bind(item: BalloonData, position: Int) {
-            balloon.text = item.name.toString()
+            balloon.text = item.name
         }
+
     }
 
 }

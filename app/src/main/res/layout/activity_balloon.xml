@@ -6,23 +6,155 @@
     android:layout_height="match_parent"
     tools:context=".BalloonActivity">
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/pg_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        tools:ignore="MissingConstraints" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/pg_bar"
+        android:id="@+id/tv_time_score"
+        android:gravity="center_horizontal"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0초"
+            android:textSize="40dp"
+            android:id="@+id/tv_time"
+            android:layout_margin="15dp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:text="SCORE: 0"
+            android:id="@+id/tv_cnt"
+            android:layout_toRightOf="@id/tv_time"
+            android:layout_margin="15dp"
+            tools:ignore="MissingConstraints" />
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAUSE"
+        android:id="@+id/btn_pause"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@id/tv_time_score"
+        android:gravity="center_horizontal"
+        tools:ignore="MissingConstraints" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="HOME"
         android:id="@+id/btn_home"
+        app:layout_constraintTop_toBottomOf="@+id/btn_pause"
         tools:ignore="MissingConstraints" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/tv_balloon_quest"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_score"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_balloon1"
+            android:textSize="40dp"
+            android:text="..."
+            android:gravity="center_horizontal"
+            android:layout_margin="15dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_balloon2"
+            android:textSize="40dp"
+            android:text="..."
+            android:gravity="center_horizontal"
+            android:layout_toRightOf="@+id/tv_balloon1"
+            android:layout_margin="15dp"
+            />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_balloon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
+        android:visibility="gone"
 
-        tools:listitem="@layout/balloon_recycler"
         app:layout_constraintTop_toBottomOf="@+id/btn_home"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/balloon_recycler" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:id="@+id/radioGroup"
+            tools:ignore="MissingConstraints">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_10"
+                android:text="10초"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_20"
+                android:text="20초"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sec_30"
+                android:text="30초"/>
+
+        </RadioGroup>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/btn_start"
+            android:text="START"
+            android:enabled="false"
+            android:layout_toRightOf="@+id/radioGroup"
+            android:layout_marginLeft="30dp"
+            tools:ignore="MissingConstraints" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/btn_reset"
+            android:text="RESET"
+            android:layout_toRightOf="@+id/btn_start"
+            />
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

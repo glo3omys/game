@@ -49,7 +49,7 @@ class BalloonActivity: AppCompatActivity() {
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvBalloon.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
+        var mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")

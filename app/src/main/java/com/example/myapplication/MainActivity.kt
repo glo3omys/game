@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +20,11 @@ class MainActivity : AppCompatActivity() {
         val balloonbtn = findViewById<Button>(R.id.goto_balloon)
         balloonbtn.setOnClickListener {
             val nextIntent = Intent(this, BalloonActivity::class.java)
+            startActivity(nextIntent)
+        }
+        val scavbtn = findViewById<Button>(R.id.goto_scav)
+        scavbtn.setOnClickListener {
+            val nextIntent = Intent(this, ScavengerHuntActivity::class.java)
             startActivity(nextIntent)
         }
     }

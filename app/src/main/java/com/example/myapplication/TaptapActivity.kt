@@ -7,18 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 //import androidx.appcompat.app.AlertDialog
 import android.app.AlertDialog
-import androidx.core.view.isVisible
-import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.databinding.ActivityTaptapBinding
 import java.util.*
 import kotlin.concurrent.timer
-import kotlin.concurrent.timerTask
 
 class TaptapActivity : AppCompatActivity() {
     private var mBinding: ActivityTaptapBinding? = null
@@ -41,7 +36,7 @@ class TaptapActivity : AppCompatActivity() {
         val countTextView = binding.tvCnt
         val secTextView = binding.tvTime
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
+        var mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")

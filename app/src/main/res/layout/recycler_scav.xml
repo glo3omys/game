@@ -5,22 +5,30 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="290dp"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_name"
-        android:text="item"
-        android:textSize="30dp"
-        tools:ignore="MissingConstraints" />
-    <TextView
-        app:layout_constraintLeft_toRightOf="@+id/tv_item_name"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_item_score"
-        android:text="score"
-        android:textSize="30dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_item_name"
+            android:text="item"
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            tools:ignore="MissingConstraints" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_item_score"
+            android:text="score"
+            android:textSize="30dp"
+            android:layout_alignParentRight="true"
+            tools:ignore="MissingConstraints" />
+    </RelativeLayout>
+
 
     <Button
         android:layout_width="wrap_content"

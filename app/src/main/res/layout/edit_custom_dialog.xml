@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/et_name"
-            android:text="Name"
+            android:hint="Item Name"
             android:layout_gravity="center"
             android:gravity="center"
             tools:ignore="MissingConstraints" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/et_score"
-            android:text="age"
+            android:hint="Item Score"
             android:layout_gravity="center"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@id/et_name"

@@ -14,7 +14,7 @@ class BalloonAdapter(private val context: BalloonActivity) :
     var datas = mutableListOf<BalloonData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.balloon_recycler,parent,false)
+        val view = LayoutInflater.from(context).inflate(R.layout.recycler_balloon,parent,false)
         return ViewHolder(view)
     }
 

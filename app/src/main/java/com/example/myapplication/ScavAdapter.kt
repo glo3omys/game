@@ -17,7 +17,7 @@ class ScavAdapter(private val context: Context) :
 {
     var datas = mutableListOf<ScavData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.scav_recycler,parent,false)
+        val view = LayoutInflater.from(context).inflate(R.layout.recycler_scav,parent,false)
         return ViewHolder(view)
     }
     override fun getItemCount(): Int = datas.size

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.myapplication.databinding.ActivityScavengerHuntBinding
+import scavDatas
 
 class ScavengerHuntActivity : AppCompatActivity() {
     val datas = mutableListOf<ScavData>()
@@ -25,7 +26,10 @@ class ScavengerHuntActivity : AppCompatActivity() {
             startActivity(nextIntent)
         }
         binding.btnStart.setOnClickListener() {
-
+            val range = (0 until scavDatas.size)
+            val idx = range.random()
+            binding.tvItem.text = scavDatas[idx].name
+            binding.tvScore.text = scavDatas[idx].score.toString()
         }
         binding.btnHome.setOnClickListener() {
             val nextIntent = Intent(this, MainActivity::class.java)

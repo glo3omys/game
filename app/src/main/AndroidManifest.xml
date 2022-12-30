@@ -27,8 +27,9 @@
         </activity>
         <activity android:name=".TaptapActivity" />
         <activity android:name=".BalloonActivity" />
-        <activity android:name=".ScavengerHuntActivity"/>
-        <activity android:name=".ScavListActivity"/>
+        <activity android:name=".ScavengerHuntActivity" />
+        <activity android:name=".MathActivity"/>
+        <activity android:name=".ScavListActivity" />
     </application>
 
 </manifest>

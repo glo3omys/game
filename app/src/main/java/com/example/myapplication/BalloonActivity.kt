@@ -29,7 +29,7 @@ class BalloonActivity: AppCompatActivity() {
     var time = 0
     var isOver = false
 
-    var cnt = 0
+    var score = 0
     var leftBalloonCnt = 2
 
     val SPAN_COUNT = 4
@@ -83,7 +83,7 @@ class BalloonActivity: AppCompatActivity() {
             }
         }
         binding.btnReset.setOnClickListener() {
-            cnt = 0
+            score = 0
             time = 0
             stopTimer()
         }
@@ -135,7 +135,7 @@ class BalloonActivity: AppCompatActivity() {
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_score).text = cnt.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_score).text = score.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -190,8 +190,8 @@ class BalloonActivity: AppCompatActivity() {
         else
             return
 
-        cnt++
-        binding.tvCnt.text = cnt.toString()
+        score++
+        binding.tvCnt.text = score.toString()
         leftBalloonCnt--
 
         if (leftBalloonCnt == 0) {
@@ -229,7 +229,7 @@ class BalloonActivity: AppCompatActivity() {
 
     fun init() {
         time = 0
-        cnt = 0
+        score = 0
         isOver = false
         leftBalloonCnt = 2
         binding.radioGroup.clearCheck()

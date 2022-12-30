@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +26,12 @@ class MainActivity : AppCompatActivity() {
         val scavbtn = findViewById<Button>(R.id.goto_scav)
         scavbtn.setOnClickListener {
             val nextIntent = Intent(this, ScavengerHuntActivity::class.java)
+            startActivity(nextIntent)
+        }
+        val mathbtn = findViewById<Button>(R.id.goto_math)
+        mathbtn.setOnClickListener {
+            val nextIntent = Intent(this, MathActivity::class.java)
+            //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
     }

@@ -16,5 +16,5 @@ val scavDatas = mutableListOf<ScavData>(
     ScavData(name = "laptop", score = 50, false),
     ScavData(name = "chopsticks", score = 50, false),
     ScavData(name = "eraser", score = 50, false),
-
 )
+

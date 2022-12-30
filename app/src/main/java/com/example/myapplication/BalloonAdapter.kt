@@ -38,7 +38,7 @@ class BalloonAdapter(private val context: BalloonActivity) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val balloon: Button = itemView.findViewById(R.id.btn_rv)
+        private val balloon: Button = itemView.findViewById(R.id.btn_rv_balloon)
         fun bind(item: BalloonData, position: Int) {
             balloon.text = item.name
         }

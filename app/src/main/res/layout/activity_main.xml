@@ -28,6 +28,12 @@
             android:id="@+id/goto_scav"
             android:text="Scavenger Hunt"
             tools:ignore="MissingConstraints" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/goto_math"
+            android:text="Mathematics"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BalloonActivity">
+    tools:context=".MathActivity">
 
     <ProgressBar
         android:layout_width="match_parent"
@@ -13,43 +13,22 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         tools:ignore="MissingConstraints" />
 
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="0초"
+        android:textSize="40dp"
+        android:id="@+id/tv_time"
         app:layout_constraintTop_toBottomOf="@id/pg_bar"
-        android:id="@+id/lay_quest_balloon"
         android:gravity="center_horizontal"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0초"
-            android:textSize="40dp"
-            android:id="@+id/tv_time"
-            android:layout_margin="15dp"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="SCORE: 0"
-            android:id="@+id/tv_cnt"
-            android:layout_toRightOf="@id/tv_time"
-            android:layout_margin="15dp"
-            tools:ignore="MissingConstraints" />
-    </RelativeLayout>
-
+        tools:ignore="MissingConstraints" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
         android:text="PAUSE"
         android:id="@+id/btn_pause"
         android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@id/lay_quest_balloon"
-        android:gravity="center_horizontal"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -60,50 +39,88 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_pause"
         tools:ignore="MissingConstraints" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="SCORE: 0"
+        android:id="@+id/tv_score"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/btn_home"
+        tools:ignore="MissingConstraints" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_quest_math"
+        app:layout_constraintTop_toBottomOf="@+id/tv_score"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:id="@+id/tv_balloon_quest"
-        app:layout_constraintTop_toBottomOf="@+id/lay_quest_balloon"
-        app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_balloon1"
-            android:textSize="40dp"
-            android:text="..."
-            android:gravity="center_horizontal"
-            android:layout_margin="15dp"
-            />
+            android:id="@+id/tv_num1"
+            android:text="3"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:textSize="40dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_balloon2"
-            android:textSize="40dp"
-            android:text="..."
-            android:gravity="center_horizontal"
-            android:layout_toRightOf="@+id/tv_balloon1"
-            android:layout_margin="15dp"
-            />
+            android:id="@+id/tv_op1"
+            android:text="+"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/tv_num1"
+            android:textSize="40dp"/>
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_num2"
+            android:text="4"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/tv_op1"
+            android:gravity="center"
+            android:textSize="40dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_op2"
+            android:text="*"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/tv_num2"
+            android:textSize="40dp"/>
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_num3"
+            android:text="5"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/tv_op2"
+            android:gravity="center"
+            android:textSize="40dp"/>
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:id="@+id/tv_history"
+        android:textSize="20dp"
+        android:gravity="right"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/lay_quest_math"/>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_balloon"
+        android:id="@+id/rv_math"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-
-        app:layout_constraintTop_toBottomOf="@+id/btn_home"
+        app:layout_constraintTop_toBottomOf="@+id/tv_history"
+        android:background="@drawable/textview_edge"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:listitem="@layout/recycler_balloon" />
+        tools:listitem="@layout/recycler_math" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -155,6 +172,5 @@
             android:layout_toRightOf="@+id/btn_start"
             />
     </RelativeLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

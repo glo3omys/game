@@ -53,6 +53,7 @@ class ScavAdapter(private val context: Context) :
                 val mBuilder = AlertDialog.Builder(context)
                     .setView(mDialogView)
                     .setTitle("EDIT ITEM")
+                    .setCancelable(false)
 
                 val mAlertDialog = mBuilder.show()
                 val okButton = mDialogView.findViewById<Button>(R.id.btn_con)

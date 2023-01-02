@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -28,8 +29,9 @@
         <activity android:name=".TaptapActivity" />
         <activity android:name=".BalloonActivity" />
         <activity android:name=".ScavengerHuntActivity" />
-        <activity android:name=".MathActivity"/>
+        <activity android:name=".MathActivity" />
         <activity android:name=".ScavListActivity" />
+        <activity android:name=".FingerChoiceActivity"/>
     </application>
 
 </manifest>

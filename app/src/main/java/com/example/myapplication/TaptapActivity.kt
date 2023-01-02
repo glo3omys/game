@@ -40,6 +40,7 @@ class TaptapActivity : AppCompatActivity() {
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
+            .setCancelable(false)
         mAlertDialog =  mBuilder.create()
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)

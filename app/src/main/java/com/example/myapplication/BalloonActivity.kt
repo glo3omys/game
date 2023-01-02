@@ -53,6 +53,7 @@ class BalloonActivity: AppCompatActivity() {
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
+            .setCancelable(false)
         mAlertDialog =  mBuilder.create()
 
         binding.btnHome.setOnClickListener {
@@ -78,8 +79,7 @@ class BalloonActivity: AppCompatActivity() {
                 binding.btnPause.isEnabled = true
                 binding.btnStart.isEnabled = false
                 binding.rvBalloon.visibility = View.VISIBLE
-                //startTimer(mDialogView, mBuilder)
-                runTimer(mDialogView, mBuilder)
+                runTimer(mDialogView)
             }
         }
         binding.btnReset.setOnClickListener() {
@@ -88,7 +88,7 @@ class BalloonActivity: AppCompatActivity() {
             stopTimer()
         }
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView, mBuilder)
+            pauseTimer(mDialogView)
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
@@ -98,7 +98,7 @@ class BalloonActivity: AppCompatActivity() {
         initRecycler()
     }
 
-    private fun pauseTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+    private fun pauseTimer(mDialogView: View) {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvBalloon.visibility = View.GONE
@@ -109,14 +109,14 @@ class BalloonActivity: AppCompatActivity() {
             //binding.cntButton.isVisible = true
             binding.rvBalloon.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView, mBuilder)
+            runTimer(mDialogView)
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
-    fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+    fun runTimer(mDialogView: View) {
         //binding.btnCnt.isEnabled = true
         val secTextView = binding.tvTime
         val progressBar = binding.pgBar

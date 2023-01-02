@@ -41,6 +41,7 @@ class ScavListActivity : AppCompatActivity() {
         binding.btnAdd.setOnClickListener() {
             mBuilder.setView(mDialogView)
                 .setTitle("ADD ITEM")
+                .setCancelable(false)
 
             mAlertDialog = mBuilder.show()
             val okButton = mDialogView.findViewById<Button>(R.id.btn_con)

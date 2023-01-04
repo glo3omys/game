@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import com.example.myapplication.databinding.ActivityFingerChoiceBinding
 import java.util.*
 import kotlin.concurrent.timer
@@ -31,7 +30,7 @@ class FingerChoiceActivity : AppCompatActivity() {
         mBinding = ActivityFingerChoiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
+        mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
@@ -81,7 +80,7 @@ class FingerChoiceActivity : AppCompatActivity() {
                 val selectedID = event.getPointerId(selectedIdx)
 
                 runOnUiThread {
-                    mDialogView.findViewById<TextView>(R.id.tv_score).text = "Idx: ${selectedIdx}, Id: ${selectedID}"
+                    mDialogView.findViewById<TextView>(R.id.tv_result).text = "Idx: ${selectedIdx}, Id: ${selectedID}"
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
                     okButton.setOnClickListener {

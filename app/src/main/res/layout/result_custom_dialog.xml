@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:text="TEXT"
             android:gravity="center"
-            android:id="@+id/tv_score"
+            android:id="@+id/tv_result"
             android:textSize="40dp"/>
         <Button
             android:layout_width="wrap_content"

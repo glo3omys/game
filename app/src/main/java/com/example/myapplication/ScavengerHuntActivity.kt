@@ -31,7 +31,7 @@ class ScavengerHuntActivity : AppCompatActivity() {
             val range = (0 until scavDatas.size)
             val idx = range.random()
             binding.tvItem.text = scavDatas[idx].name
-            binding.tvScore.text = scavDatas[idx].score.toString()
+            binding.tvResult.text = scavDatas[idx].score.toString()
         }
         binding.btnHome.setOnClickListener() {
             val nextIntent = Intent(this, MainActivity::class.java)

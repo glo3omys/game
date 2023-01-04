@@ -42,13 +42,13 @@ class MathActivity: AppCompatActivity() {
         setContentView(binding.root)
         mathAdapter = MathAdapter(this)
 
-        val scoreTextView = binding.tvScore
+        //val scoreTextView = binding.tvScore
         val secTextView = binding.tvTime
 
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvMath.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
+        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
@@ -130,7 +130,7 @@ class MathActivity: AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_score).text = score.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_result).text = score.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -241,7 +241,7 @@ class MathActivity: AppCompatActivity() {
         mToast.show()
 
         score += res
-        binding.tvScore.text = "SCORE: " + score.toString()
+        binding.tvResult.text = "SCORE: " + score.toString()
         binding.tvHistory.append(string)
         allocQuest()
     }
@@ -262,7 +262,7 @@ class MathActivity: AppCompatActivity() {
         numCnt = 0
         binding.radioGroup.clearCheck()
         binding.tvHistory.text = ""
-        binding.tvScore.text = "0"
+        binding.tvResult.text = "0"
         binding.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.tvNum1.text = "  "

@@ -36,7 +36,7 @@ class TaptapActivity : AppCompatActivity() {
         val countTextView = binding.tvCnt
         val secTextView = binding.tvTime
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
+        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
@@ -120,7 +120,7 @@ class TaptapActivity : AppCompatActivity() {
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_score).text = cnt.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_result).text = cnt.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)

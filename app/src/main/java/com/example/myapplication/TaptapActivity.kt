@@ -11,7 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 //import androidx.appcompat.app.AlertDialog
 import android.app.AlertDialog
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityTaptapBinding
+import setRadioState
+import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -25,6 +28,8 @@ class TaptapActivity : AppCompatActivity() {
     var cnt = 0
     var isOver = false
 
+    val gameName = "Taptap"
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +38,7 @@ class TaptapActivity : AppCompatActivity() {
         mBinding = ActivityTaptapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val countTextView = binding.tvCnt
+        val countTextView = binding.tvScoreTaptap
         val secTextView = binding.tvTime
 
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
@@ -63,6 +68,7 @@ class TaptapActivity : AppCompatActivity() {
             if (binding.radioGroup.checkedRadioButtonId == -1)
                 Toast.makeText(this@TaptapActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
             else {
+                setRadioState(false, binding.radioGroup)
                 time *= 100
                 binding.pgBar.max = time
                 binding.btnPause.isEnabled = true
@@ -79,6 +85,7 @@ class TaptapActivity : AppCompatActivity() {
         binding.btnPause.setOnClickListener {
             pauseTimer(mDialogView, mBuilder)
         }
+        init()
     }
 
     private fun pauseTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
@@ -119,8 +126,10 @@ class TaptapActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
+                    updateMyBestScore(gameName, cnt.toString())
+                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, cnt.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_result).text = cnt.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = cnt.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -139,12 +148,14 @@ class TaptapActivity : AppCompatActivity() {
         cnt = 0
         isOver = false
         binding.radioGroup.clearCheck()
-        binding.tvCnt.text = "0"
+        binding.tvScoreTaptap.text = "0"
         binding.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         binding.btnCnt.isEnabled = false
         binding.btnStart.isEnabled = false
+        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        setRadioState(true, binding.radioGroup)
         timerTask?.cancel()
     }
 }

@@ -16,6 +16,8 @@ class ScavengerHuntActivity : AppCompatActivity() {
     private val binding get() = mBinding!!
     lateinit var mAlertDialog: AlertDialog
 
+    val gameName = "ScavengerHunt"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scavenger_hunt)
@@ -30,14 +32,12 @@ class ScavengerHuntActivity : AppCompatActivity() {
         binding.btnStart.setOnClickListener() {
             val range = (0 until scavDatas.size)
             val idx = range.random()
-            binding.tvItem.text = scavDatas[idx].name
-            binding.tvResult.text = scavDatas[idx].score.toString()
+            binding.tvItemName.text = scavDatas[idx].name
+            binding.tvItemScore.text = scavDatas[idx].score.toString()
         }
         binding.btnHome.setOnClickListener() {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-
-        //init()
     }
 }

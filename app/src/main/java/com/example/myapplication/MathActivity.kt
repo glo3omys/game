@@ -11,7 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityMathBinding
+import setRadioState
+import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -30,6 +33,8 @@ class MathActivity: AppCompatActivity() {
     var score = 0
     var numCnt = 0
     val SPAN_COUNT = 5
+
+    val gameName = "Math"
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -74,6 +79,7 @@ class MathActivity: AppCompatActivity() {
             else {
                 setDatas()
                 allocQuest()
+                setRadioState(false, binding.radioGroup)
                 time *= 100
                 binding.pgBar.max = time
                 binding.btnPause.isEnabled = true
@@ -129,8 +135,10 @@ class MathActivity: AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
+                    updateMyBestScore(gameName, score.toString())
+                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_result).text = score.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -147,6 +155,7 @@ class MathActivity: AppCompatActivity() {
     private fun initRecycler() {
         init()
         setDatas()
+        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
         binding.rvMath.adapter = mathAdapter
     }
 
@@ -241,7 +250,7 @@ class MathActivity: AppCompatActivity() {
         mToast.show()
 
         score += res
-        binding.tvResult.text = "SCORE: " + score.toString()
+        binding.tvScoreMath.text = "SCORE: " + score.toString()
         binding.tvHistory.append(string)
         allocQuest()
     }
@@ -262,7 +271,7 @@ class MathActivity: AppCompatActivity() {
         numCnt = 0
         binding.radioGroup.clearCheck()
         binding.tvHistory.text = ""
-        binding.tvResult.text = "0"
+        binding.tvScoreMath.text = "0"
         binding.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.tvNum1.text = "  "
@@ -271,6 +280,8 @@ class MathActivity: AppCompatActivity() {
         binding.btnPause.isEnabled = false
         binding.rvMath.visibility = View.GONE
         binding.btnStart.isEnabled = false
+        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        setRadioState(true, binding.radioGroup)
         timerTask?.cancel()
     }
 }

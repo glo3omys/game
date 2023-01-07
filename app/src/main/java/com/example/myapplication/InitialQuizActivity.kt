@@ -4,14 +4,19 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.myapplication.databinding.ActivityInitialQuizBinding
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +39,7 @@ class InitialQuizActivity : AppCompatActivity() {
     var resD = false
     var wordLength = -1
 
+    //val gameName = "InitialQuiz"
     val api = NaverAPI.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +64,52 @@ class InitialQuizActivity : AppCompatActivity() {
             allocQuest()
             runTimer()
         }
+        binding.etAnswer.addTextChangedListener(object: TextWatcher {
+            val etAnswer = binding.etAnswer
+            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                /*
+                if (s.toString().equals("\n"))
+                    Toast.makeText(this@InitialQuizActivity, "Toast", Toast.LENGTH_SHORT).show()
+                */
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val res = s.toString().replace(" ", "")
+                if (!s.toString().equals(res)) {
+                    etAnswer.setText(res)
+                    etAnswer.setSelection(res.length)
+                }
+                if (!s.toString().equals("") && s.toString()[s!!.length - 1].toString() == "\n") {
+                    val res = s.toString().replace("\n", "")
+                    if (!s.toString().equals(res)) {
+                        etAnswer.setText(res)
+                        etAnswer.setSelection(res.length)
+                    }
+                    if (res.equals(""))
+                        return
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
+                    etAnswer.isEnabled = false
+                    binding.btnSubmit.isEnabled = false
+                    questCheck()
+                    dictionaryCheck()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                /*val res = s.toString().replace(" ", "")
+                if (!s.toString().equals(res)) {
+                    etAnswer.setText(res)
+                    etAnswer.setSelection(res.length)
+                }
+
+                 */
+            }
+        })
         binding.btnSubmit.setOnClickListener {
+            val etAnswer = binding.etAnswer
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
+            etAnswer.isEnabled = false
             binding.btnSubmit.isEnabled = false
             questCheck()
             dictionaryCheck()
@@ -70,7 +121,7 @@ class InitialQuizActivity : AppCompatActivity() {
         time = 1000
         binding.btnStart.isEnabled = false
         val secTextView = binding.tvTime
-        val resTextView = mDialogView.findViewById<TextView>(R.id.tv_result)
+        val resTextView = mDialogView.findViewById<TextView>(R.id.tv_custom_result)
         val progressBar = binding.pgBar
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
@@ -109,6 +160,8 @@ class InitialQuizActivity : AppCompatActivity() {
         binding.pgBar.max = 1000
         binding.tvItem.text = "_______"
         binding.tvTime.text = "0초"
+        binding.etAnswer.text = null
+        binding.etAnswer.clearFocus()
         binding.etAnswer.isEnabled = false
         binding.btnSubmit.isEnabled = false
         binding.btnStart.isEnabled = true
@@ -121,7 +174,8 @@ class InitialQuizActivity : AppCompatActivity() {
 
     private fun allocQuest() {
         var string = ""
-        wordLength = (2 .. 4).random()
+        wordLength = 2
+        //wordLength = (2 .. 4).random()
         for (i in 1..wordLength)
             string += defaultInitials[(0 until defaultInitialsCnt).random()]
         binding.tvItem.text = string

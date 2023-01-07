@@ -12,7 +12,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityBalloonBinding
+import setRadioState
+import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -34,6 +37,8 @@ class BalloonActivity: AppCompatActivity() {
 
     val SPAN_COUNT = 4
 
+    val gameName = "Balloon"
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +48,7 @@ class BalloonActivity: AppCompatActivity() {
         setContentView(binding.root)
         balloonAdapter = BalloonAdapter(this)
 
-        val countTextView = binding.tvCnt
+        val countTextView = binding.tvScoreBalloon
         val secTextView = binding.tvTime
 
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
@@ -74,6 +79,7 @@ class BalloonActivity: AppCompatActivity() {
                 Toast.makeText(this@BalloonActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
             else {
                 allocProb()
+                setRadioState(false, binding.radioGroup)
                 time *= 100
                 binding.pgBar.max = time
                 binding.btnPause.isEnabled = true
@@ -134,8 +140,10 @@ class BalloonActivity: AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
+                    updateMyBestScore(gameName, score.toString())
+                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_result).text = score.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -151,6 +159,7 @@ class BalloonActivity: AppCompatActivity() {
 
     private fun initRecycler() {
         binding.rvBalloon.adapter = balloonAdapter
+        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
 
         datas.apply {
             val range = (0..SPAN_COUNT)
@@ -191,7 +200,7 @@ class BalloonActivity: AppCompatActivity() {
             return
 
         score++
-        binding.tvCnt.text = score.toString()
+        binding.tvScoreBalloon.text = score.toString()
         leftBalloonCnt--
 
         if (leftBalloonCnt == 0) {
@@ -233,7 +242,7 @@ class BalloonActivity: AppCompatActivity() {
         isOver = false
         leftBalloonCnt = 2
         binding.radioGroup.clearCheck()
-        binding.tvCnt.text = "0"
+        binding.tvScoreBalloon.text = "0"
         binding.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.tvBalloon1.text = "..."
@@ -241,6 +250,8 @@ class BalloonActivity: AppCompatActivity() {
         binding.btnPause.isEnabled = false
         binding.rvBalloon.visibility = View.GONE
         binding.btnStart.isEnabled = false
+        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        setRadioState(true, binding.radioGroup)
         timerTask?.cancel()
     }
 }

@@ -1,3 +1,5 @@
+import android.widget.RadioGroup
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.ScavData
 
 val scavDatas = mutableListOf<ScavData>(
@@ -18,3 +20,14 @@ val scavDatas = mutableListOf<ScavData>(
     ScavData(name = "eraser", score = 50, false),
 )
 
+fun setRadioState(flag: Boolean, radioGroup: RadioGroup) {
+    for (i in 0 until radioGroup.childCount)
+        radioGroup.getChildAt(i).isEnabled = flag
+}
+
+fun updateMyBestScore(gameName: String, score: String) {
+    val storedScore = prefs.getSharedPrefs(gameName, score)
+    if (storedScore.toInt() > score.toInt())
+        return
+    prefs.setSharedPrefs(gameName, score)
+}

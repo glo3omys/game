@@ -48,7 +48,7 @@ class FingerChoiceActivity : AppCompatActivity() {
 
         val dX = event.x.toInt()
         val dY = event.y.toInt()
-        tvTouch.append("x: ${dX}, y: ${dY} \n")
+        //tvTouch.append("x: ${dX}, y: ${dY} \n")
 
         when (event.actionMasked) {
             // 2개 이상 들어오면 timer run
@@ -80,7 +80,7 @@ class FingerChoiceActivity : AppCompatActivity() {
                 val selectedID = event.getPointerId(selectedIdx)
 
                 runOnUiThread {
-                    mDialogView.findViewById<TextView>(R.id.tv_result).text = "Idx: ${selectedIdx}, Id: ${selectedID}"
+                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = "Idx: ${selectedIdx}, Id: ${selectedID}"
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
                     okButton.setOnClickListener {

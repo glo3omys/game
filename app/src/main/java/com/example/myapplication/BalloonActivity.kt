@@ -163,8 +163,8 @@ class BalloonActivity: AppCompatActivity() {
 
         datas.apply {
             val range = (0..SPAN_COUNT)
-            for (i in 0 until SPAN_COUNT * SPAN_COUNT) {
-               add(BalloonData(name = defaultBalloons[range.random()])) }
+            for (i in 0 until SPAN_COUNT * SPAN_COUNT)
+               add(BalloonData(name = defaultBalloons[range.random()]))
             balloonAdapter.datas = datas
             balloonAdapter.notifyDataSetChanged()
         }

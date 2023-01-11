@@ -50,5 +50,11 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
+        val leftrightbtn = findViewById<Button>(R.id.goto_leftright)
+        leftrightbtn.setOnClickListener {
+            val nextIntent = Intent(this, LeftRightActivity::class.java)
+            //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
+            startActivity(nextIntent)
+        }
     }
 }

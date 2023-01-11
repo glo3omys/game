@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -33,7 +34,8 @@
         <activity android:name=".MathActivity" />
         <activity android:name=".ScavListActivity" />
         <activity android:name=".FingerChoiceActivity" />
-        <activity android:name=".InitialQuizActivity"/>
+        <activity android:name=".InitialQuizActivity" />
+        <activity android:name=".LeftRightActivity"/>
     </application>
 
 </manifest>

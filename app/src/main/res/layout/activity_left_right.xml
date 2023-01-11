@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MathActivity">
+    tools:context=".LeftRightActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -67,89 +67,52 @@
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text="SCORE: 0"
-        android:id="@+id/tv_score_math"
+        android:id="@+id/tv_score_leftright"
+        android:layout_margin="15dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/lay_menu"
         tools:ignore="MissingConstraints" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_leftright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintTop_toBottomOf="@+id/tv_score_leftright"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/recycler_leftright" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lay_quest_math"
-        app:layout_constraintTop_toBottomOf="@+id/tv_score_math"
-        android:gravity="center"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
+        android:id="@+id/lay_lr_buttons"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_leftright">
 
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_num1"
-            android:text="3"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:textSize="40dp"/>
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_op1"
-            android:text="+"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@+id/tv_num1"
-            android:textSize="40dp"/>
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_num2"
-            android:text="4"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@id/tv_op1"
-            android:gravity="center"
-            android:textSize="40dp"/>
-        <TextView
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btn_left"
+            android:text="LEFT"/>
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_op2"
-            android:text="*"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@+id/tv_num2"
-            android:textSize="40dp"/>
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_num3"
-            android:text="5"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@+id/tv_op2"
-            android:gravity="center"
-            android:textSize="40dp"/>
-
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_right"
+            android:text="RIGHT"/>
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="140dp"
-        android:id="@+id/tv_history"
-        android:textSize="20dp"
-        android:gravity="right"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/lay_quest_math"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_math"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_history"
-        android:background="@drawable/textview_edge"
-        tools:ignore="MissingConstraints"
-        tools:listitem="@layout/recycler_math" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/lay_bottom_buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
         <RadioGroup

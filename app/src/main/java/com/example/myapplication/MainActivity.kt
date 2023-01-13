@@ -56,5 +56,11 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
+        val findnumbtn = findViewById<Button>(R.id.goto_findnum)
+        findnumbtn.setOnClickListener {
+            val nextIntent = Intent(this, FindNumberActivity::class.java)
+            //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
+            startActivity(nextIntent)
+        }
     }
 }

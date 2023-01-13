@@ -52,7 +52,12 @@
             android:id="@+id/goto_leftright"
             android:text="Left Right"
             tools:ignore="MissingConstraints" />
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/goto_findnum"
+            android:text="Find Number"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 

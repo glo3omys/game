@@ -7,11 +7,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.view.KeyEvent
-import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
@@ -22,6 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.concurrent.timer
+import kotlin.math.min
 
 class InitialQuizActivity : AppCompatActivity() {
     private var mBinding: ActivityInitialQuizBinding? = null
@@ -202,19 +200,25 @@ class InitialQuizActivity : AppCompatActivity() {
                 response: Response<ResultGetSearchDict>
             ) {
                 val bodyTotal = response.body()?.total
-                var firstTitle: String = response.body()!!.items[0].title
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    firstTitle = Html.fromHtml(firstTitle, Html.FROM_HTML_MODE_LEGACY).toString()
-                else
-                    firstTitle = Html.fromHtml(firstTitle).toString();
+                var foundflag = false
+                var tmpTitle: String
+                for (i in 0 until min(10, bodyTotal!!.toInt())) {
+                    tmpTitle = response.body()!!.items[i].title
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                        tmpTitle = Html.fromHtml(tmpTitle, Html.FROM_HTML_MODE_LEGACY).toString()
+                    else
+                        tmpTitle = Html.fromHtml(tmpTitle).toString();
+                    if (tmpTitle == keyword) {
+                        foundflag = true
+                        break
+                    }
+                }
 
-
-                if (bodyTotal != 0 && firstTitle == keyword)
+                if (bodyTotal != 0 && foundflag)
                     resD = true
             }
 
             override fun onFailure(call: Call<ResultGetSearchDict>, t: Throwable) {
-                // 실패
                 Toast.makeText(this@InitialQuizActivity, "ERROR", Toast.LENGTH_SHORT).show()
             }
         })

@@ -186,7 +186,7 @@ class InitialQuizActivity : AppCompatActivity() {
         val ansString = binding.etAnswer.text
         val questString = binding.tvItem.text
         for (i in 0 until wordLength) {
-            if ((ansString[i].toInt() < 0xAC00) || (((ansString[i] - 0xAC00).toInt() / 28 / 21) != defaultInitials.indexOf(questString[i])))
+            if ((Integer.parseInt(ansString[i]+"") < 0xAC00) || ((Integer.parseInt(ansString[i] + "") - 0xAC00) / 28 / 21) != defaultInitials.indexOf(questString[i]))
                 return
         }
         resQ = true
@@ -203,7 +203,7 @@ class InitialQuizActivity : AppCompatActivity() {
                 var foundflag = false
                 var tmpTitle: String
                 for (i in 0 until min(10, bodyTotal!!.toInt())) {
-                    tmpTitle = response.body()!!.items[i].title
+                    tmpTitle = response.body()!!.items[i].name
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
                         tmpTitle = Html.fromHtml(tmpTitle, Html.FROM_HTML_MODE_LEGACY).toString()
                     else

@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import com.google.gson.annotations.SerializedName
+
 data class ResultGetSearchDict(
     var lastBuildDate: String = "",
     var total: Int = 0,
@@ -9,7 +11,8 @@ data class ResultGetSearchDict(
 )
 
 data class Items(
-    var title: String = "",
+    @SerializedName("title")
+    var name: String = "", // title(origin) > name
     //var originallink: String = "",
     var link: String = "",
     var description: String = "",

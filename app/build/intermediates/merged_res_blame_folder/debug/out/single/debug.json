@@ -1,0 +1,162 @@
+[
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_left_right.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_left_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_score_custom_toast.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\score_custom_toast.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_recycler_findnum.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_findnum.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_recycler_balloon.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_balloon.xml"
+    },
+    {
+        "merged": "com.example.myapplication.app-merged_res-30:/layout_activity_left_right.xml.flat",
+        "source": "com.example.myapplication.app-main-32:/layout/activity_left_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_result_custom_dialog.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\result_custom_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_edit_custom_dialog.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\edit_custom_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\drawable_textview_edge.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\drawable\\textview_edge.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_initial_quiz.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_initial_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\drawable_mushroom_z.png.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\drawable\\mushroom_z.png"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_scavenger_hunt.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_scavenger_hunt.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-pngs-25:\\drawable-anydpi-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_scav_list.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_scav_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_taptap.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_taptap.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\drawable_mushroom_b.png.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\drawable\\mushroom_b.png"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_conn_test.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_conn_test.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_balloon.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_balloon.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_recycler_leftright.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_leftright.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_find_number.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_find_number.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_finger_choice.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_finger_choice.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_recycler_math.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_math.xml"
+    },
+    {
+        "merged": "com.example.myapplication.app-merged_res-30:/layout_view_timer.xml.flat",
+        "source": "com.example.myapplication.app-main-32:/layout/view_timer.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_recycler_scav.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_scav.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-merged_res-30:\\layout_activity_math.xml.flat",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_math.xml"
+    }
+]

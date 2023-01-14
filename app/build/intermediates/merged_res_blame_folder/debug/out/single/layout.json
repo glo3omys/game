@@ -1,0 +1,86 @@
+[
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\result_custom_dialog.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\result_custom_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\score_custom_toast.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\score_custom_toast.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_conn_test.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_conn_test.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\recycler_scav.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_scav.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_initial_quiz.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_initial_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_balloon.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_balloon.xml"
+    },
+    {
+        "merged": "com.example.myapplication.app-mergeDebugResources-29:/layout/activity_left_right.xml",
+        "source": "com.example.myapplication.app-main-32:/layout/activity_left_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\recycler_math.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_math.xml"
+    },
+    {
+        "merged": "com.example.myapplication.app-mergeDebugResources-29:/layout/view_timer.xml",
+        "source": "com.example.myapplication.app-main-32:/layout/view_timer.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\recycler_balloon.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_balloon.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\edit_custom_dialog.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\edit_custom_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_find_number.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_find_number.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_scav_list.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_scav_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_math.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_math.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\recycler_leftright.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_leftright.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\recycler_findnum.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\recycler_findnum.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_finger_choice.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_finger_choice.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_left_right.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_left_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_scavenger_hunt.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_scavenger_hunt.xml"
+    },
+    {
+        "merged": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-mergeDebugResources-29:\\layout\\activity_taptap.xml",
+        "source": "C:\\Users\\snail\\.gradle\\daemon\\7.4\\com.example.myapplication.app-main-32:\\layout\\activity_taptap.xml"
+    }
+]

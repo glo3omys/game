@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScavengerHuntActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/lay_menu"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOME"
+            android:id="@+id/btn_home"
+            tools:ignore="MissingConstraints" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAUSE"
+            android:id="@+id/btn_pause"
+            android:enabled="false"
+            android:layout_below="@+id/btn_home"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ITEM"
+            android:textSize="40dp"
+            android:layout_margin="10dp"
+            tools:ignore="MissingConstraints"/>
+        <TextView
+            android:id="@+id/tv_item_score"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SCORE"
+            android:textSize="40dp"
+            android:layout_below="@+id/tv_item_name"
+            tools:ignore="MissingConstraints"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ITEM LIST"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btn_itemlist"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START"
+            android:gravity="center_horizontal"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_start"/>
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

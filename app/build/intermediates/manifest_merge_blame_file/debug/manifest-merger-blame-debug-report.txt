@@ -1,0 +1,123 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.myapplication"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="32" />
+9-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:5:5-67
+11-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:6:5-79
+12-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:6:22-76
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+13-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:7:5-76
+13-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:7:22-73
+14
+15    <application
+15-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:9:5-43:19
+16        android:allowBackup="true"
+16-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:10:9-35
+17        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+17-->[androidx.core:core:1.8.0] C:\Users\snail\.gradle\caches\transforms-3\205feb206244c8c1b4b56fcdc8d69988\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+18        android:dataExtractionRules="@xml/data_extraction_rules"
+18-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:11:9-65
+19        android:debuggable="true"
+20        android:fullBackupContent="@xml/backup_rules"
+20-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:12:9-54
+21        android:icon="@mipmap/ic_launcher"
+21-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:13:9-43
+22        android:label="@string/app_name"
+22-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:14:9-41
+23        android:roundIcon="@mipmap/ic_launcher_round"
+23-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:15:9-54
+24        android:supportsRtl="true"
+24-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:16:9-35
+25        android:testOnly="true"
+26        android:theme="@style/Theme.AppCompat" >
+26-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:17:9-47
+27        <activity
+27-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:20:9-32:20
+28            android:name="com.example.myapplication.MainActivity"
+28-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:21:13-41
+29            android:exported="true" >
+29-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:22:13-36
+30            <intent-filter>
+30-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:23:13-27:29
+31                <action android:name="android.intent.action.MAIN" />
+31-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:24:17-69
+31-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:24:25-66
+32
+33                <category android:name="android.intent.category.LAUNCHER" />
+33-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:26:17-77
+33-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:26:27-74
+34            </intent-filter>
+35
+36            <meta-data
+36-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:29:13-31:36
+37                android:name="android.app.lib_name"
+37-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:30:17-52
+38                android:value="" />
+38-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:31:17-33
+39        </activity>
+40        <activity android:name="com.example.myapplication.TaptapActivity" />
+40-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:33:9-52
+40-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:33:19-49
+41        <activity android:name="com.example.myapplication.BalloonActivity" />
+41-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:34:9-53
+41-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:34:19-50
+42        <activity android:name="com.example.myapplication.ScavengerHuntActivity" />
+42-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:35:9-59
+42-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:35:19-56
+43        <activity android:name="com.example.myapplication.MathActivity" />
+43-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:36:9-50
+43-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:36:19-47
+44        <activity android:name="com.example.myapplication.ScavListActivity" />
+44-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:37:9-54
+44-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:37:19-51
+45        <activity android:name="com.example.myapplication.FingerChoiceActivity" />
+45-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:38:9-58
+45-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:38:19-55
+46        <activity android:name="com.example.myapplication.InitialQuizActivity" />
+46-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:39:9-57
+46-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:39:19-54
+47        <activity android:name="com.example.myapplication.LeftRightActivity" />
+47-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:40:9-55
+47-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:40:19-52
+48        <activity android:name="com.example.myapplication.FindNumberActivity" />
+48-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:41:9-56
+48-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:41:19-53
+49        <activity android:name="com.example.myapplication.ConnTestActivity" />
+49-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:42:9-54
+49-->C:\Users\snail\Documents\game\app\src\main\AndroidManifest.xml:42:19-51
+50
+51        <provider
+51-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+52            android:name="androidx.startup.InitializationProvider"
+52-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+53            android:authorities="com.example.myapplication.androidx-startup"
+53-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+54            android:exported="false" >
+54-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+55            <meta-data
+55-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+56                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+56-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+57                android:value="androidx.startup" />
+57-->[androidx.emoji2:emoji2:1.2.0] C:\Users\snail\.gradle\caches\transforms-3\412372332f980a5c4ef0364c55a99af0\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+58            <meta-data
+58-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\snail\.gradle\caches\transforms-3\a8199b6bb025d711471524267dd78014\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+59                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+59-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\snail\.gradle\caches\transforms-3\a8199b6bb025d711471524267dd78014\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+60                android:value="androidx.startup" />
+60-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\snail\.gradle\caches\transforms-3\a8199b6bb025d711471524267dd78014\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+61        </provider>
+62    </application>
+63
+64</manifest>

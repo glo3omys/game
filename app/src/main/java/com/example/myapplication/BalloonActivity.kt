@@ -143,7 +143,11 @@ class BalloonActivity: AppCompatActivity() {
                     updateMyBestScore(gameName, score.toString())
                     binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
+<<<<<<< HEAD
                     mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
+=======
+                    mDialogView.findViewById<TextView>(R.id.tv_score).text = score.toString()
+>>>>>>> origin/master
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -200,7 +204,11 @@ class BalloonActivity: AppCompatActivity() {
             return
 
         score++
+<<<<<<< HEAD
         binding.tvScoreBalloon.text = score.toString()
+=======
+        binding.tvCnt.text = score.toString()
+>>>>>>> origin/master
         leftBalloonCnt--
 
         if (leftBalloonCnt == 0) {

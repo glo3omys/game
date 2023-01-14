@@ -33,6 +33,7 @@
         <activity android:name=".TaptapActivity" />
         <activity android:name=".BalloonActivity" />
         <activity android:name=".ScavengerHuntActivity" />
+<<<<<<< HEAD
         <activity android:name=".MathActivity" />
         <activity android:name=".ScavListActivity" />
         <activity android:name=".FingerChoiceActivity" />
@@ -40,6 +41,10 @@
         <activity android:name=".LeftRightActivity" />
         <activity android:name=".FindNumberActivity" />
         <activity android:name=".ConnTestActivity" />
+=======
+        <activity android:name=".MathActivity"/>
+        <activity android:name=".ScavListActivity" />
+>>>>>>> origin/master
     </application>
 
 </manifest>

@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/lay_time"
         android:orientation="horizontal"
+<<<<<<< HEAD
+=======
+        app:layout_constraintTop_toBottomOf="@id/pg_bar"
+        android:id="@+id/lay_quest_balloon"
+        android:gravity="center_horizontal"
+>>>>>>> origin/master
         tools:ignore="MissingConstraints">
 
         <ProgressBar
@@ -34,10 +40,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:orientation="vertical"
         android:id="@+id/lay_menu"
         app:layout_constraintTop_toBottomOf="@id/lay_time"
         tools:ignore="MissingConstraints">
+=======
+        android:text="PAUSE"
+        android:id="@+id/btn_pause"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@id/lay_quest_balloon"
+        android:gravity="center_horizontal"
+        tools:ignore="MissingConstraints" />
+>>>>>>> origin/master
 
         <Button
             android:layout_width="wrap_content"
@@ -77,9 +92,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+<<<<<<< HEAD
         android:gravity="center"
         android:id="@+id/lay_balloon_quest"
         app:layout_constraintTop_toBottomOf="@+id/tv_score_balloon"
+=======
+        android:gravity="center_horizontal"
+        android:id="@+id/tv_balloon_quest"
+        app:layout_constraintTop_toBottomOf="@+id/lay_quest_balloon"
+        app:layout_constraintRight_toRightOf="parent"
+>>>>>>> origin/master
         tools:ignore="MissingConstraints">
 
         <TextView

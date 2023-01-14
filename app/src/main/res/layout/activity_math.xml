@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MathActivity">
 
+<<<<<<< HEAD
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,22 +62,66 @@
             android:id="@+id/tv_best_score"
             android:textSize="30dp"/>
     </RelativeLayout>
+=======
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/pg_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0초"
+        android:textSize="40dp"
+        android:id="@+id/tv_time"
+        app:layout_constraintTop_toBottomOf="@id/pg_bar"
+        android:gravity="center_horizontal"
+        tools:ignore="MissingConstraints" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        android:text="PAUSE"
+        android:id="@+id/btn_pause"
+        android:enabled="false"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HOME"
+        android:id="@+id/btn_home"
+        app:layout_constraintTop_toBottomOf="@+id/btn_pause"
+        tools:ignore="MissingConstraints" />
+>>>>>>> origin/master
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text="SCORE: 0"
+<<<<<<< HEAD
         android:id="@+id/tv_score_math"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/lay_menu"
+=======
+        android:id="@+id/tv_score"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/btn_home"
+>>>>>>> origin/master
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lay_quest_math"
+<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/tv_score_math"
+=======
+        app:layout_constraintTop_toBottomOf="@+id/tv_score"
+>>>>>>> origin/master
         android:gravity="center"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
@@ -149,7 +194,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+<<<<<<< HEAD
         android:id="@+id/lay_bottom_buttons"
+=======
+>>>>>>> origin/master
         tools:ignore="MissingConstraints">
 
         <RadioGroup

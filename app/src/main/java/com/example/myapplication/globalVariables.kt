@@ -20,7 +20,6 @@ val scavDatas = mutableListOf<ScavData>(
     ScavData(name = "eraser", score = 50, false),
 )
 
-<<<<<<< HEAD
 fun setRadioState(flag: Boolean, radioGroup: RadioGroup) {
     for (i in 0 until radioGroup.childCount)
         radioGroup.getChildAt(i).isEnabled = flag
@@ -32,5 +31,3 @@ fun updateMyBestScore(gameName: String, score: String) {
         return
     prefs.setSharedPrefs(gameName, score)
 }
-=======
->>>>>>> origin/master

@@ -7,30 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".FindNumberActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <include
         android:id="@+id/lay_time"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-
-        <ProgressBar
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:id="@+id/pg_bar"
-            android:layout_marginLeft="10dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            tools:ignore="MissingConstraints" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0초"
-            android:textSize="25dp"
-            android:id="@+id/tv_time"
-            android:layout_margin="15dp"
-            android:layout_toRightOf="@+id/pg_bar"
-            tools:ignore="MissingConstraints" />
-    </RelativeLayout>
+        layout="@layout/view_lay_time"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -83,60 +62,11 @@
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/lay_menu"
-
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/recycler_findnum" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/lay_bottom_buttons"
-        tools:ignore="MissingConstraints">
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:id="@+id/radioGroup"
-            tools:ignore="MissingConstraints">
-
-          <RadioButton
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/sec_10"
-              android:text="10초"/>
-          <RadioButton
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/sec_20"
-              android:text="20초"/>
-          <RadioButton
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/sec_30"
-              android:text="30초"/>
-        </RadioGroup>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_start"
-            android:text="START"
-            android:enabled="false"
-            android:layout_toRightOf="@+id/radioGroup"
-            android:layout_marginLeft="30dp"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_reset"
-            android:text="RESET"
-            android:layout_toRightOf="@+id/btn_start" />
-    </RelativeLayout>
+    <include android:id="@+id/lay_bottom"
+        layout="@layout/view_lay_bottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

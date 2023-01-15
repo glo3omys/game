@@ -57,6 +57,7 @@ class ScavAdapter(private val context: Context) :
 
                 val mAlertDialog = mBuilder.show()
                 val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
+                val cancelButton = mDialogView.findViewById<Button>(R.id.btn_can)
 
                 okButton.setOnClickListener() {
                     val name = mDialogView.findViewById<EditText>(R.id.et_name).text.toString()
@@ -65,6 +66,9 @@ class ScavAdapter(private val context: Context) :
                     datas[position] = data
                     datas.sortBy { it.score }
                     notifyDataSetChanged()
+                    mAlertDialog.dismiss()
+                }
+                cancelButton.setOnClickListener() {
                     mAlertDialog.dismiss()
                 }
             }

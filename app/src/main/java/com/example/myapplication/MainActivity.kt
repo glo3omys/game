@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
-<<<<<<< HEAD
         val choicebtn = findViewById<Button>(R.id.goto_choice)
         choicebtn.setOnClickListener {
             val nextIntent = Intent(this, FingerChoiceActivity::class.java)
@@ -70,7 +69,5 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
-=======
->>>>>>> origin/master
     }
 }

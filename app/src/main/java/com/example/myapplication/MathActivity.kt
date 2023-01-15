@@ -11,14 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-<<<<<<< HEAD
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityMathBinding
 import setRadioState
 import updateMyBestScore
-=======
-import com.example.myapplication.databinding.ActivityMathBinding
->>>>>>> origin/master
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -38,11 +34,8 @@ class MathActivity: AppCompatActivity() {
     var numCnt = 0
     val SPAN_COUNT = 5
 
-<<<<<<< HEAD
     val gameName = "Math"
 
-=======
->>>>>>> origin/master
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
 
@@ -54,62 +47,46 @@ class MathActivity: AppCompatActivity() {
         setContentView(binding.root)
         mathAdapter = MathAdapter(this)
 
-<<<<<<< HEAD
-        //val scoreTextView = binding.tvScore
-=======
-        val scoreTextView = binding.tvScore
->>>>>>> origin/master
-        val secTextView = binding.tvTime
-
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvMath.layoutManager = gridLayoutManager
 
-<<<<<<< HEAD
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Score")
             .setCancelable(false)
-=======
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.score_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
->>>>>>> origin/master
         mAlertDialog =  mBuilder.create()
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
                 R.id.sec_30 -> time = 30
             }
-            if (binding.radioGroup.checkedRadioButtonId != -1)
-                binding.btnStart.isEnabled = true
+            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
+                binding.layBottom.btnStart.isEnabled = true
         }
-        binding.btnStart.setOnClickListener {
-            if (binding.radioGroup.checkedRadioButtonId == -1)
+        binding.layBottom.btnStart.setOnClickListener {
+            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
                 Toast.makeText(this@MathActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
             else {
                 setDatas()
                 allocQuest()
-<<<<<<< HEAD
-                setRadioState(false, binding.radioGroup)
-=======
->>>>>>> origin/master
+                setRadioState(false, binding.layBottom.radioGroup)
+
                 time *= 100
-                binding.pgBar.max = time
+                binding.layTime.pgBar.max = time
                 binding.btnPause.isEnabled = true
-                binding.btnStart.isEnabled = false
+                binding.layBottom.btnStart.isEnabled = false
                 binding.rvMath.visibility = View.VISIBLE
                 runTimer(mDialogView, mBuilder)
             }
         }
-        binding.btnReset.setOnClickListener() {
+        binding.layBottom.btnReset.setOnClickListener() {
             stopTimer()
         }
         binding.btnPause.setOnClickListener {
@@ -143,8 +120,8 @@ class MathActivity: AppCompatActivity() {
     }
     fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
         binding.rvMath.visibility = View.VISIBLE
-        val secTextView = binding.tvTime
-        val progressBar = binding.pgBar
+        val secTextView = binding.layTime.tvTime
+        val progressBar = binding.layTime.pgBar
 
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
@@ -156,15 +133,10 @@ class MathActivity: AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-<<<<<<< HEAD
                     updateMyBestScore(gameName, score.toString())
                     binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
                     mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
-=======
-                    secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_score).text = score.toString()
->>>>>>> origin/master
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -181,10 +153,7 @@ class MathActivity: AppCompatActivity() {
     private fun initRecycler() {
         init()
         setDatas()
-<<<<<<< HEAD
         binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-=======
->>>>>>> origin/master
         binding.rvMath.adapter = mathAdapter
     }
 
@@ -279,11 +248,7 @@ class MathActivity: AppCompatActivity() {
         mToast.show()
 
         score += res
-<<<<<<< HEAD
         binding.tvScoreMath.text = "SCORE: " + score.toString()
-=======
-        binding.tvScore.text = "SCORE: " + score.toString()
->>>>>>> origin/master
         binding.tvHistory.append(string)
         allocQuest()
     }
@@ -302,26 +267,19 @@ class MathActivity: AppCompatActivity() {
         score = 0
         isOver = false
         numCnt = 0
-        binding.radioGroup.clearCheck()
+        binding.layBottom.radioGroup.clearCheck()
         binding.tvHistory.text = ""
-<<<<<<< HEAD
         binding.tvScoreMath.text = "0"
-=======
-        binding.tvScore.text = "0"
->>>>>>> origin/master
-        binding.tvTime.text = "0초"
+        binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.tvNum1.text = "  "
         binding.tvNum2.text = "  "
         binding.tvNum3.text = "  "
         binding.btnPause.isEnabled = false
         binding.rvMath.visibility = View.GONE
-        binding.btnStart.isEnabled = false
-<<<<<<< HEAD
+        binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.radioGroup)
-=======
->>>>>>> origin/master
+        setRadioState(true, binding.layBottom.radioGroup)
         timerTask?.cancel()
     }
 }

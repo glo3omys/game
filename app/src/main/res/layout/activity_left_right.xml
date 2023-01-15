@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/lay_time"
-        layout="@layout/view_timer"/>
+        layout="@layout/view_lay_time"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,18 +47,15 @@
         android:textSize="40dp"
         android:text="SCORE: 0"
         android:id="@+id/tv_score_leftright"
-        android:layout_margin="15dp"
         android:gravity="center"
         android:layout_below="@+id/lay_menu"
         tools:ignore="MissingConstraints" />
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lay_lr_buttons"
         android:orientation="vertical"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="50dp"
         android:layout_below="@+id/tv_score_leftright">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -66,10 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
             android:layout_centerHorizontal="true"
-            tools:ignore="MissingConstraints"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/recycler_leftright" />
         <Button
             android:layout_width="wrap_content"
@@ -87,57 +81,7 @@
             android:text="RIGHT"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:id="@+id/lay_bottom_buttons"
-        android:layout_alignParentBottom="true"
-        tools:ignore="MissingConstraints">
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:id="@+id/radioGroup"
-            tools:ignore="MissingConstraints">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_10"
-                android:text="10초"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_20"
-                android:text="20초"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_30"
-                android:text="30초"/>
-
-        </RadioGroup>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_start"
-            android:text="START"
-            android:enabled="false"
-            android:layout_toRightOf="@+id/radioGroup"
-            android:layout_marginLeft="30dp"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_reset"
-            android:text="RESET"
-            android:layout_toRightOf="@+id/btn_start"
-            />
-    </RelativeLayout>
+    <include android:id="@+id/lay_bottom"
+        layout="@layout/view_lay_bottom" />
 
 </RelativeLayout>

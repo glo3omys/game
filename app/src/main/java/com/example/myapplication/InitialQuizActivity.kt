@@ -118,9 +118,9 @@ class InitialQuizActivity : AppCompatActivity() {
     private fun runTimer() {
         time = 1000
         binding.btnStart.isEnabled = false
-        val secTextView = binding.tvTime
+        val secTextView = binding.layTime.tvTime
         val resTextView = mDialogView.findViewById<TextView>(R.id.tv_custom_result)
-        val progressBar = binding.pgBar
+        val progressBar = binding.layTime.pgBar
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
             val sec = time / 100
@@ -155,9 +155,9 @@ class InitialQuizActivity : AppCompatActivity() {
     private fun init() {
         time = 0
         isOver = false
-        binding.pgBar.max = 1000
+        binding.layTime.pgBar.max = 1000
         binding.tvItem.text = "_______"
-        binding.tvTime.text = "0초"
+        binding.layTime.tvTime.text = "0초"
         binding.etAnswer.text = null
         binding.etAnswer.clearFocus()
         binding.etAnswer.isEnabled = false

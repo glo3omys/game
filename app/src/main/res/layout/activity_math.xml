@@ -6,31 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".MathActivity">
 
-<<<<<<< HEAD
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <include
         android:id="@+id/lay_time"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-
-        <ProgressBar
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:id="@+id/pg_bar"
-            android:layout_marginLeft="10dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            tools:ignore="MissingConstraints" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0초"
-            android:textSize="25dp"
-            android:id="@+id/tv_time"
-            android:layout_margin="15dp"
-            android:layout_toRightOf="@+id/pg_bar"
-            tools:ignore="MissingConstraints" />
-    </RelativeLayout>
+        layout="@layout/view_lay_time"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,66 +40,22 @@
             android:id="@+id/tv_best_score"
             android:textSize="30dp"/>
     </RelativeLayout>
-=======
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:id="@+id/pg_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0초"
-        android:textSize="40dp"
-        android:id="@+id/tv_time"
-        app:layout_constraintTop_toBottomOf="@id/pg_bar"
-        android:gravity="center_horizontal"
-        tools:ignore="MissingConstraints" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_time"
-        android:text="PAUSE"
-        android:id="@+id/btn_pause"
-        android:enabled="false"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HOME"
-        android:id="@+id/btn_home"
-        app:layout_constraintTop_toBottomOf="@+id/btn_pause"
-        tools:ignore="MissingConstraints" />
->>>>>>> origin/master
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text="SCORE: 0"
-<<<<<<< HEAD
         android:id="@+id/tv_score_math"
-        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/lay_menu"
-=======
-        android:id="@+id/tv_score"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/btn_home"
->>>>>>> origin/master
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lay_quest_math"
-<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/tv_score_math"
-=======
-        app:layout_constraintTop_toBottomOf="@+id/tv_score"
->>>>>>> origin/master
         android:gravity="center"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
@@ -182,67 +116,14 @@
         app:layout_constraintTop_toBottomOf="@+id/lay_quest_math"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_math"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/rv_math"
         app:layout_constraintTop_toBottomOf="@+id/tv_history"
-        android:background="@drawable/textview_edge"
-        tools:ignore="MissingConstraints"
-        tools:listitem="@layout/recycler_math" />
+        tools:listitem="@layout/recycler_math"
+        />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-<<<<<<< HEAD
-        android:id="@+id/lay_bottom_buttons"
-=======
->>>>>>> origin/master
-        tools:ignore="MissingConstraints">
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:id="@+id/radioGroup"
-            tools:ignore="MissingConstraints">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_10"
-                android:text="10초"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_20"
-                android:text="20초"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sec_30"
-                android:text="30초"/>
-
-        </RadioGroup>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_start"
-            android:text="START"
-            android:enabled="false"
-            android:layout_toRightOf="@+id/radioGroup"
-            android:layout_marginLeft="30dp"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_reset"
-            android:text="RESET"
-            android:layout_toRightOf="@+id/btn_start"
-            />
-    </RelativeLayout>
+    <include android:id="@+id/lay_bottom"
+        layout="@layout/view_lay_bottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

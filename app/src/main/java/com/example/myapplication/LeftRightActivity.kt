@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
@@ -12,6 +13,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityLeftRightBinding
 import setRadioState
@@ -32,6 +35,8 @@ class LeftRightActivity : AppCompatActivity() {
     var isOver = false
 
     var score = 0
+    val startIdx = 0
+    var lastIdx = 0 // size = 7(0 .. 6)
     val gameName = "LeftRight"
 
     lateinit var mToast: Toast
@@ -45,6 +50,21 @@ class LeftRightActivity : AppCompatActivity() {
         setContentView(binding.root)
         leftRightAdapter = LeftRightAdapter(this)
 
+        var linearLayoutManager = LinearLayoutManager(this)
+        //linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        binding.rvLeftright.layoutManager = linearLayoutManager
+
+        lastIdx = leftRightAdapter.itemCount - 1
+
+        binding.rvLeftright.addItemDecoration(object: RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                val position = parent.getChildAdapterPosition(view)
+                if (position != lastIdx)
+                    outRect.bottom -= 90
+            }
+        })
+
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
@@ -56,33 +76,33 @@ class LeftRightActivity : AppCompatActivity() {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
                 R.id.sec_30 -> time = 30
             }
-            if (binding.radioGroup.checkedRadioButtonId != -1)
-                binding.btnStart.isEnabled = true
+            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
+                binding.layBottom.btnStart.isEnabled = true
         }
-        binding.btnStart.setOnClickListener {
-            if (binding.radioGroup.checkedRadioButtonId == -1)
+        binding.layBottom.btnStart.setOnClickListener {
+            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
                 Toast.makeText(this@LeftRightActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
             else {
                 init()
                 setDatas()
-                setRadioState(false, binding.radioGroup)
+                setRadioState(false, binding.layBottom.radioGroup)
                 time *= 100
-                binding.pgBar.max = time
+                binding.layTime.pgBar.max = time
                 binding.btnPause.isEnabled = true
-                binding.btnStart.isEnabled = false
+                binding.layBottom.btnStart.isEnabled = false
                 binding.btnLeft.isEnabled = true
                 binding.btnRight.isEnabled = true
                 binding.rvLeftright.visibility = View.VISIBLE
                 runTimer(mDialogView)
             }
         }
-        binding.btnReset.setOnClickListener {
+        binding.layBottom.btnReset.setOnClickListener {
             score = 0
             time = 0
             stopTimer()
@@ -95,13 +115,13 @@ class LeftRightActivity : AppCompatActivity() {
             startActivity(nextIntent)
         }
         binding.btnLeft.setOnClickListener {
-            if (leftRightAdapter.datas[4].name == "LEFT")
+            if (leftRightAdapter.datas[lastIdx].name == "LEFT")
                 popItem()
             else
                 toastWrong()
         }
         binding.btnRight.setOnClickListener {
-            if (leftRightAdapter.datas[4].name == "RIGHT")
+            if (leftRightAdapter.datas[lastIdx].name == "RIGHT")
                 popItem()
             else
                 toastWrong()
@@ -114,13 +134,13 @@ class LeftRightActivity : AppCompatActivity() {
     private fun popItem() {
         score++
         binding.tvScoreLeftright.text = score.toString()
-        leftRightAdapter.datas.removeAt(4)
+        leftRightAdapter.datas.removeAt(lastIdx)
         leftRightAdapter.datas.apply {
             val nextItem = (0.. 1).random()
             if (nextItem % 2 == 0)
-                add(0, LeftRightData(name = defaultItems[0].toString(), imageID = R.drawable.mushroom_b))
+                add(startIdx, LeftRightData(name = defaultItems[0].toString(), imageID = R.drawable.mushroom_b))
             else
-                add(0, LeftRightData(name = defaultItems[1].toString(), imageID = R.drawable.mushroom_z))
+                add(startIdx, LeftRightData(name = defaultItems[1].toString(), imageID = R.drawable.mushroom_z))
         }
         leftRightAdapter.notifyDataSetChanged()
     }
@@ -170,8 +190,8 @@ class LeftRightActivity : AppCompatActivity() {
         init()
     }
     fun runTimer(mDialogView: View) {
-        val secTextView = binding.tvTime
-        val progressBar = binding.pgBar
+        val secTextView = binding.layTime.tvTime
+        val progressBar = binding.layTime.pgBar
 
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
@@ -203,7 +223,7 @@ class LeftRightActivity : AppCompatActivity() {
         val tmpDatas = mutableListOf<LeftRightData>()
         tmpDatas.apply {
             val range = (0..1)
-            for (i in 0 until 5)
+            for (i in 0 .. lastIdx)
                 if (range.random() % 2 == 0)
                     add(LeftRightData(name = defaultItems[0].toString(), imageID = R.drawable.mushroom_b))
                 else
@@ -223,18 +243,17 @@ class LeftRightActivity : AppCompatActivity() {
         time = 0
         score = 0
         isOver = false
-        binding.radioGroup.clearCheck()
+        binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreLeftright.text = "0"
-        binding.tvTime.text = "0초"
+        binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        //binding.rvLeftright.visibility = View.GONE
         binding.rvLeftright.visibility = View.INVISIBLE
-        binding.btnStart.isEnabled = false
+        binding.layBottom.btnStart.isEnabled = false
         binding.btnLeft.isEnabled = false
         binding.btnRight.isEnabled = false
         binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.radioGroup)
+        setRadioState(true, binding.layBottom.radioGroup)
         timerTask?.cancel()
     }
 }

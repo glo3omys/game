@@ -34,7 +34,6 @@
             android:id="@+id/goto_math"
             android:text="Mathematics"
             tools:ignore="MissingConstraints" />
-<<<<<<< HEAD
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,8 +64,6 @@
             android:id="@+id/goto_conntest"
             android:text="Conn Test"
             tools:ignore="MissingConstraints" />
-=======
->>>>>>> origin/master
 
     </LinearLayout>
 

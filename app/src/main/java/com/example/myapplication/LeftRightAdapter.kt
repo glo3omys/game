@@ -19,36 +19,16 @@ class LeftRightAdapter(private val context: LeftRightActivity) :
     }
 
     //override fun getItemCount(): Int = datas.size
-    override fun getItemCount(): Int = 5
+    override fun getItemCount(): Int = 8
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position], position)
-        if (position == 4)
+        if (position == 7)
             holder.itemView.setBackgroundResource(R.drawable.textview_edge)
-
-        /*
-        when (datas[position].name.toString()) {
-            "RIGHT" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.RED.RGB.toString()))
-            "LEFT" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.YELLOW.RGB.toString()))
-        }
-        */
-
-        //holder.itemView.setOnClickListener() {
-            //Toast.makeText(this.context, position.toString(), Toast.LENGTH_SHORT).show()
-            //holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.BLACK.RGB.toString()))
-            //context.popBalloon(datas[position].name)
-        //}
+        else
+            holder.itemView.setBackgroundResource(0)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        /*
-        private val imageView: ImageView = itemView.findViewById(R.id.img_leftright)
-        fun bind(item: LeftRightData, position: Int) {
-            this.item.setImageResource(item.imageID)
-            imageView.setImageResource(R.drawable.mushroom_blue)
-            this.item.setImageResource(R.drawable.mushroom_blue)
-        }
-        */
-        //private val img: Button = itemView.findViewById(R.id.btn_rv_leftright)
         private val imageView: ImageView = itemView.findViewById(R.id.img_rv_leftright)
         fun bind(item: LeftRightData, position: Int) {
             //img.text = item.name

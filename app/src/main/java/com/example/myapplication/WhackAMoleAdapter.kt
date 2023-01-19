@@ -39,7 +39,12 @@ class WhackAMoleAdapter(private val context: WhackAMoleActivity) :
                 mole.isEnabled = false
             }
             mole.setOnClickListener() {
-                val res = (datas[position].imageID == R.drawable.mokoko)
+                var res = 0
+                when (datas[position].imageID) {
+                    R.drawable.mokoko -> res = 1
+                    R.drawable.mokoko_g -> res = 3
+                    R.drawable.mushroom_z -> res = -5
+                }
                 context.popMole(res, position)
             }
         }

@@ -61,6 +61,7 @@
         android:layout_marginTop="68dp"
         android:orientation="vertical"
         android:visibility="gone"
+        android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@+id/lay_menu"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"

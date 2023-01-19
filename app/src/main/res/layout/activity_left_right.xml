@@ -62,6 +62,7 @@
             android:id="@+id/rv_leftright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:overScrollMode="never"
             android:orientation="vertical"
             android:layout_centerHorizontal="true"
             tools:listitem="@layout/recycler_leftright" />

@@ -19,7 +19,7 @@ import kotlin.concurrent.timer
 class WhackAMoleActivity : AppCompatActivity() {
     lateinit var whackAMoleAdapter: WhackAMoleAdapter
     //val datas = mutableListOf<WhackAMoleData>()
-    val defaultMoles = listOf("mole", "bomb")
+    val defaultMoles = listOf("mole", "gold", "bomb")
 
     private var mBinding: ActivityWhackAMoleBinding? = null
     private val binding get() = mBinding!!
@@ -184,7 +184,12 @@ class WhackAMoleActivity : AppCompatActivity() {
         // mole or bomb
         whackAMoleAdapter.datas[nextMole].apply {
             selected = true
-            if ((0 until 100).random() < 80) {
+            val p = (0 until 100).random()
+            if (p < 5) {
+                name = "gold"
+                imageID = R.drawable.mokoko_g
+            }
+            else if (p < 70) {
                 name = "mole"
                 imageID = R.drawable.mokoko
             }
@@ -248,11 +253,8 @@ class WhackAMoleActivity : AppCompatActivity() {
         timerTask?.cancel()
     }
 
-    fun popMole(isMole: Boolean, position: Int) {
-        if (isMole)
-            score++
-        else
-            score--
+    fun popMole(moleScore: Int, position: Int) {
+        score += moleScore
 
         whackAMoleAdapter.datas[position].selected = false
         runOnUiThread {

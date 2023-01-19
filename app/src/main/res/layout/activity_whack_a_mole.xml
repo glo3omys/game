@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WhackAMoleActivity">
+
+    <include
+        android:id="@+id/lay_time"
+        layout="@layout/view_lay_time"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/lay_menu"
+        app:layout_constraintTop_toBottomOf="@id/lay_time"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOME"
+            android:id="@+id/btn_home"
+            tools:ignore="MissingConstraints" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAUSE"
+            android:id="@+id/btn_pause"
+            android:enabled="false"
+            android:layout_below="@+id/btn_home"
+            tools:ignore="MissingConstraints" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_pause"
+            android:text="_____"
+            android:id="@+id/tv_best_score"
+            android:textSize="30dp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="SCORE: 0"
+        android:id="@+id/tv_score_wam"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/lay_menu"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_whack_a_mole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/tv_score_wam"
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/textview_edge"
+        tools:listitem="@layout/recycler_whack_a_mole" />
+
+    <include android:id="@+id/lay_bottom"
+        layout="@layout/view_lay_bottom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

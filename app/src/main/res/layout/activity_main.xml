@@ -70,6 +70,12 @@
             android:id="@+id/goto_wam"
             android:text="Whack a Mole"
             tools:ignore="MissingConstraints" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/goto_memory"
+            android:text="Memory Card Game"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 

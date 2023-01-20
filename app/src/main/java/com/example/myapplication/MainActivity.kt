@@ -75,5 +75,11 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
             startActivity(nextIntent)
         }
+        val memorybtn = findViewById<Button>(R.id.goto_memory)
+        memorybtn.setOnClickListener {
+            val nextIntent = Intent(this, MemoryCardGameActivity::class.java)
+            //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
+            startActivity(nextIntent)
+        }
     }
 }

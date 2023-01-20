@@ -41,6 +41,7 @@
         <activity android:name=".FindNumberActivity" />
         <activity android:name=".ConnTestActivity" />
         <activity android:name=".WhackAMoleActivity" />
+        <activity android:name=".MemoryCardGameActivity" />
     </application>
 
 </manifest>

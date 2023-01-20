@@ -4,54 +4,52 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.databinding.ActivityWhackAMoleBinding
+import com.example.myapplication.databinding.ActivityMemoryCardGameBinding
 import setRadioState
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
+import memoryCardGameDatas
 
-class WhackAMoleActivity : AppCompatActivity() {
-    lateinit var whackAMoleAdapter: WhackAMoleAdapter
-    //val datas = mutableListOf<WhackAMoleData>()
-    val defaultMoles = listOf("mole", "gold", "bomb")
+class MemoryCardGameActivity : AppCompatActivity() {
+    lateinit var memoryCardGameAdapter: MemoryCardGameAdapter
 
-    private var mBinding: ActivityWhackAMoleBinding? = null
+    private var mBinding: ActivityMemoryCardGameBinding? = null
     private val binding get() = mBinding!!
     lateinit var mAlertDialog: AlertDialog
 
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
-    val moleTimer = arrayListOf<Timer?>()
-    var questTimer: Timer?= null
-    var questTime = 0
-    var questIsOver = false
-    var questTimerStarted = false
 
     var score = 0
 
-    val SPAN_COUNT = 4
+    var flippedCnt = 0
+    var leftCardCnt = 12
+    var flippedCards = mutableListOf<Int>()
+    val SPAN_COUNT = 3
 
-    val gameName = "WhackAMole"
-
+    val gameName = "MemoryCardGame"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_whack_a_mole)
+        setContentView(R.layout.activity_memory_card_game)
 
-        mBinding = ActivityWhackAMoleBinding.inflate(layoutInflater)
+        mBinding = ActivityMemoryCardGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        whackAMoleAdapter = WhackAMoleAdapter(this)
+        memoryCardGameAdapter = MemoryCardGameAdapter(this)
 
         val secTextView = binding.layTime.tvTime
 
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
-        binding.rvWhackAMole.layoutManager = gridLayoutManager
+        binding.rvMemoryCardGame.layoutManager = gridLayoutManager
 
         var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
@@ -75,7 +73,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         }
         binding.layBottom.btnStart.setOnClickListener {
             if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@WhackAMoleActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "CHECK ERROR", Toast.LENGTH_SHORT).show()
             else {
                 setDatas()
                 setRadioState(false, binding.layBottom.radioGroup)
@@ -83,7 +81,7 @@ class WhackAMoleActivity : AppCompatActivity() {
                 binding.layTime.pgBar.max = time
                 binding.btnPause.isEnabled = true
                 binding.layBottom.btnStart.isEnabled = false
-                binding.rvWhackAMole.visibility = View.VISIBLE
+                binding.rvMemoryCardGame.visibility = View.VISIBLE
                 runTimer(mDialogView)
             }
         }
@@ -104,19 +102,18 @@ class WhackAMoleActivity : AppCompatActivity() {
     private fun pauseTimer(mDialogView: View) {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
-            binding.rvWhackAMole.visibility = View.GONE
+            binding.rvMemoryCardGame.visibility = View.GONE
             pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
-            binding.rvWhackAMole.visibility = View.VISIBLE
+            binding.rvMemoryCardGame.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
             runTimer(mDialogView)
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
-
         init()
     }
     fun runTimer(mDialogView: View) {
@@ -126,21 +123,19 @@ class WhackAMoleActivity : AppCompatActivity() {
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
             val sec = time / 100
-
             runOnUiThread {
                 secTextView.text = "$sec" + "초"
                 progressBar.progress = time
-
-                if (!questTimerStarted)
-                    allocQuestTimer()
             }
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text =
+                        MainActivity.prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
+                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text =
+                        score.toString()
 
                     mAlertDialog.show()
                     val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
@@ -153,112 +148,78 @@ class WhackAMoleActivity : AppCompatActivity() {
             }
         }
     }
-    // 두더지를 부르기 까지의 대기 시간 설정
-    private fun allocQuestTimer() {
-        questTimerStarted = true
-        questTime = (50 .. 120).random()
-
-        questTimer = timer(period = 10) {
-            questTime--
-            runOnUiThread {
-
-            }
-            if (questTime <= 0 && !questIsOver) {
-                questIsOver = true
-                runOnUiThread {
-                    allocQuest()
-                    questTimer?.cancel()
-                }
-            }
-        }
-    }
-
-    private fun allocQuest() {
-        questIsOver = false
-        questTimerStarted = false
-
-        // set next mole's index
-        var nextMole = (0 until SPAN_COUNT * SPAN_COUNT).random()
-        while (whackAMoleAdapter.datas[nextMole].selected)
-            nextMole = (0 until SPAN_COUNT * SPAN_COUNT).random()
-
-        var moleTime = 100
-        var moleIsOver = false
-        whackAMoleAdapter.datas[nextMole].apply {
-            selected = true
-            val p = (0 until 100).random()
-            if (p < 5) {
-                name = "gold"
-                imageID = R.drawable.mokoko_g
-                moleTime = 50
-            }
-            else if (p < 70) {
-                name = "mole"
-                imageID = R.drawable.mokoko
-            }
-            else {
-                name = "bomb"
-                imageID = R.drawable.mushroom_z
-            }
-            runOnUiThread {
-                whackAMoleAdapter.notifyItemChanged(nextMole)
-            }
-        }
-
-        moleTimer[nextMole] = timer(period = 10) {
-            moleTime--
-            if (moleTime <= 0 && !moleIsOver) {
-                moleIsOver = true
-                whackAMoleAdapter.datas[nextMole].selected = false
-                runOnUiThread {
-                    whackAMoleAdapter.notifyItemChanged(nextMole)
-                    moleTimer[nextMole]?.cancel()
-                }
-            }
-        }
-    }
-
     private fun initRecycler() {
         init()
         setDatas()
-        for (i in (0 until SPAN_COUNT * SPAN_COUNT))
-            moleTimer.add(Timer())
-        binding.rvWhackAMole.adapter = whackAMoleAdapter
+        binding.rvMemoryCardGame.adapter = memoryCardGameAdapter
         binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
     }
     private fun setDatas() {
-        val tmpDatas = mutableListOf<WhackAMoleData>()
+        val tmpDatas = mutableListOf<MemoryCardGameData>()
+        val tmpDefault = memoryCardGameDatas.shuffled()
+
+        tmpDatas.clear()
         tmpDatas.apply {
-            for (i in (0 until SPAN_COUNT * SPAN_COUNT))
-                add(WhackAMoleData(name = "mole", imageID = R.drawable.mokoko, selected = false))
-            whackAMoleAdapter.datas = tmpDatas
-            whackAMoleAdapter.notifyDataSetChanged()
+            for (i in (0 until 6))
+                for (j in (0 .. 1))
+                    add(tmpDefault[i])
+            shuffle()
+            memoryCardGameAdapter.datas = tmpDatas
+            memoryCardGameAdapter.notifyDataSetChanged()
         }
     }
+    fun flipCard(position: Int) {
+        flippedCnt++
+        flippedCards.add(position)
+        if (flippedCnt == 2) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                //실행할 코드
+                popCard()
+            }, 800)
+        }
+    }
+    private fun popCard() {
+        memoryCardGameAdapter.datas.apply {
+            for (i in flippedCards)
+                this[i].selected = false
+            if (this[flippedCards[0]].name == this[flippedCards[1]].name) {
+                score++
+                for (i in flippedCards)
+                    this[i].invisible = true
+                binding.tvScoreMemory.text = score.toString()
+            }
+            memoryCardGameAdapter.notifyDataSetChanged()
+        }
+        flippedCards.clear()
+        flippedCnt = 0
 
+        if (leftCardCnt == 0) {
+            setDatas()
+            leftCardCnt = 12
+        }
+    }
+    private fun initDefaultCards() {
+        for (card in memoryCardGameDatas) {
+            card.invisible = false
+            card.selected = false
+        }
+    }
     fun init() {
         time = 0
         score = 0
         isOver = false
+        flippedCnt = 0
+        leftCardCnt = 12
         binding.layBottom.radioGroup.clearCheck()
-        binding.tvScoreWam.text = "0"
+        binding.tvScoreMemory.text = "0"
         binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.rvWhackAMole.visibility = View.GONE
+        binding.rvMemoryCardGame.visibility = View.GONE
         binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
         setRadioState(true, binding.layBottom.radioGroup)
+        initDefaultCards()
         timerTask?.cancel()
-    }
-
-    fun popMole(moleScore: Int, position: Int) {
-        score += moleScore
-
-        whackAMoleAdapter.datas[position].selected = false
-        runOnUiThread {
-            binding.tvScoreWam.text = score.toString()
-            whackAMoleAdapter.notifyItemChanged(position)
-        }
     }
 }

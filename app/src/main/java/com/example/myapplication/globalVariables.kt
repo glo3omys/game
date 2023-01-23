@@ -1,3 +1,5 @@
+import android.graphics.Typeface
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.MemoryCardGameData
@@ -38,10 +40,22 @@ val memoryCardGameDatas = listOf<MemoryCardGameData>(
 )
 
 fun setRadioState(flag: Boolean, radioGroup: RadioGroup) {
-    for (i in 0 until radioGroup.childCount)
-        radioGroup.getChildAt(i).isEnabled = flag
+    for (i in 0 until radioGroup.childCount) {
+        //radioGroup.getChildAt(i).isEnabled = flag
+        val rb = radioGroup.getChildAt(i) as RadioButton
+        rb.isEnabled = flag
+        rb.buttonDrawable = null
+    }
 }
-
+fun setRadioStyle(radioGroup: RadioGroup) {
+    for (i in 0 until radioGroup.childCount) {
+        val rb = radioGroup.getChildAt(i) as RadioButton
+        if (rb.isChecked)
+            radioGroup.findViewById<RadioButton>(rb.id).typeface = Typeface.DEFAULT_BOLD
+        else
+            radioGroup.findViewById<RadioButton>(rb.id).typeface = Typeface.DEFAULT
+    }
+}
 fun updateMyBestScore(gameName: String, score: String) {
     val storedScore = prefs.getSharedPrefs(gameName, score)
     if (storedScore.toInt() > score.toInt())

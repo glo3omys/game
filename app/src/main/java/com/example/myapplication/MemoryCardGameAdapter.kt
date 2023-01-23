@@ -28,10 +28,14 @@ class MemoryCardGameAdapter(private val context: MemoryCardGameActivity) :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val card: ImageView = itemView.findViewById(R.id.img_rv_memory)
         fun bind(item: MemoryCardGameData, position: Int) {
-            if (item.selected)
+            if (item.selected) {
                 card.setImageResource(item.imageID)
-            else
+                card.isEnabled = false
+            }
+            else {
                 card.setImageResource(R.drawable.card_back)
+                card.isEnabled = true
+            }
             if (item.invisible) {
                 card.visibility = View.INVISIBLE
                 card.isEnabled = false
@@ -42,9 +46,6 @@ class MemoryCardGameAdapter(private val context: MemoryCardGameActivity) :
             }
 
             card.setOnClickListener() {
-                /* card flip */
-                item.selected = true
-                notifyItemChanged(position)
                 context.flipCard(position)
             }
         }

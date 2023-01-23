@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
     var flippedCnt = 0
     var leftCardCnt = 12
     var flippedCards = mutableListOf<Int>()
-    val SPAN_COUNT = 3
+    val SPAN_COUNT = 4
 
     val gameName = "MemoryCardGame"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,40 +155,52 @@ class MemoryCardGameActivity : AppCompatActivity() {
         binding.rvMemoryCardGame.adapter = memoryCardGameAdapter
         binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
     }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun setDatas() {
         val tmpDatas = mutableListOf<MemoryCardGameData>()
-        val tmpDefault = memoryCardGameDatas.shuffled()
+        val tmpDefault = mutableListOf<MemoryCardGameData>()
+        tmpDefault.addAll(memoryCardGameDatas.shuffled())
 
-        tmpDatas.clear()
         tmpDatas.apply {
             for (i in (0 until 6))
-                for (j in (0 .. 1))
-                    add(tmpDefault[i])
+                for (j in (0..1))
+                    add(MemoryCardGameData(name = tmpDefault[i].name, imageID = tmpDefault[i].imageID, selected = false, invisible = false))
             shuffle()
             memoryCardGameAdapter.datas = tmpDatas
+        }
+
+        runOnUiThread() {
             memoryCardGameAdapter.notifyDataSetChanged()
         }
     }
     fun flipCard(position: Int) {
+        if (memoryCardGameAdapter.datas[position].selected || flippedCnt == 2)
+            return
+        memoryCardGameAdapter.datas[position].selected = true
+        memoryCardGameAdapter.notifyItemChanged(position)
         flippedCnt++
         flippedCards.add(position)
         if (flippedCnt == 2) {
             Handler(Looper.getMainLooper()).postDelayed({
                 //실행할 코드
                 popCard()
-            }, 800)
+            }, 500)
         }
     }
     private fun popCard() {
-        memoryCardGameAdapter.datas.apply {
+        memoryCardGameAdapter.datas.run {
             for (i in flippedCards)
                 this[i].selected = false
             if (this[flippedCards[0]].name == this[flippedCards[1]].name) {
                 score++
+                leftCardCnt -= 2
                 for (i in flippedCards)
                     this[i].invisible = true
                 binding.tvScoreMemory.text = score.toString()
             }
+        }
+        runOnUiThread() {
             memoryCardGameAdapter.notifyDataSetChanged()
         }
         flippedCards.clear()
@@ -208,7 +221,6 @@ class MemoryCardGameActivity : AppCompatActivity() {
         time = 0
         score = 0
         isOver = false
-        flippedCnt = 0
         leftCardCnt = 12
         binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreMemory.text = "0"

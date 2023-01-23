@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/lay_menu"
-        app:layout_constraintTop_toBottomOf="@id/lay_time"
+        android:layout_below="@+id/lay_time"
         tools:ignore="MissingConstraints">
 
         <Button
@@ -49,17 +49,17 @@
         android:id="@+id/tv_score_balloon"
         android:layout_margin="15dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/lay_menu"
+        android:layout_alignRight="@+id/lay_menu"
+        android:layout_below="@+id/lay_time"
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_score_balloon"
         android:gravity="center_horizontal"
         android:id="@+id/lay_balloon_quest"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_below="@+id/lay_menu"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -84,18 +84,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_balloon"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:orientation="vertical"
-        android:visibility="gone"
         android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/lay_balloon_quest"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_below="@+id/lay_balloon_quest"
         tools:listitem="@layout/recycler_balloon" />
 
     <include android:id="@+id/lay_bottom"
         layout="@layout/view_lay_bottom" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

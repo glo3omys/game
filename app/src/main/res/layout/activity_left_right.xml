@@ -11,7 +11,7 @@
         layout="@layout/view_lay_time"/>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/lay_menu"
@@ -48,7 +48,7 @@
         android:text="SCORE: 0"
         android:id="@+id/tv_score_leftright"
         android:gravity="center"
-        android:layout_below="@+id/lay_menu"
+        android:layout_below="@+id/lay_time"
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="50dp"
-        android:layout_below="@+id/tv_score_leftright">
+        android:layout_below="@+id/lay_menu">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_leftright"

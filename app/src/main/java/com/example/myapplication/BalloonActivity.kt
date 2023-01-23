@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityBalloonBinding
 import setRadioState
+import setRadioStyle
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -73,6 +74,7 @@ class BalloonActivity: AppCompatActivity() {
             }
             if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
                 binding.layBottom.btnStart.isEnabled = true
+            setRadioStyle(group)
         }
         binding.layBottom.btnStart.setOnClickListener {
             if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
@@ -168,6 +170,7 @@ class BalloonActivity: AppCompatActivity() {
             balloonAdapter.datas = datas
             balloonAdapter.notifyDataSetChanged()
         }
+        setRadioState(true, binding.layBottom.radioGroup)
     }
 
     private fun allocQuest() {

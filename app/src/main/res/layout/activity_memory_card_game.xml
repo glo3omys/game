@@ -6,40 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".MemoryCardGameActivity">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_menu"
+        >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_home"
+            android:src="@drawable/home_button"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_pause"
+            android:src="@drawable/pause_button"
+            android:layout_alignParentRight="true"
+            android:enabled="false" />
+    </RelativeLayout>
+
     <include
         android:id="@+id/lay_time"
-        layout="@layout/view_lay_time"/>
-
-    <RelativeLayout
+        layout="@layout/view_lay_time"
+        android:layout_below="@+id/lay_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/lay_menu"
-        android:layout_below="@+id/lay_time"
-        tools:ignore="MissingConstraints">
+        android:layout_height="72dp"
+        android:layout_marginTop="43dp"
+        />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HOME"
-            android:id="@+id/btn_home"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PAUSE"
-            android:id="@+id/btn_pause"
-            android:enabled="false"
-            android:layout_below="@+id/btn_home"
-            tools:ignore="MissingConstraints" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_pause"
-            android:text="최고기록: ___"
-            android:id="@+id/tv_best_score"
-            android:textSize="16dp"/>
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최고기록: ___"
+        android:id="@+id/tv_best_score"
+        android:layout_below="@id/lay_time"
+        android:textSize="16dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -49,7 +52,7 @@
         android:id="@+id/tv_score_memory"
         android:layout_margin="15dp"
         android:gravity="center"
-        android:layout_below="@+id/lay_time" />
+        android:layout_below="@+id/tv_best_score" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_memory_card_game"
@@ -57,7 +60,7 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:visibility="invisible"
-        android:layout_below="@+id/lay_menu"
+        android:layout_below="@+id/tv_score_memory"
         android:layout_centerHorizontal="true"
         tools:listitem="@layout/recycler_memory" />
 

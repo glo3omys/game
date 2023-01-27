@@ -1,70 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TaptapActivity">
 
-    <include android:id="@+id/lay_time"
-        layout="@layout/view_lay_time" />
-
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:id="@+id/lay_menu"
-        app:layout_constraintTop_toBottomOf="@id/lay_time"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HOME"
-            android:id="@+id/btn_home"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PAUSE"
-            android:id="@+id/btn_pause"
-            android:enabled="false"
-            android:layout_below="@+id/btn_home"
-            tools:ignore="MissingConstraints" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_pause"
-            android:text="최고기록: ___"
-            android:id="@+id/tv_best_score"
-            android:textSize="16dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/lay_menu"
-        tools:ignore="MissingConstraints"
         >
 
-        <TextView
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="0"
-            android:id="@+id/tv_score_taptap"
-            />
+            android:id="@+id/btn_home"
+            android:src="@drawable/home_button"/>
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_cnt"
-            android:enabled="false"
-            android:layout_below="@+id/tv_score_taptap"
-            android:text="CLICK"/>
-
+            android:id="@+id/btn_pause"
+            android:src="@drawable/pause_button"
+            android:layout_alignParentRight="true"
+            android:enabled="false" />
     </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/lay_time"
+        layout="@layout/view_lay_time"
+        android:layout_below="@+id/lay_menu"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="43dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최고기록: ___"
+        android:id="@+id/tv_best_score"
+        android:layout_below="@id/lay_time"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="SCORE: 0"
+        android:id="@+id/tv_score_taptap"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        android:layout_below="@+id/tv_best_score" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_tap"
+        android:src="@drawable/click_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:enabled="false"
+        android:layout_below="@+id/tv_score_taptap" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_click"
+        android:layout_below="@+id/btn_tap"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:textSize="40dp"
+        android:text="Click" />
+
+
+</RelativeLayout>

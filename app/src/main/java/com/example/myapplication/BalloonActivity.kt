@@ -91,10 +91,6 @@ class BalloonActivity: AppCompatActivity() {
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
-        binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
-            startActivity(nextIntent)
-        }
 
         initRecycler()
 
@@ -104,7 +100,7 @@ class BalloonActivity: AppCompatActivity() {
 
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        /*if (pauseBtn.text == "PAUSE") {
             binding.rvBalloon.visibility = View.GONE
             pauseBtn.text = "PLAY"
             timerTask?.cancel()
@@ -114,7 +110,7 @@ class BalloonActivity: AppCompatActivity() {
             binding.rvBalloon.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -240,7 +236,7 @@ class BalloonActivity: AppCompatActivity() {
         //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreBalloon.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.tvBalloon1.text = "..."
         binding.tvBalloon2.text = "..."
         binding.btnPause.isEnabled = false

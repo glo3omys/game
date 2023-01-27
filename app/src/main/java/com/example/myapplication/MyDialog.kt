@@ -118,7 +118,7 @@ class MyDialog(context: Context) {
             else if (gameName == "WhackAMole")
                 nextIntent = Intent(mContext, WhackAMoleActivity::class.java)
 
-            nextIntent.putExtra("time", time*100)
+            nextIntent.putExtra("time", time * 100)
             mContext.startActivity(nextIntent)
         }
         btnBack.setOnClickListener() {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityTaptapBinding
@@ -31,6 +32,9 @@ class TaptapActivity : AppCompatActivity() {
         mBinding = ActivityTaptapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val anim = AnimationUtils.loadAnimation(this, R.anim.anim_blink)
+        binding.tvClick.startAnimation(anim)
+
         val countTextView = binding.tvScoreTaptap
         val secTextView = binding.layTime.tvTime
 
@@ -41,7 +45,7 @@ class TaptapActivity : AppCompatActivity() {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.btnCnt.setOnClickListener {
+        binding.btnTap.setOnClickListener {
             cnt += 1
             countTextView.text = cnt.toString()
         }
@@ -82,7 +86,7 @@ class TaptapActivity : AppCompatActivity() {
 
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        /*if (pauseBtn.text == "PAUSE") {
             pauseBtn.text = "PLAY"
             timerTask?.cancel()
             binding.btnCnt.isEnabled = false
@@ -90,7 +94,7 @@ class TaptapActivity : AppCompatActivity() {
         else {
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
 
     private fun stopTimer() {
@@ -99,7 +103,7 @@ class TaptapActivity : AppCompatActivity() {
     }
 
     fun runTimer() {
-        binding.btnCnt.isEnabled = true
+        binding.btnTap.isEnabled = true
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -134,9 +138,9 @@ class TaptapActivity : AppCompatActivity() {
         //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreTaptap.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.btnCnt.isEnabled = false
+        binding.btnTap.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
         //setRadioState(true, binding.layBottom.radioGroup)

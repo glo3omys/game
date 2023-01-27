@@ -89,10 +89,6 @@ class MathActivity: AppCompatActivity() {
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
-        binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
-            startActivity(nextIntent)
-        }
 
         mToast = createToast()
         initRecycler()
@@ -101,7 +97,7 @@ class MathActivity: AppCompatActivity() {
 
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        /*if (pauseBtn.text == "PAUSE") {
             binding.rvMath.visibility = View.GONE
             pauseBtn.text = "PLAY"
             timerTask?.cancel()
@@ -110,7 +106,7 @@ class MathActivity: AppCompatActivity() {
             binding.rvMath.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -266,7 +262,7 @@ class MathActivity: AppCompatActivity() {
         binding.tvHistory.text = ""
         binding.tvScoreMath.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.tvNum1.text = "  "
         binding.tvNum2.text = "  "
         binding.tvNum3.text = "  "

@@ -108,10 +108,6 @@ class LeftRightActivity : AppCompatActivity() {
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
-        binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
-            startActivity(nextIntent)
-        }
         binding.btnLeft.setOnClickListener {
             if (leftRightAdapter.datas[lastIdx].name == "LEFT")
                 popItem()
@@ -167,7 +163,7 @@ class LeftRightActivity : AppCompatActivity() {
 
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        /*if (pauseBtn.text == "PAUSE") {
             //binding.rvLeftright.visibility = View.GONE
             binding.rvLeftright.visibility = View.INVISIBLE
             binding.btnLeft.isEnabled = false
@@ -182,7 +178,7 @@ class LeftRightActivity : AppCompatActivity() {
             binding.btnRight.isEnabled = true
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -242,7 +238,7 @@ class LeftRightActivity : AppCompatActivity() {
         //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreLeftright.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
         binding.btnLeft.isEnabled = true

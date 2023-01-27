@@ -95,10 +95,7 @@ class FindNumberActivity : AppCompatActivity() {
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
-        binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
-            startActivity(nextIntent)
-        }
+
         mToast = createToast()
         initRecycler()
         runTimer()
@@ -138,7 +135,7 @@ class FindNumberActivity : AppCompatActivity() {
 
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        /*if (pauseBtn.text == "PAUSE") {
             binding.rvFindnum.visibility = View.GONE
             pauseBtn.text = "PLAY"
             timerTask?.cancel()
@@ -147,7 +144,7 @@ class FindNumberActivity : AppCompatActivity() {
             binding.rvFindnum.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -199,14 +196,14 @@ class FindNumberActivity : AppCompatActivity() {
     }
 
     fun init() {
-        time = 0
+        //time = 0
         score = 0
         nextNumber = 1
         isOver = false
         //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreFindnum.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")

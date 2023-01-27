@@ -44,7 +44,7 @@ fun setRadioState(flag: Boolean, radioGroup: RadioGroup) {
         //radioGroup.getChildAt(i).isEnabled = flag
         val rb = radioGroup.getChildAt(i) as RadioButton
         rb.isEnabled = flag
-        rb.buttonDrawable = null
+        //rb.buttonDrawable = null
     }
 }
 fun setRadioStyle(radioGroup: RadioGroup) {

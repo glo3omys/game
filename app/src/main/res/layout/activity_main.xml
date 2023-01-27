@@ -13,14 +13,21 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/testbtn"
+            android:text="alert test"
+            android:visibility="gone"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/goto_taptap"
-            android:text="taptap"
+            android:text="Taptap"
             tools:ignore="MissingConstraints" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_balloon"
-            android:text="balloon"
+            android:text="Balloon"
             tools:ignore="MissingConstraints" />
         <Button
             android:layout_width="wrap_content"

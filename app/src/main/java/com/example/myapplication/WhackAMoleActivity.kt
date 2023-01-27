@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -23,7 +25,6 @@ class WhackAMoleActivity : AppCompatActivity() {
 
     private var mBinding: ActivityWhackAMoleBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
 
     var timerTask: Timer?= null
     var time = 0
@@ -40,6 +41,8 @@ class WhackAMoleActivity : AppCompatActivity() {
 
     val gameName = "WhackAMole"
 
+    //val displayMetrics = DisplayMetrics()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_whack_a_mole)
@@ -53,18 +56,14 @@ class WhackAMoleActivity : AppCompatActivity() {
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvWhackAMole.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
+        val intent = intent
+        time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
@@ -84,7 +83,7 @@ class WhackAMoleActivity : AppCompatActivity() {
                 binding.btnPause.isEnabled = true
                 binding.layBottom.btnStart.isEnabled = false
                 binding.rvWhackAMole.visibility = View.VISIBLE
-                runTimer(mDialogView)
+                runTimer()
             }
         }
         binding.layBottom.btnReset.setOnClickListener() {
@@ -92,16 +91,19 @@ class WhackAMoleActivity : AppCompatActivity() {
             time = 0
             stopTimer()
         }
+
+         */
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView)
+            pauseTimer()
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
         initRecycler()
+        runTimer()
     }
-    private fun pauseTimer(mDialogView: View) {
+    private fun pauseTimer() {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvWhackAMole.visibility = View.GONE
@@ -111,7 +113,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         else {
             binding.rvWhackAMole.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView)
+            runTimer()
         }
     }
     private fun stopTimer() {
@@ -119,7 +121,7 @@ class WhackAMoleActivity : AppCompatActivity() {
 
         init()
     }
-    fun runTimer(mDialogView: View) {
+    fun runTimer() {
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -138,17 +140,14 @@ class WhackAMoleActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
+                    val mDialog = MyDialog(this@WhackAMoleActivity)
+                    mDialog.myDig("Score", score)
+
                     timerTask?.cancel()
+                    //init()
                 }
             }
         }
@@ -224,7 +223,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         for (i in (0 until SPAN_COUNT * SPAN_COUNT))
             moleTimer.add(Timer())
         binding.rvWhackAMole.adapter = whackAMoleAdapter
-        binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
     }
     private fun setDatas() {
         val tmpDatas = mutableListOf<WhackAMoleData>()
@@ -237,18 +236,19 @@ class WhackAMoleActivity : AppCompatActivity() {
     }
 
     fun init() {
-        time = 0
+        //time = 0
         score = 0
         isOver = false
-        binding.layBottom.radioGroup.clearCheck()
+        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreWam.text = "0"
         binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.rvWhackAMole.visibility = View.GONE
-        binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.layBottom.radioGroup)
+        //binding.layBottom.btnStart.isEnabled = false
+        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        //setRadioState(true, binding.layBottom.radioGroup)
+        binding.layTime.pgBar.max = time
+        binding.rvWhackAMole.visibility = View.VISIBLE
         timerTask?.cancel()
     }
 

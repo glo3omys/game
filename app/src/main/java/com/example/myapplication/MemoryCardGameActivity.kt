@@ -25,7 +25,6 @@ class MemoryCardGameActivity : AppCompatActivity() {
 
     private var mBinding: ActivityMemoryCardGameBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
 
     var timerTask: Timer?= null
     var time = 0
@@ -52,18 +51,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvMemoryCardGame.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
+        val intent = intent
+        time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
@@ -83,7 +78,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
                 binding.btnPause.isEnabled = true
                 binding.layBottom.btnStart.isEnabled = false
                 binding.rvMemoryCardGame.visibility = View.VISIBLE
-                runTimer(mDialogView)
+                runTimer()
             }
         }
         binding.layBottom.btnReset.setOnClickListener() {
@@ -91,16 +86,19 @@ class MemoryCardGameActivity : AppCompatActivity() {
             time = 0
             stopTimer()
         }
+
+         */
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView)
+            pauseTimer()
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
         initRecycler()
+        runTimer()
     }
-    private fun pauseTimer(mDialogView: View) {
+    private fun pauseTimer() {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvMemoryCardGame.visibility = View.GONE
@@ -110,14 +108,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
         else {
             binding.rvMemoryCardGame.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView)
+            runTimer()
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
-    fun runTimer(mDialogView: View) {
+    fun runTimer() {
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -133,18 +131,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
                     binding.tvBestScore.text =
-                        MainActivity.prefs.getSharedPrefs(gameName, score.toString())
+                        "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text =
-                        score.toString()
 
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
+                    val mDialog = MyDialog(this@MemoryCardGameActivity)
+                    mDialog.myDig("Score", score)
+
                     timerTask?.cancel()
+                    //init()
                 }
             }
         }
@@ -153,7 +147,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvMemoryCardGame.adapter = memoryCardGameAdapter
-        binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -218,20 +212,21 @@ class MemoryCardGameActivity : AppCompatActivity() {
         }
     }
     fun init() {
-        time = 0
+        //time = 0
         score = 0
         isOver = false
         leftCardCnt = 12
-        binding.layBottom.radioGroup.clearCheck()
+        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreMemory.text = "0"
         binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.rvMemoryCardGame.visibility = View.GONE
-        binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = MainActivity.prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.layBottom.radioGroup)
+        //binding.layBottom.btnStart.isEnabled = false
+        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        //setRadioState(true, binding.layBottom.radioGroup)
         initDefaultCards()
+        binding.layTime.pgBar.max = time
+        binding.rvMemoryCardGame.visibility = View.VISIBLE
         timerTask?.cancel()
     }
 }

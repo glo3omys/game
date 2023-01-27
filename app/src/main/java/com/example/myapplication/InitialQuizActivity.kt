@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -47,12 +46,15 @@ class InitialQuizActivity : AppCompatActivity() {
         mBinding = ActivityInitialQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*
         mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
         mBuilder.setView(mDialogView)
             .setTitle("Result")
             .setCancelable(false)
         mAlertDialog =  mBuilder.create()
+
+         */
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
@@ -119,7 +121,7 @@ class InitialQuizActivity : AppCompatActivity() {
         time = 1000
         binding.btnStart.isEnabled = false
         val secTextView = binding.layTime.tvTime
-        val resTextView = mDialogView.findViewById<TextView>(R.id.tv_custom_result)
+        val resTextView = mDialogView.findViewById<TextView>(R.id.my_tv)
         val progressBar = binding.layTime.pgBar
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--

@@ -26,7 +26,6 @@ class FindNumberActivity : AppCompatActivity() {
 
     private var mBinding: ActivityFindNumberBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -56,18 +55,14 @@ class FindNumberActivity : AppCompatActivity() {
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvFindnum.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
+        val intent = intent
+        time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
@@ -87,7 +82,7 @@ class FindNumberActivity : AppCompatActivity() {
                 binding.btnPause.isEnabled = true
                 binding.layBottom.btnStart.isEnabled = false
                 binding.rvFindnum.visibility = View.VISIBLE
-                runTimer(mDialogView)
+                runTimer()
             }
         }
         binding.layBottom.btnReset.setOnClickListener() {
@@ -95,8 +90,10 @@ class FindNumberActivity : AppCompatActivity() {
             time = 0
             stopTimer()
         }
+
+         */
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView)
+            pauseTimer()
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
@@ -104,6 +101,7 @@ class FindNumberActivity : AppCompatActivity() {
         }
         mToast = createToast()
         initRecycler()
+        runTimer()
     }
 
     fun popNumber(number: Int): Boolean {
@@ -138,7 +136,7 @@ class FindNumberActivity : AppCompatActivity() {
         mToast.show()
     }
 
-    private fun pauseTimer(mDialogView: View) {
+    private fun pauseTimer() {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvFindnum.visibility = View.GONE
@@ -148,14 +146,14 @@ class FindNumberActivity : AppCompatActivity() {
         else {
             binding.rvFindnum.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView)
+            runTimer()
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
-    fun runTimer(mDialogView: View) {
+    fun runTimer() {
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -170,17 +168,14 @@ class FindNumberActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
+                    val mDialog = MyDialog(this@FindNumberActivity)
+                    mDialog.myDig("Score", score)
+
                     timerTask?.cancel()
+                    init()
                 }
             }
         }
@@ -190,7 +185,7 @@ class FindNumberActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvFindnum.adapter = findNumberAdapter
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
     }
     private fun setDatas() {
         val tmpDatas = mutableListOf<FindNumberData>()
@@ -208,15 +203,16 @@ class FindNumberActivity : AppCompatActivity() {
         score = 0
         nextNumber = 1
         isOver = false
-        binding.layBottom.radioGroup.clearCheck()
+        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreFindnum.text = "0"
         binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.rvFindnum.visibility = View.GONE
-        binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.layBottom.radioGroup)
+        //binding.layBottom.btnStart.isEnabled = false
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        //setRadioState(true, binding.layBottom.radioGroup)
+        binding.layTime.pgBar.max = time
+        binding.rvFindnum.visibility = View.VISIBLE
         timerTask?.cancel()
     }
 }

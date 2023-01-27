@@ -49,7 +49,8 @@ class ScavAdapter(private val context: Context) :
                 notifyDataSetChanged()
             }
             editbtn.setOnClickListener() {
-                val mDialogView = LayoutInflater.from(context).inflate(R.layout.edit_custom_dialog, null)
+                /*
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.my_et_dialog, null)
                 val mBuilder = AlertDialog.Builder(context)
                     .setView(mDialogView)
                     .setTitle("EDIT ITEM")
@@ -71,6 +72,11 @@ class ScavAdapter(private val context: Context) :
                 cancelButton.setOnClickListener() {
                     mAlertDialog.dismiss()
                 }
+
+                 */
+                val mDialog = MyDialog(context)
+                mDialog.myDig("EDIT ITEM", datas[position].name, datas[position].score)
+                notifyDataSetChanged()
             }
         }
     }

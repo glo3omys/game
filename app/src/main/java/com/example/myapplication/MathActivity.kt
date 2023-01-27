@@ -24,7 +24,6 @@ class MathActivity: AppCompatActivity() {
 
     private var mBinding: ActivityMathBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
 
     var timerTask: Timer?= null
     var time = 0
@@ -50,18 +49,14 @@ class MathActivity: AppCompatActivity() {
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvMath.layoutManager = gridLayoutManager
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
+        val intent = intent
+        time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
                 R.id.sec_20 -> time = 20
@@ -83,14 +78,16 @@ class MathActivity: AppCompatActivity() {
                 binding.btnPause.isEnabled = true
                 binding.layBottom.btnStart.isEnabled = false
                 binding.rvMath.visibility = View.VISIBLE
-                runTimer(mDialogView, mBuilder)
+                runTimer()
             }
         }
         binding.layBottom.btnReset.setOnClickListener() {
             stopTimer()
         }
+
+         */
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView, mBuilder)
+            pauseTimer()
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
@@ -99,9 +96,10 @@ class MathActivity: AppCompatActivity() {
 
         mToast = createToast()
         initRecycler()
+        runTimer()
     }
 
-    private fun pauseTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+    private fun pauseTimer() {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvMath.visibility = View.GONE
@@ -111,14 +109,14 @@ class MathActivity: AppCompatActivity() {
         else {
             binding.rvMath.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView, mBuilder)
+            runTimer()
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
-    fun runTimer(mDialogView: View, mBuilder: AlertDialog.Builder) {
+    fun runTimer() {
         binding.rvMath.visibility = View.VISIBLE
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
@@ -134,17 +132,14 @@ class MathActivity: AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
+                    val mDialog = MyDialog(this@MathActivity)
+                    mDialog.myDig("Score", score)
+
                     timerTask?.cancel()
+                    //init()
                 }
             }
         }
@@ -153,7 +148,7 @@ class MathActivity: AppCompatActivity() {
     private fun initRecycler() {
         init()
         setDatas()
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
         binding.rvMath.adapter = mathAdapter
     }
 
@@ -263,11 +258,11 @@ class MathActivity: AppCompatActivity() {
     }
 
     fun init() {
-        time = 0
+        //time = 0
         score = 0
         isOver = false
         numCnt = 0
-        binding.layBottom.radioGroup.clearCheck()
+        //binding.layBottom.radioGroup.clearCheck()
         binding.tvHistory.text = ""
         binding.tvScoreMath.text = "0"
         binding.layTime.tvTime.text = "0초"
@@ -276,10 +271,11 @@ class MathActivity: AppCompatActivity() {
         binding.tvNum2.text = "  "
         binding.tvNum3.text = "  "
         binding.btnPause.isEnabled = false
-        binding.rvMath.visibility = View.GONE
-        binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.layBottom.radioGroup)
+        //binding.layBottom.btnStart.isEnabled = false
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        //setRadioState(true, binding.layBottom.radioGroup)
+        binding.layTime.pgBar.max = time
+        binding.rvMath.visibility = View.VISIBLE
         timerTask?.cancel()
     }
 }

@@ -35,9 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_pause"
-            android:text="_____"
+            android:text="최고기록: ___"
             android:id="@+id/tv_best_score"
-            android:textSize="30dp"/>
+            android:textSize="16dp"/>
     </RelativeLayout>
 
     <TextView
@@ -61,8 +61,5 @@
         android:background="@drawable/textview_edge"
         android:layout_marginTop="20dp"
         tools:listitem="@layout/recycler_whack_a_mole" />
-
-    <include android:id="@+id/lay_bottom"
-        layout="@layout/view_lay_bottom" />
 
 </RelativeLayout>

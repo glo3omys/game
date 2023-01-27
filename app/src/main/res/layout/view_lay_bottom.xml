@@ -4,63 +4,104 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/lay_bottom"
-        android:layout_alignParentBottom="true" >
+        android:layout_above="@+id/lay_radiogroup_tv">
 
         <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/radioGroup"
-            android:layout_weight="1">
+            android:background="@drawable/custom_radiogroup"
+            android:layout_alignParentBottom="true"
+            >
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/sec_10"
+                android:button="@drawable/custom_radiobutton"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="15dp"
-                android:text="10초"
-                />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center" />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/sec_20"
+                android:button="@drawable/custom_radiobutton"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="15dp"
-                android:text="20초"/>
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center" />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/sec_30"
+                android:button="@drawable/custom_radiobutton"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="15dp"
-                android:text="30초"/>
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center" />
 
         </RadioGroup>
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:visibility="gone">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_start"
-                android:text="START"
+                android:text="시작"
                 android:enabled="false" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_reset"
-                android:text="RESET"
+                android:text="다시"
                 android:layout_toRightOf="@+id/btn_start" />
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_radiogroup_tv"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_sec_10"
+            android:textSize="14dp"
+            android:layout_marginLeft="30dp"
+            android:text="10S"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_sec_20"
+            android:text="20S"
+            android:textSize="14dp"
+            android:layout_marginLeft="60dp"
+            android:layout_toRightOf="@+id/tv_sec_10"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_sec_30"
+            android:text="30S"
+            android:textSize="14dp"
+            android:layout_marginLeft="60dp"
+            android:layout_toRightOf="@id/tv_sec_20"/>
+    </RelativeLayout>
 
 </RelativeLayout>

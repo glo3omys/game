@@ -28,7 +28,6 @@ class LeftRightActivity : AppCompatActivity() {
 
     private var mBinding: ActivityLeftRightBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
 
     var timerTask: Timer?= null
     var time = 0
@@ -57,6 +56,9 @@ class LeftRightActivity : AppCompatActivity() {
 
         lastIdx = leftRightAdapter.itemCount - 1
 
+        val intent = intent
+        time = intent.getIntExtra("time", 0) /* default value check */
+
         binding.rvLeftright.addItemDecoration(object: RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 val position = parent.getChildAdapterPosition(view)
@@ -65,17 +67,11 @@ class LeftRightActivity : AppCompatActivity() {
             }
         })
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
-
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         }
+        /*
         binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.sec_10 -> time = 10
@@ -99,7 +95,7 @@ class LeftRightActivity : AppCompatActivity() {
                 binding.btnLeft.isEnabled = true
                 binding.btnRight.isEnabled = true
                 binding.rvLeftright.visibility = View.VISIBLE
-                runTimer(mDialogView)
+                runTimer()
             }
         }
         binding.layBottom.btnReset.setOnClickListener {
@@ -107,8 +103,10 @@ class LeftRightActivity : AppCompatActivity() {
             time = 0
             stopTimer()
         }
+
+         */
         binding.btnPause.setOnClickListener {
-            pauseTimer(mDialogView)
+            pauseTimer()
         }
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, MainActivity::class.java)
@@ -129,6 +127,7 @@ class LeftRightActivity : AppCompatActivity() {
 
         mToast = createToast()
         initRecycler()
+        runTimer()
     }
 
     private fun popItem() {
@@ -166,7 +165,7 @@ class LeftRightActivity : AppCompatActivity() {
         mToast.show()
     }
 
-    private fun pauseTimer(mDialogView: View) {
+    private fun pauseTimer() {
         var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             //binding.rvLeftright.visibility = View.GONE
@@ -182,14 +181,14 @@ class LeftRightActivity : AppCompatActivity() {
             binding.btnLeft.isEnabled = true
             binding.btnRight.isEnabled = true
             pauseBtn.text = "PAUSE"
-            runTimer(mDialogView)
+            runTimer()
         }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
-    fun runTimer(mDialogView: View) {
+    fun runTimer() {
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -204,17 +203,14 @@ class LeftRightActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
-                    mDialogView.findViewById<TextView>(R.id.tv_custom_result).text = score.toString()
 
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
+                    val mDialog = MyDialog(this@LeftRightActivity)
+                    mDialog.myDig("Score", score)
+
                     timerTask?.cancel()
+                    //init()
                 }
             }
         }
@@ -237,23 +233,24 @@ class LeftRightActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvLeftright.adapter = leftRightAdapter
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
     }
     fun init() {
-        time = 0
+        //time = 0
         score = 0
         isOver = false
-        binding.layBottom.radioGroup.clearCheck()
+        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreLeftright.text = "0"
         binding.layTime.tvTime.text = "0초"
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        binding.rvLeftright.visibility = View.INVISIBLE
-        binding.layBottom.btnStart.isEnabled = false
-        binding.btnLeft.isEnabled = false
-        binding.btnRight.isEnabled = false
-        binding.tvBestScore.text = prefs.getSharedPrefs(gameName, "0")
-        setRadioState(true, binding.layBottom.radioGroup)
+        //binding.layBottom.btnStart.isEnabled = false
+        binding.btnLeft.isEnabled = true
+        binding.btnRight.isEnabled = true
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        //setRadioState(true, binding.layBottom.radioGroup)
+        binding.layTime.pgBar.max = time
+        binding.rvLeftright.visibility = View.VISIBLE
         timerTask?.cancel()
     }
 }

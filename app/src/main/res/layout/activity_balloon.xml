@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".BalloonActivity">
 
     <include
@@ -36,9 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_pause"
-            android:text="_____"
+            android:text="최고기록: ___"
             android:id="@+id/tv_best_score"
-            android:textSize="30dp"/>
+            android:textSize="16dp"/>
     </RelativeLayout>
 
     <TextView
@@ -91,8 +92,5 @@
         android:visibility="invisible"
         android:layout_below="@+id/lay_balloon_quest"
         tools:listitem="@layout/recycler_balloon" />
-
-    <include android:id="@+id/lay_bottom"
-        layout="@layout/view_lay_bottom" />
 
 </RelativeLayout>

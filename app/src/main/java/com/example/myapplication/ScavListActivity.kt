@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,7 +16,7 @@ class ScavListActivity : AppCompatActivity() {
 
     private var mBinding: ActivityScavListBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
+    //lateinit var mAlertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +26,7 @@ class ScavListActivity : AppCompatActivity() {
         setContentView(binding.root)
         scavAdapter = ScavAdapter(this)
 
-        var mDialogView = LayoutInflater.from(this).inflate(R.layout.edit_custom_dialog, null)
+        var mDialogView = LayoutInflater.from(this).inflate(R.layout.my_et_dialog, null)
         var mBuilder = AlertDialog.Builder(this)
             //.setView(mDialogView)
             //.setTitle("ADD ITEM")
@@ -39,6 +37,7 @@ class ScavListActivity : AppCompatActivity() {
             startActivity(nextIntent)
         }
         binding.btnAdd.setOnClickListener() {
+            /*
             mBuilder.setView(mDialogView)
                 .setTitle("ADD ITEM")
                 .setCancelable(false)
@@ -62,6 +61,11 @@ class ScavListActivity : AppCompatActivity() {
             cancelButton.setOnClickListener {
                 mAlertDialog.dismiss()
             }
+
+             */
+
+            //val mDialog = MyDialog(this@ScavListActivity)
+            //mDialog.myDig("EDIT ITEM", )
         }
         binding.btnSelectAll.setOnClickListener() {
             selectAllItem()

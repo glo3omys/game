@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -54,7 +53,7 @@ class BalloonActivity: AppCompatActivity() {
         binding.rvBalloon.layoutManager = gridLayoutManager
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->

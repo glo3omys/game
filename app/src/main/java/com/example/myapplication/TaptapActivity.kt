@@ -5,10 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityTaptapBinding
-import setRadioState
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -42,7 +40,7 @@ class TaptapActivity : AppCompatActivity() {
         time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         binding.btnTap.setOnClickListener {

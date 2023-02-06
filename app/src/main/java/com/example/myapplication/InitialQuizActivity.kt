@@ -57,7 +57,7 @@ class InitialQuizActivity : AppCompatActivity() {
          */
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         binding.btnStart.setOnClickListener {
@@ -143,7 +143,7 @@ class InitialQuizActivity : AppCompatActivity() {
                         resTextView.text = "Correct"
 
                     mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_con)
+                    val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
                     okButton.setOnClickListener {
                         init()
                         mAlertDialog.dismiss()

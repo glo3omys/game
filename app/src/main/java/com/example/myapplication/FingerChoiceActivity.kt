@@ -1,75 +1,67 @@
 package com.example.myapplication
 
-import android.app.AlertDialog
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import com.example.myapplication.databinding.ActivityFingerChoiceBinding
 import java.util.*
 import kotlin.concurrent.timer
+import kotlin.random.Random
 
 class FingerChoiceActivity : AppCompatActivity() {
     private var mBinding: ActivityFingerChoiceBinding? = null
     private val binding get() = mBinding!!
-    lateinit var mAlertDialog: AlertDialog
-    lateinit var mDialogView: View
 
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
 
+    var thisContext: Context? = null
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_finger_choice)
+        //setContentView(R.layout.activity_finger_choice)
 
         mBinding = ActivityFingerChoiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*
-        mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Score")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
-
-         */
+        thisContext = this
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val tvTouch = binding.tvTouch
-
-        val dX = event.x.toInt()
-        val dY = event.y.toInt()
-        //tvTouch.append("x: ${dX}, y: ${dY} \n")
-
-        when (event.actionMasked) {
-            // 2개 이상 들어오면 timer run
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                timerTask?.cancel()
-                time = 300
-                runTimer(event)
+        binding.cvFinger.setOnTouchListener(View.OnTouchListener { v, event ->
+            val eventID = event.getPointerId((event.actionIndex))
+            when (event.actionMasked) {
+                /*MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                    binding.cvFinger.rmData(eventID)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    binding.cvFinger.modData(eventID, event.getX(eventID), event.getY(eventID))
+                }*/
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                    //binding.cvFinger.addData(eventID, FingerChoiceData(ID = eventID, dX = event.getX(eventID), dY = event.getY(eventID), color = Color.rgb(Random.nextInt(0, 255), Random.nextInt(0, 255), Random.nextInt(0, 255)), removed = false))
+                    binding.cvFinger.addData(eventID, FingerChoiceData(ID = eventID, dX = event.getX(eventID), dY = event.getY(eventID), color = Color.rgb(Random.nextInt(0, 255), Random.nextInt(0, 255), Random.nextInt(0, 255)), removed = false), binding.layTouch)
+                }
+                else -> {
+                    v.onTouchEvent(event)
+                }
             }
-            MotionEvent.ACTION_POINTER_UP -> {
-                timerTask?.cancel()
-                time = 300
-                runTimer(event)
-            }
-        }
-        return super.onTouchEvent(event)
+            v.invalidate()
+            true
+        })
     }
 
     private fun runTimer(event: MotionEvent) {
+        if (timerTask != null)
+            timerTask?.cancel()
         timerTask = timer(period = 10) { // 10ms 마다 반복
             time--
             val sec = time / 100

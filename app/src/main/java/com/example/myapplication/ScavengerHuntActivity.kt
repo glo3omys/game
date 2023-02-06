@@ -4,8 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityScavengerHuntBinding
 import scavDatas
 
@@ -36,7 +34,7 @@ class ScavengerHuntActivity : AppCompatActivity() {
             binding.tvItemScore.text = scavDatas[idx].score.toString()
         }
         binding.btnHome.setOnClickListener() {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
     }

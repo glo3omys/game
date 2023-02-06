@@ -1,19 +1,12 @@
 package com.example.myapplication
 
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.Display
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityWhackAMoleBinding
-import setRadioState
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -60,7 +53,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -97,7 +90,7 @@ class WhackAMoleActivity : AppCompatActivity() {
             pauseTimer()
         }
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         initRecycler()
@@ -140,7 +133,7 @@ class WhackAMoleActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@WhackAMoleActivity)
@@ -223,7 +216,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         for (i in (0 until SPAN_COUNT * SPAN_COUNT))
             moleTimer.add(Timer())
         binding.rvWhackAMole.adapter = whackAMoleAdapter
-        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
     }
     private fun setDatas() {
         val tmpDatas = mutableListOf<WhackAMoleData>()
@@ -245,7 +238,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvWhackAMole.visibility = View.VISIBLE

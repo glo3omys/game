@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/lay_bottom"
-        android:layout_above="@+id/lay_radiogroup_tv">
+      >
 
         <RadioGroup
             android:layout_width="wrap_content"
@@ -17,7 +17,6 @@
             android:orientation="horizontal"
             android:id="@+id/radioGroup"
             android:background="@drawable/custom_radiogroup"
-            android:layout_alignParentBottom="true"
             >
 
             <RadioButton
@@ -74,10 +73,11 @@
         </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
+        android:layout_below="@+id/lay_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lay_radiogroup_tv"
-        android:layout_alignParentBottom="true">
+     >
 
         <TextView
             android:layout_width="wrap_content"

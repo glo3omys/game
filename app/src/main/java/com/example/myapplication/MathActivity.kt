@@ -1,19 +1,15 @@
 package com.example.myapplication
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityMathBinding
-import setRadioState
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -53,7 +49,7 @@ class MathActivity: AppCompatActivity() {
         time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->

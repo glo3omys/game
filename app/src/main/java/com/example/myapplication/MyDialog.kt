@@ -9,9 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.google.firebase.database.FirebaseDatabase
 import scavDatas
 
-class MyDialog(context: Context) {
+class MyDialog(context: Context){
     var mContext = context
     var mBuilder = AlertDialog.Builder(mContext)
     lateinit var mDialogView: View
@@ -19,7 +20,7 @@ class MyDialog(context: Context) {
     lateinit var nextIntent: Intent
 
     /*
-        var mTitle: TextView
+        var m: TextView
         mTitle.text = title
         mTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24F)
         mBuilder.setCustomTitle(mTitle)
@@ -41,7 +42,7 @@ class MyDialog(context: Context) {
 
         val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
         okButton.setOnClickListener {
-            nextIntent = Intent(mContext, MainActivity::class.java)
+            nextIntent = Intent(mContext, GameListActivity::class.java)
             mContext.startActivity(nextIntent)
 
             mAlertDialog.dismiss()
@@ -124,5 +125,85 @@ class MyDialog(context: Context) {
         btnBack.setOnClickListener() {
             mAlertDialog.dismiss()
         }
+    }
+
+    // create room
+    fun createRoom(master: String) {
+        val database = FirebaseDatabase.getInstance()
+        var myRef = database.getReference("room")
+
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_et_dialog, null)
+
+        mDialogView.findViewById<EditText>(R.id.et_name).hint = "방제"
+        mDialogView.findViewById<EditText>(R.id.et_score).visibility = View.GONE
+
+        mBuilder.setView(mDialogView)
+            .setTitle("create room")
+            .setCancelable(false)
+        mAlertDialog =  mBuilder.create()
+        mAlertDialog.show()
+
+        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        okButton.setOnClickListener {
+            val mySeed = genSeed()
+            val memberList = mutableListOf<String>()
+            memberList.add(master)
+            val newRoom = RoomData (
+                title = mDialogView.findViewById<EditText>(R.id.et_name).text.toString(),
+                master = master,
+                seed = mySeed,
+                memberCnt = 1,
+                memberList = memberList
+            )
+
+            val pk = myRef.push().key.toString()
+            myRef.child(pk).setValue(newRoom)
+            myRef = database.getReference("roomSeeds")
+            myRef.child(mySeed).setValue(pk)
+
+            nextIntent = Intent(mContext, LobbyActivity::class.java)
+            nextIntent.putExtra("master", true)
+            nextIntent.putExtra("pk", pk)
+            mContext.startActivity(nextIntent)
+            //mAlertDialog.dismiss()
+        }
+        val cancelButton = mDialogView.findViewById<Button>(R.id.btn_cancel)
+        cancelButton.setOnClickListener() {
+            mAlertDialog.dismiss()
+        }
+
+    }
+
+    fun searchRoom(mActivity: SearchRoomActivity) {
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_et_dialog, null)
+
+        mDialogView.findViewById<EditText>(R.id.et_name).hint = "참여코드"
+        mDialogView.findViewById<EditText>(R.id.et_score).visibility = View.GONE
+
+        mBuilder.setView(mDialogView)
+            .setTitle("find room")
+            .setCancelable(false)
+        mAlertDialog =  mBuilder.create()
+        mAlertDialog.show()
+
+        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        var mySeed : String
+        okButton.setOnClickListener() {
+            mySeed = mDialogView.findViewById<EditText>(R.id.et_name).text.toString()
+            mActivity.searchRoomBySeed(mySeed)
+            mAlertDialog.dismiss()
+        }
+        val cancelButton = mDialogView.findViewById<Button>(R.id.btn_cancel)
+        cancelButton.setOnClickListener() {
+            mAlertDialog.dismiss()
+        }
+    }
+
+    private fun genSeed() : String {
+        val charset = 'A' .. 'Z'
+        var res = ""
+        for (i in (1 .. 6))
+            res += charset.random()
+        return res
     }
 }

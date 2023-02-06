@@ -1,20 +1,15 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityMemoryCardGameBinding
-import setRadioState
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -55,7 +50,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
         time = intent.getIntExtra("time", 0) /* default value check */
 
         binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, MainActivity::class.java)
+            val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
         /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -127,7 +122,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
                 runOnUiThread {
                     updateMyBestScore(gameName, score.toString())
                     binding.tvBestScore.text =
-                        "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, score.toString())
+                        "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@MemoryCardGameActivity)
@@ -143,7 +138,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvMemoryCardGame.adapter = memoryCardGameAdapter
-        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -218,7 +213,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
         //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + MainActivity.prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
         //setRadioState(true, binding.layBottom.radioGroup)
         initDefaultCards()
         binding.layTime.pgBar.max = time

@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityLeftRightBinding
 import updateMyBestScore
 import java.util.*
@@ -24,6 +23,7 @@ class LeftRightActivity : AppCompatActivity() {
 
     private var mBinding: ActivityLeftRightBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
 
     var timerTask: Timer?= null
     var time = 0
@@ -40,6 +40,7 @@ class LeftRightActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_left_right)
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityLeftRightBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -194,8 +195,8 @@ class LeftRightActivity : AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-                    updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
+                    updateMyBestScore(this@LeftRightActivity, gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@LeftRightActivity)
@@ -225,7 +226,7 @@ class LeftRightActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvLeftright.adapter = leftRightAdapter
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
     fun init() {
         //time = 0
@@ -239,7 +240,7 @@ class LeftRightActivity : AppCompatActivity() {
         //binding.layBottom.btnStart.isEnabled = false
         binding.btnLeft.isEnabled = true
         binding.btnRight.isEnabled = true
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvLeftright.visibility = View.VISIBLE

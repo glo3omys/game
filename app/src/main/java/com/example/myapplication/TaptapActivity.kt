@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityTaptapBinding
 import updateMyBestScore
 import java.util.*
@@ -14,6 +13,7 @@ import kotlin.concurrent.timer
 class TaptapActivity : AppCompatActivity() {
     private var mBinding: ActivityTaptapBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
 
     var timerTask: Timer?= null
     var time = 0
@@ -26,6 +26,7 @@ class TaptapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_taptap)
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityTaptapBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -115,8 +116,8 @@ class TaptapActivity : AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-                    updateMyBestScore(gameName, cnt.toString())
-                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, cnt.toString())
+                    updateMyBestScore(this@TaptapActivity, gameName, cnt.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, cnt.toString())}"
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@TaptapActivity)
@@ -140,7 +141,7 @@ class TaptapActivity : AppCompatActivity() {
         binding.btnPause.isEnabled = false
         binding.btnTap.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         timerTask?.cancel()

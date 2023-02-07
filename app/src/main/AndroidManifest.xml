@@ -46,6 +46,7 @@
         <activity android:name=".MemoryCardGameActivity" />
         <activity android:name=".SearchRoomActivity" />
         <activity android:name=".LobbyActivity" />
+        <activity android:name=".PlayModeActivity" />
     </application>
 
 </manifest>

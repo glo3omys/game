@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityBalloonBinding
 import updateMyBestScore
 import java.util.*
@@ -22,6 +21,7 @@ class BalloonActivity: AppCompatActivity() {
 
     private var mBinding: ActivityBalloonBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
 
     var timerTask: Timer?= null
     var time = 0
@@ -38,6 +38,8 @@ class BalloonActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balloon)
+
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityBalloonBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -133,8 +135,8 @@ class BalloonActivity: AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     //Toast.makeText(this@TaptapActivity, "TOAST", Toast.LENGTH_SHORT).show()
-                    updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
+                    updateMyBestScore(this@BalloonActivity, gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@BalloonActivity)
@@ -148,7 +150,7 @@ class BalloonActivity: AppCompatActivity() {
 
     private fun initRecycler() {
         binding.rvBalloon.adapter = balloonAdapter
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
 
         datas.apply {
             val range = (0..SPAN_COUNT)
@@ -240,7 +242,7 @@ class BalloonActivity: AppCompatActivity() {
         binding.tvBalloon2.text = "..."
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvBalloon.visibility = View.VISIBLE

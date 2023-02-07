@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityMathBinding
 import updateMyBestScore
 import java.util.*
@@ -20,6 +19,7 @@ class MathActivity: AppCompatActivity() {
 
     private var mBinding: ActivityMathBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
 
     var timerTask: Timer?= null
     var time = 0
@@ -37,6 +37,7 @@ class MathActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_math)
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityMathBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -123,8 +124,8 @@ class MathActivity: AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-                    updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
+                    updateMyBestScore(this@MathActivity, gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@MathActivity)
@@ -140,7 +141,7 @@ class MathActivity: AppCompatActivity() {
     private fun initRecycler() {
         init()
         setDatas()
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.rvMath.adapter = mathAdapter
     }
 
@@ -264,7 +265,7 @@ class MathActivity: AppCompatActivity() {
         binding.tvNum3.text = "  "
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvMath.visibility = View.VISIBLE

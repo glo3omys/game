@@ -16,11 +16,10 @@ class LobbyActivity : AppCompatActivity() {
     lateinit var lobbyAdapter: LobbyAdapter
 
     var masterFlag = false
-    var myPk = ""
+    var roomPk = ""
 
     val database = Firebase.database
     lateinit var myRef : DatabaseReference
-    //val myRef = database.getReference("room")
     private val userDatas = mutableListOf<UserData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,19 +28,25 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         masterFlag = intent.getBooleanExtra("master", false)
-        myPk = intent.getStringExtra("pk").toString()
-        myRef = database.getReference("room").child(myPk)
+        roomPk = intent.getStringExtra("pk").toString()
+        myRef = database.getReference("room").child(roomPk)
 
         lobbyAdapter = LobbyAdapter(this)
 
-        //bin
-
-        initRecycler()
+        init()
     }
 
-    private fun initRecycler() {
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        val dialog = MyDialog(this)
+        dialog.goBack(roomPk)
+    }
+
+    private fun init() {
         binding.rvUsers.adapter = lobbyAdapter
         fetchData()
+
+        // btn 권한 설정
     }
 
     fun fetchData() {

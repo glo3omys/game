@@ -5,5 +5,5 @@ data class RoomData(
     val title : String,
     val master : String,
     var memberCnt : Int,
-    val memberList: MutableList<String>
+    val memberList: MutableList<String>? = null
 )

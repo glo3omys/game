@@ -1,40 +1,74 @@
 package com.example.myapplication
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.databinding.ActivityFingerChoiceBinding
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.databinding.ActivityMathBinding
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        lateinit var prefs: PreferenceUtil
-    }
-
     private var mBinding: ActivityMainBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
+    //private val prefs = PreferenceUtil(applicationContext)
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
-        prefs = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
 
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnPlayAlone.setOnClickListener() {
-            val nextIntent = Intent(this, GameListActivity::class.java)
+        prefs = PreferenceUtil(applicationContext)
+
+        binding.etId.addTextChangedListener(object: TextWatcher {
+            val etId = binding.etId
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val res = s.toString().replace(" ", "")
+                if (!s.toString().equals(res)) {
+                    etId.setText(res)
+                    etId.setSelection(res.length)
+                }
+                if (!s.toString().equals("") && s.toString()[s!!.length - 1].toString() == "\n") {
+                    val res = s.toString().replace("\n", "")
+                    if (!s.toString().equals(res)) {
+                        etId.setText(res)
+                        etId.setSelection(res.length)
+                    }
+                    if (res.equals(""))
+                        return
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(etId.windowToken, 0)
+
+                    setID()
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+            override fun afterTextChanged(s: Editable?) { }
+        })
+        binding.btnOk.setOnClickListener() {
+            val etId = binding.etId
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(etId.windowToken, 0)
+            setID()
+        }
+        getID()
+    }
+    private fun setID() {
+        val newID = binding.etId.text.toString()
+        prefs.setSharedPrefs("myID", newID)
+
+        finish()
+        val nextIntent = Intent(this, PlayModeActivity::class.java)
+        startActivity(nextIntent)
+    }
+    private fun getID() {
+        val myID = prefs.getSharedPrefs("myID", "")
+        if (myID != "") {
+            finish()
+            val nextIntent = Intent(this, PlayModeActivity::class.java)
             startActivity(nextIntent)
         }
-
-        binding.btnPlayTogether.setOnClickListener() {
-            val nextIntent = Intent(this, SearchRoomActivity::class.java)
-            startActivity(nextIntent)
-        }
-
     }
 }

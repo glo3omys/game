@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Context
 import android.app.AlertDialog
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -127,8 +128,7 @@ class MyDialog(context: Context){
         }
     }
 
-    // create room
-    fun createRoom(master: String) {
+    fun createRoom(myID: String) {
         val database = FirebaseDatabase.getInstance()
         var myRef = database.getReference("room")
 
@@ -147,10 +147,10 @@ class MyDialog(context: Context){
         okButton.setOnClickListener {
             val mySeed = genSeed()
             val memberList = mutableListOf<String>()
-            memberList.add(master)
+            //memberList.add(myID)
             val newRoom = RoomData (
                 title = mDialogView.findViewById<EditText>(R.id.et_name).text.toString(),
-                master = master,
+                master = myID,
                 seed = mySeed,
                 memberCnt = 1,
                 memberList = memberList
@@ -158,6 +158,7 @@ class MyDialog(context: Context){
 
             val pk = myRef.push().key.toString()
             myRef.child(pk).setValue(newRoom)
+            myRef.child(pk).child("memberList").push().setValue(myID)
             myRef = database.getReference("roomSeeds")
             myRef.child(mySeed).setValue(pk)
 
@@ -199,6 +200,77 @@ class MyDialog(context: Context){
         }
     }
 
+    fun goBack(roomPk: String) {
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_tv_dialog, null)
+        mDialogView.findViewById<View>(R.id.lay_bottom).visibility = View.GONE
+        mDialogView.findViewById<TextView>(R.id.my_tv).text = "나갈거야?"
+
+        val btnOk = mDialogView.findViewById<Button>(R.id.btn_ok)
+        val btnBack = mDialogView.findViewById<Button>(R.id.btn_cancel)
+        btnOk.text = "나가기"
+        btnBack.text = "취소"
+
+        mBuilder.setView(mDialogView)
+            .setTitle(" ")
+            .setCancelable(false)
+        mAlertDialog =  mBuilder.create()
+        mAlertDialog.show()
+
+        btnOk.setOnClickListener() {
+            // rm DB
+            val prefs = PreferenceUtil(mContext)
+            val database = FirebaseDatabase.getInstance()
+            val roomRef = database.getReference("room")
+            val myID = prefs.getSharedPrefs("myID", "")
+            var myPk = ""
+            var memberCnt : Int
+
+            roomRef.child(roomPk).get().addOnSuccessListener {
+                memberCnt = it.child("memberCnt").value.toString().toInt()
+                memberCnt--
+
+                if (memberCnt == 0) {
+                    val roomSeed = it.child("seed").value.toString()
+                    roomRef.child(roomPk).removeValue()
+                    val seedRef = database.getReference("roomSeeds")
+                    seedRef.child(roomSeed).get().addOnSuccessListener {
+                        seedRef.child(roomSeed).removeValue()
+                    }
+                }
+                else {
+                    for (data in it.child("memberList").children)
+                        if (data.value.toString() == myID) {
+                            myPk = data.key.toString()
+                            break
+                        }
+                    roomRef.child(roomPk).child("memberCnt").setValue(memberCnt)
+                    roomRef.child(roomPk).child("memberList").child(myPk).removeValue()
+
+                    if (it.child("master").value == myID)
+                        for (data in it.child("memberList").children) {
+                            if (data.value.toString() != myID) {
+                                roomRef.child(roomPk).child("master")
+                                    .setValue(data.value.toString())
+                                break
+                            }
+                        }
+                }
+
+                mAlertDialog.dismiss()
+                val nextIntent = Intent(mContext, SearchRoomActivity::class.java)
+                (mContext as LobbyActivity).finish()
+                mContext.startActivity(nextIntent)
+            }
+                .addOnFailureListener {
+                    Log.e("ERROR", "FAIL TO MOD DB")
+                    //startActivity(Intent(this, MainActivity::class.java))
+                }
+        }
+        btnBack.setOnClickListener() {
+            mAlertDialog.dismiss()
+        }
+    }
+
     private fun genSeed() : String {
         val charset = 'A' .. 'Z'
         var res = ""
@@ -206,4 +278,5 @@ class MyDialog(context: Context){
             res += charset.random()
         return res
     }
+
 }

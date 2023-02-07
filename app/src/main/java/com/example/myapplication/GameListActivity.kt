@@ -12,8 +12,6 @@ class GameListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_list)
 
-
-
         val findroombtn = findViewById<Button>(R.id.find_room)
         findroombtn.setOnClickListener {
             val nextIntent = Intent(this, SearchRoomActivity::class.java)

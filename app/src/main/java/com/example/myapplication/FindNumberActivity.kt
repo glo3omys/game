@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.databinding.ActivityFindNumberBinding
 import updateMyBestScore
 import java.util.*
@@ -21,6 +20,7 @@ class FindNumberActivity : AppCompatActivity() {
 
     private var mBinding: ActivityFindNumberBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -40,6 +40,7 @@ class FindNumberActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_number)
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityFindNumberBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -159,8 +160,8 @@ class FindNumberActivity : AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-                    updateMyBestScore(gameName, score.toString())
-                    binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, score.toString())
+                    updateMyBestScore(this@FindNumberActivity, gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@FindNumberActivity)
@@ -177,7 +178,7 @@ class FindNumberActivity : AppCompatActivity() {
         init()
         setDatas()
         binding.rvFindnum.adapter = findNumberAdapter
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
     private fun setDatas() {
         val tmpDatas = mutableListOf<FindNumberData>()
@@ -201,7 +202,7 @@ class FindNumberActivity : AppCompatActivity() {
         //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
-        binding.tvBestScore.text = "최고기록: " + prefs.getSharedPrefs(gameName, "0")
+        binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvFindnum.visibility = View.VISIBLE

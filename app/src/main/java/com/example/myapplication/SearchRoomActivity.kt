@@ -16,6 +16,8 @@ import com.google.firebase.ktx.Firebase
 class SearchRoomActivity : AppCompatActivity() {
     private var mBinding: ActivitySearchRoomBinding? = null
     private val binding get() = mBinding!!
+    lateinit var prefs : PreferenceUtil
+
     lateinit var roomAdapter: SearchRoomAdapter
 
     val database = Firebase.database
@@ -26,6 +28,7 @@ class SearchRoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_room)
+        prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivitySearchRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -33,7 +36,7 @@ class SearchRoomActivity : AppCompatActivity() {
 
         binding.btnCreateRoom.setOnClickListener() {
             val dialog = MyDialog(this)
-            dialog.createRoom("master")
+            dialog.createRoom(prefs.getSharedPrefs("myID", "GUEST"))
         }
 
         binding.btnSearchRoom.setOnClickListener() {
@@ -54,19 +57,20 @@ class SearchRoomActivity : AppCompatActivity() {
     fun searchRoomBySeed(seed : String) {
         if (seedToPk.containsKey(seed)) {
             val pk = seedToPk[seed].toString()
-            val memberList = mutableListOf<String>()
+            //val memberList = mutableListOf<String>()
             var memberCnt = -1
 
             myRef.child("room").child(pk).get().addOnSuccessListener {
-                for (data in it.child("memberList").children)
+                /*for (data in it.child("memberList").children)
                     memberList.add(data.value.toString())
-                memberList.add("돼라")
+                memberList.add(prefs.getSharedPrefs("myID", "GUEST"))*/
 
                 memberCnt = it.child("memberCnt").value.toString().toInt()
                 memberCnt++
 
                 myRef.child("room").child(pk).child("memberCnt").setValue(memberCnt)
-                myRef.child("room").child(pk).child("memberList").setValue(memberList)
+                //myRef.child("room").child(pk).child("memberList").setValue(memberList)
+                myRef.child("room").child(pk).child("memberList").push().setValue(prefs.getSharedPrefs("myID", "GUEST"))
 
                 val nextIntent = Intent(this, LobbyActivity::class.java)
                 nextIntent.putExtra("master", false)
@@ -91,9 +95,9 @@ class SearchRoomActivity : AppCompatActivity() {
                         val title = data.child("title").value.toString()
                         val seed = data.child("seed").value.toString()
                         val memberCnt = data.child("memberCnt").value.toString().toInt()
-                        val memberList = data.child("memberList").value as MutableList<String>
+                        //val memberList = data.child("memberList").value as MutableList<String>
 
-                        roomDatas.add(RoomData(master = master, title = title, seed = seed, memberCnt = memberCnt, memberList = memberList))
+                        roomDatas.add(RoomData(master = master, title = title, seed = seed, memberCnt = memberCnt))
                     }
                     for (data in snapshot.child("roomSeeds").children) {
                         val seed = data.key.toString()

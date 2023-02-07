@@ -1,8 +1,9 @@
+import android.content.Context
 import android.graphics.Typeface
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import com.example.myapplication.MainActivity.Companion.prefs
 import com.example.myapplication.MemoryCardGameData
+import com.example.myapplication.PreferenceUtil
 import com.example.myapplication.R
 import com.example.myapplication.ScavData
 
@@ -56,7 +57,8 @@ fun setRadioStyle(radioGroup: RadioGroup) {
             radioGroup.findViewById<RadioButton>(rb.id).typeface = Typeface.DEFAULT
     }
 }
-fun updateMyBestScore(gameName: String, score: String) {
+fun updateMyBestScore(context: Context, gameName: String, score: String) {
+    val prefs = PreferenceUtil(context)
     val storedScore = prefs.getSharedPrefs(gameName, score)
     if (storedScore.toInt() > score.toInt())
         return

@@ -21,4 +21,12 @@
         android:layout_centerInParent="true"
         android:spinnerMode="dropdown" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_ready"
+        android:text="준비"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
 </RelativeLayout>

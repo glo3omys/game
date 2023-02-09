@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.myapplication.databinding.ActivitySearchRoomBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -21,7 +22,7 @@ class SearchRoomActivity : AppCompatActivity() {
     lateinit var roomAdapter: SearchRoomAdapter
 
     val database = Firebase.database
-    val myRef = database.getReference()
+    lateinit var myRef : DatabaseReference
     val roomDatas = mutableListOf<RoomData>()
     val seedToPk = hashMapOf<String, String>()
 
@@ -29,6 +30,8 @@ class SearchRoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_room)
         prefs = PreferenceUtil(applicationContext)
+
+        myRef = database.getReference()
 
         mBinding = ActivitySearchRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -56,32 +59,33 @@ class SearchRoomActivity : AppCompatActivity() {
 
     fun searchRoomBySeed(seed : String) {
         if (seedToPk.containsKey(seed)) {
-            val pk = seedToPk[seed].toString()
-            //val memberList = mutableListOf<String>()
-            var memberCnt = -1
+            val roomPk = seedToPk[seed].toString()
 
-            myRef.child("room").child(pk).get().addOnSuccessListener {
-                /*for (data in it.child("memberList").children)
-                    memberList.add(data.value.toString())
-                memberList.add(prefs.getSharedPrefs("myID", "GUEST"))*/
-
-                memberCnt = it.child("memberCnt").value.toString().toInt()
+            val myRoomRef = database.getReference("room").child(roomPk)
+            myRoomRef.get().addOnSuccessListener {
+                var memberCnt = it.child("memberCnt").value.toString().toInt()
                 memberCnt++
 
-                myRef.child("room").child(pk).child("memberCnt").setValue(memberCnt)
-                //myRef.child("room").child(pk).child("memberList").setValue(memberList)
-                myRef.child("room").child(pk).child("memberList").push().setValue(prefs.getSharedPrefs("myID", "GUEST"))
+                myRoomRef.child("memberCnt").setValue(memberCnt)
+                val newUser =  UserData(name = prefs.getSharedPrefs("myID", "GUEST"), imageID = 0, readyState = false)
+                val myPk = myRoomRef.child("memberList").push().key.toString()
+                val masterName = it.child("master").value.toString()
+                myRoomRef.child("memberList").child(myPk).setValue(newUser)
 
                 val nextIntent = Intent(this, LobbyActivity::class.java)
-                nextIntent.putExtra("master", false)
-                nextIntent.putExtra("pk", seedToPk[seed])
+                nextIntent.putExtra("roomPk", seedToPk[seed])
+                nextIntent.putExtra("myPk", myPk)
+                nextIntent.putExtra("masterName", masterName)
                 startActivity(nextIntent)
             }
                 .addOnFailureListener {
                     Log.e("ERROR", "FAIL TO MOD DB")
                     startActivity(Intent(this, MainActivity::class.java))
                 }
-
+        }
+        else {
+            val dialog = MyDialog(this)
+            dialog.myAlertDialog("참여코드")
         }
     }
 

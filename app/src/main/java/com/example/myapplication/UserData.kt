@@ -2,5 +2,6 @@ package com.example.myapplication
 
 data class UserData(
     val name: String,
-    val imageID: Int,
+    var imageID: Int,
+    var readyState: Boolean = false,
 )

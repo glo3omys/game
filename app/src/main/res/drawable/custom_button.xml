@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:state_enabled="true">
         <shape>
             <solid android:color="@color/default_button_color" />
+            <corners android:radius="20dp" />
+            <padding
+                android:left="25dp"
+                android:right="25dp"
+                android:top="3dp"
+                android:bottom="3dp" />
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@color/default_button_color_disabled" />
             <corners android:radius="20dp" />
             <padding
                 android:left="25dp"

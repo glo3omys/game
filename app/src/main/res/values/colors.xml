@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="my_theme_color">#F8F5EB</color>
     <color name="default_button_color">#F2CB87</color>
+    <color name="default_button_color_disabled">#C3C3C3</color>
 </resources>

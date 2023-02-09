@@ -128,9 +128,28 @@ class MyDialog(context: Context){
         }
     }
 
+    fun myAlertDialog(errInfo: String) {
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_tv_dialog, null)
+
+        mDialogView.findViewById<TextView>(R.id.my_tv).text = "잘못된 ${errInfo}입니다"
+        mDialogView.findViewById<Button>(R.id.btn_cancel).visibility = View.GONE
+        mDialogView.findViewById<View>(R.id.lay_bottom).visibility = View.GONE
+
+        mBuilder.setView(mDialogView)
+            .setTitle(" ")
+            .setCancelable(false)
+        mAlertDialog =  mBuilder.create()
+        mAlertDialog.show()
+
+        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        okButton.setOnClickListener() {
+            mAlertDialog.dismiss()
+        }
+    }
+
     fun createRoom(myID: String) {
         val database = FirebaseDatabase.getInstance()
-        var myRef = database.getReference("room")
+        val roomRef = database.getReference("room")
 
         mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_et_dialog, null)
 
@@ -145,28 +164,32 @@ class MyDialog(context: Context){
 
         val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
         okButton.setOnClickListener {
-            val mySeed = genSeed()
+            val roomSeed = genSeed()
             val memberList = mutableListOf<String>()
             //memberList.add(myID)
             val newRoom = RoomData (
                 title = mDialogView.findViewById<EditText>(R.id.et_name).text.toString(),
                 master = myID,
-                seed = mySeed,
+                seed = roomSeed,
                 memberCnt = 1,
                 memberList = memberList
             )
 
-            val pk = myRef.push().key.toString()
-            myRef.child(pk).setValue(newRoom)
-            myRef.child(pk).child("memberList").push().setValue(myID)
-            myRef = database.getReference("roomSeeds")
-            myRef.child(mySeed).setValue(pk)
+            var newUser = UserData(name = myID, imageID = R.drawable.mushroom_z, readyState = false)
+            val roomPk = roomRef.push().key.toString()
+            roomRef.child(roomPk).setValue(newRoom)
+            val myPk = roomRef.child(roomPk).child("memberList").push().key.toString()
+            roomRef.child(roomPk).child("memberList").child(myPk).setValue(newUser)
+            roomRef.child(roomPk).child("readyCnt").setValue(0)
+            val seedRef = database.getReference("roomSeeds")
+            seedRef.child(roomSeed).setValue(roomPk)
 
             nextIntent = Intent(mContext, LobbyActivity::class.java)
-            nextIntent.putExtra("master", true)
-            nextIntent.putExtra("pk", pk)
+            nextIntent.putExtra("roomPk", roomPk)
+            nextIntent.putExtra("myPk", myPk)
+            nextIntent.putExtra("masterName", myID)
             mContext.startActivity(nextIntent)
-            //mAlertDialog.dismiss()
+            mAlertDialog.dismiss()
         }
         val cancelButton = mDialogView.findViewById<Button>(R.id.btn_cancel)
         cancelButton.setOnClickListener() {
@@ -200,7 +223,7 @@ class MyDialog(context: Context){
         }
     }
 
-    fun goBack(roomPk: String) {
+    fun exitRoom(roomPk: String) {
         mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_tv_dialog, null)
         mDialogView.findViewById<View>(R.id.lay_bottom).visibility = View.GONE
         mDialogView.findViewById<TextView>(R.id.my_tv).text = "나갈거야?"
@@ -239,7 +262,7 @@ class MyDialog(context: Context){
                 }
                 else {
                     for (data in it.child("memberList").children)
-                        if (data.value.toString() == myID) {
+                        if (data.child("name").value.toString() == myID) {
                             myPk = data.key.toString()
                             break
                         }
@@ -248,18 +271,18 @@ class MyDialog(context: Context){
 
                     if (it.child("master").value == myID)
                         for (data in it.child("memberList").children) {
-                            if (data.value.toString() != myID) {
+                            if (data.child("name").value.toString() != myID) {
                                 roomRef.child(roomPk).child("master")
-                                    .setValue(data.value.toString())
+                                    .setValue(data.child("name").value.toString())
                                 break
                             }
                         }
                 }
 
                 mAlertDialog.dismiss()
-                val nextIntent = Intent(mContext, SearchRoomActivity::class.java)
+                //val nextIntent = Intent(mContext, SearchRoomActivity::class.java)
                 (mContext as LobbyActivity).finish()
-                mContext.startActivity(nextIntent)
+                //mContext.startActivity(nextIntent)
             }
                 .addOnFailureListener {
                     Log.e("ERROR", "FAIL TO MOD DB")

@@ -27,8 +27,14 @@ class LobbyAdapter(private val context: LobbyActivity) :
         private val tvName: TextView = itemView.findViewById(R.id.tv_rv_username)
 
         fun bind(item: UserData, position: Int) {
-            //img.text = item.name
+            if (item.readyState)
+                item.imageID = R.drawable.mushroom_b
+            else
+                item.imageID = R.drawable.mushroom_z
+
             tvName.text = item.name
+            imageView.setImageResource(item.imageID)
+
             //imageView.setImageResource(R.drawable.mushroom_b)
             //imageView.setImageResource(item.imageID)
         }

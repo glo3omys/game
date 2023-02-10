@@ -65,8 +65,8 @@ class SearchRoomActivity : AppCompatActivity() {
             myRoomRef.get().addOnSuccessListener {
                 var memberCnt = it.child("memberCnt").value.toString().toInt()
                 memberCnt++
-
                 myRoomRef.child("memberCnt").setValue(memberCnt)
+
                 val newUser =  UserData(name = prefs.getSharedPrefs("myID", "GUEST"), imageID = 0, readyState = false)
                 val myPk = myRoomRef.child("memberList").push().key.toString()
                 val masterName = it.child("master").value.toString()

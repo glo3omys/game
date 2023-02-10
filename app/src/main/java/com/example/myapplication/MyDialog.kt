@@ -188,6 +188,8 @@ class MyDialog(context: Context){
             nextIntent.putExtra("roomPk", roomPk)
             nextIntent.putExtra("myPk", myPk)
             nextIntent.putExtra("masterName", myID)
+
+            //(mContext as SearchRoomActivity).finish()
             mContext.startActivity(nextIntent)
             mAlertDialog.dismiss()
         }
@@ -243,46 +245,54 @@ class MyDialog(context: Context){
             // rm DB
             val prefs = PreferenceUtil(mContext)
             val database = FirebaseDatabase.getInstance()
-            val roomRef = database.getReference("room")
+            val myRoomRef = database.getReference("room").child(roomPk)
             val myID = prefs.getSharedPrefs("myID", "")
             var myPk = ""
             var memberCnt : Int
+            var readyCnt : Int
 
-            roomRef.child(roomPk).get().addOnSuccessListener {
+            myRoomRef.get().addOnSuccessListener {
                 memberCnt = it.child("memberCnt").value.toString().toInt()
                 memberCnt--
+                readyCnt = it.child("readyCnt").value.toString().toInt()
 
                 if (memberCnt == 0) {
+                    (mContext as LobbyActivity).removeListener()
                     val roomSeed = it.child("seed").value.toString()
-                    roomRef.child(roomPk).removeValue()
-                    val seedRef = database.getReference("roomSeeds")
-                    seedRef.child(roomSeed).get().addOnSuccessListener {
-                        seedRef.child(roomSeed).removeValue()
+                    myRoomRef.removeValue()
+                    val mySeedRef = database.getReference("roomSeeds").child(roomSeed)
+                    mySeedRef.get().addOnSuccessListener {
+                        mySeedRef.removeValue()
                     }
                 }
                 else {
+                    myRoomRef.child("memberCnt").setValue(memberCnt)
+                    var myState = false
                     for (data in it.child("memberList").children)
                         if (data.child("name").value.toString() == myID) {
                             myPk = data.key.toString()
+                            myState = data.child("readyState").value.toString().toBoolean()
                             break
                         }
-                    roomRef.child(roomPk).child("memberCnt").setValue(memberCnt)
-                    roomRef.child(roomPk).child("memberList").child(myPk).removeValue()
-
-                    if (it.child("master").value == myID)
+                    if (it.child("master").value == myID) {
                         for (data in it.child("memberList").children) {
                             if (data.child("name").value.toString() != myID) {
-                                roomRef.child(roomPk).child("master")
-                                    .setValue(data.child("name").value.toString())
+                                myRoomRef.child("master").setValue(data.child("name").value.toString())
+                                if (data.child("readyState").value.toString().toBoolean())
+                                    readyCnt--
+                                myRoomRef.child("memberList").child(data.key.toString()).child("readyState").setValue(false)
                                 break
                             }
                         }
+                    }
+                    else if (myState)
+                        readyCnt--
+                    myRoomRef.child("memberList").child(myPk).removeValue()
+                    myRoomRef.child("readyCnt").setValue(readyCnt)
                 }
 
                 mAlertDialog.dismiss()
-                //val nextIntent = Intent(mContext, SearchRoomActivity::class.java)
                 (mContext as LobbyActivity).finish()
-                //mContext.startActivity(nextIntent)
             }
                 .addOnFailureListener {
                     Log.e("ERROR", "FAIL TO MOD DB")

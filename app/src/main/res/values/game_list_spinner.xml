@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="games">
+        <item>Balloon</item>
+        <item>FindNumber</item>
+        <item>InitialQuiz</item>
+        <item>LeftRight</item>
+        <item>Math</item>
+        <item>MemoryCardGame</item>
+        <item>Taptap</item>
+        <item>WhackAMole</item>
+    </string-array>
+</resources>

@@ -29,6 +29,7 @@ class LobbyActivity : AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     private val userDatas = mutableListOf<UserData>()
+    var startFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +47,14 @@ class LobbyActivity : AppCompatActivity() {
             masterName = roomInfoData.masterName
         }
 
-        /*roomPk = intent.getStringExtra("roomPk").toString()
-        myPk = intent.getStringExtra("myPk").toString()
-        masterName = intent.getStringExtra("masterName").toString()*/
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
         dbListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child("gameInfo").child("gameData").value != null)
+                if (!startFlag && snapshot.child("gameInfo").child("gameData").value != null) {
+                    startFlag = true
                     startGame()
+                }
 
                 userDatas.clear()
                 masterName = snapshot.child("master").value.toString()
@@ -86,8 +86,8 @@ class LobbyActivity : AppCompatActivity() {
         binding.btnReady.setOnClickListener() {
             var readyFlag = false
             val btnReady = binding.btnReady
-            if (btnReady.text == "시작") {
-                //masterStartGame()
+            if (!startFlag && btnReady.text == "시작") {
+                startFlag = true
                 startGame()
             } else {
                 myRoomRef.get().addOnSuccessListener {
@@ -155,7 +155,7 @@ class LobbyActivity : AppCompatActivity() {
 
         var nextIntent = Intent(this@LobbyActivity, MainActivity::class.java)
         if (gameTitle == "Balloon")
-            nextIntent = Intent(this@LobbyActivity, TaptapActivity::class.java)
+            nextIntent = Intent(this@LobbyActivity, BalloonActivity::class.java)
         else if (gameTitle == "FindNumber")
             nextIntent = Intent(this@LobbyActivity, FindNumberActivity::class.java)
         else if (gameTitle == "InitialQuiz")
@@ -172,11 +172,8 @@ class LobbyActivity : AppCompatActivity() {
             nextIntent = Intent(this@LobbyActivity, WhackAMoleActivity::class.java)
 
         val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = masterName)
-        /*nextIntent.putExtra("masterName", masterName)
-        nextIntent.putExtra("roomPk", roomPk)
-        nextIntent.putExtra("myPk", myPk)*/
 
-        finish()
+        this@LobbyActivity.finish()
         nextIntent.putExtra("roomInfoData", roomInfoData)
         nextIntent.putExtra("time", 10 * 100)
         startActivity(nextIntent)

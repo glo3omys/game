@@ -55,9 +55,11 @@ class GameListActivity : AppCompatActivity() {
         }
         val initialbtn = findViewById<Button>(R.id.goto_initial)
         initialbtn.setOnClickListener {
-            val nextIntent = Intent(this, InitialQuizActivity::class.java)
+            /*val nextIntent = Intent(this, InitialQuizActivity::class.java)
             //Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show()
-            startActivity(nextIntent)
+            startActivity(nextIntent)*/
+            val dialog = MyDialog(this)
+            dialog.myDig("game description", "InitialQuiz")
         }
         val leftrightbtn = findViewById<Button>(R.id.goto_leftright)
         leftrightbtn.setOnClickListener {

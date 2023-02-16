@@ -128,6 +128,8 @@ class MyDialog(context: Context){
                 nextIntent = Intent(mContext, MemoryCardGameActivity::class.java)
             else if (gameName == "WhackAMole")
                 nextIntent = Intent(mContext, WhackAMoleActivity::class.java)
+            else if (gameName == "InitialQuiz")
+                nextIntent = Intent(mContext, InitialQuizActivity::class.java)
 
             (mContext as Activity).finish()
             nextIntent.putExtra("time", time * 100)

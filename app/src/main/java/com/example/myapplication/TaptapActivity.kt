@@ -61,9 +61,6 @@ class TaptapActivity : AppCompatActivity() {
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
         }
-        /*masterName = intent.getStringExtra("masterName").toString()
-        roomPk = intent.getStringExtra("roomPk").toString()
-        myPk = intent.getStringExtra("myPk").toString()*/
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
@@ -75,13 +72,6 @@ class TaptapActivity : AppCompatActivity() {
             cnt += 1
             countTextView.text = cnt.toString()
         }
-        /*
-        binding.layBottom.btnReset.setOnClickListener() {
-            cnt = 0
-            time = 0
-            stopTimer()
-        }
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }

@@ -11,6 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityFindNumberBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -29,6 +35,15 @@ class FindNumberActivity : AppCompatActivity() {
     var time = 0
     var isOver = false
 
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<FindNumberData>()
+
     var score = 0
     var nextNumber = 1
 
@@ -46,55 +61,31 @@ class FindNumberActivity : AppCompatActivity() {
         setContentView(binding.root)
         findNumberAdapter = FindNumberAdapter(this)
 
-        val secTextView = binding.layTime.tvTime
-
         var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
         binding.rvFindnum.layoutManager = gridLayoutManager
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@FindNumberActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                setDatas()
-                setRadioState(false, binding.layBottom.radioGroup)
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.rvFindnum.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener() {
-            score = 0
-            time = 0
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
 
         mToast = createToast()
         initRecycler()
-        runTimer()
+        //runTimer()
     }
 
     fun popNumber(number: Int): Boolean {
@@ -165,7 +156,20 @@ class FindNumberActivity : AppCompatActivity() {
                     secTextView.text = "0초"
 
                     val mDialog = MyDialog(this@FindNumberActivity)
-                    mDialog.myDig("Score", score)
+                    mDialog.myDig("Score", score, intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+
+                    myRoomRef.child("gameInfo").child("gameData").removeValue()
+                    myRoomRef.child("readyCnt").setValue(0)
+                    myRoomRef.child("memberList").addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (data in snapshot.children)
+                                data.child("readyState").ref.setValue(false)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+                    })
 
                     timerTask?.cancel()
                     init()
@@ -181,14 +185,40 @@ class FindNumberActivity : AppCompatActivity() {
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
     private fun setDatas() {
-        val tmpDatas = mutableListOf<FindNumberData>()
-        tmpDatas.apply {
-            for (i in (1 .. 20))
-                add(FindNumberData(num = i, selected = false))
-            shuffle()
-            findNumberAdapter.datas = tmpDatas
-            findNumberAdapter.notifyDataSetChanged()
+        val tmpData = mutableListOf<Int>()
+        gameData.clear()
+        tmpData.clear()
+        if (masterName == myID) {
+            tmpData.apply {
+                for (i in (1 .. 20))
+                    add(i)
+                shuffle()
+            }
+            gameData.apply {
+                for (data in tmpData)
+                    add(FindNumberData(num = data, selected = false))
+            }
+            myRoomRef.child("gameInfo").child("gameData").setValue(tmpData)
         }
+        else if (masterName != "") {
+            myRoomRef.child("gameInfo").child("gameData").get().addOnSuccessListener {
+                gameData.apply {
+                    for (data in it.children)
+                        add(FindNumberData(num = data.value.toString().toInt(), selected = false))
+                }
+            }
+        }
+        else {
+            gameData.apply {
+                for (i in (1 .. 20))
+                    add(FindNumberData(num = i, selected = false))
+                shuffle()
+            }
+        }
+        findNumberAdapter.datas = gameData
+        findNumberAdapter.notifyDataSetChanged()
+
+        runTimer()
     }
 
     fun init() {
@@ -201,9 +231,7 @@ class FindNumberActivity : AppCompatActivity() {
         binding.layTime.tvTime.text = "0초"
         //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvFindnum.visibility = View.VISIBLE
         timerTask?.cancel()

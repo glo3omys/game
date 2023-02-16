@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.Activity
 import android.content.Context
 import android.app.AlertDialog
 import android.content.Intent
@@ -28,7 +29,7 @@ class MyDialog(context: Context){
         */
 
     // score
-    fun myDig(title: String, cnt: Int = -1) {
+    fun myDig(title: String, cnt: Int = -1, roomInfoData: RoomInfoData? = null) {
         mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_tv_dialog, null)
 
         mDialogView.findViewById<TextView>(R.id.my_tv).text = cnt.toString()
@@ -43,9 +44,17 @@ class MyDialog(context: Context){
 
         val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
         okButton.setOnClickListener {
-            nextIntent = Intent(mContext, GameListActivity::class.java)
-            mContext.startActivity(nextIntent)
+            if (roomInfoData != null) {
+                nextIntent = Intent(mContext, LobbyActivity::class.java)
+                nextIntent.putExtra("roomInfoData", roomInfoData)
+                mContext.startActivity(nextIntent)
+            }
+            else {
+                nextIntent = Intent(mContext, GameListActivity::class.java)
+                mContext.startActivity(nextIntent)
+            }
 
+            (mContext as Activity).finish()
             mAlertDialog.dismiss()
         }
     }
@@ -120,6 +129,7 @@ class MyDialog(context: Context){
             else if (gameName == "WhackAMole")
                 nextIntent = Intent(mContext, WhackAMoleActivity::class.java)
 
+            (mContext as Activity).finish()
             nextIntent.putExtra("time", time * 100)
             mContext.startActivity(nextIntent)
         }
@@ -185,9 +195,11 @@ class MyDialog(context: Context){
             seedRef.child(roomSeed).setValue(roomPk)
 
             nextIntent = Intent(mContext, LobbyActivity::class.java)
-            nextIntent.putExtra("roomPk", roomPk)
+            val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = myID)
+            /*nextIntent.putExtra("roomPk", roomPk)
             nextIntent.putExtra("myPk", myPk)
-            nextIntent.putExtra("masterName", myID)
+            nextIntent.putExtra("masterName", myID)*/
+            nextIntent.putExtra("roomInfoData", roomInfoData)
 
             //(mContext as SearchRoomActivity).finish()
             mContext.startActivity(nextIntent)

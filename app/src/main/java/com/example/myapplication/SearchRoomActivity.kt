@@ -73,9 +73,8 @@ class SearchRoomActivity : AppCompatActivity() {
                 myRoomRef.child("memberList").child(myPk).setValue(newUser)
 
                 val nextIntent = Intent(this, LobbyActivity::class.java)
-                nextIntent.putExtra("roomPk", seedToPk[seed])
-                nextIntent.putExtra("myPk", myPk)
-                nextIntent.putExtra("masterName", masterName)
+                var roomInfoData = RoomInfoData(roomPk = seedToPk[seed].toString(), myPk = myPk, masterName = masterName)
+                nextIntent.putExtra("roomInfoData", roomInfoData)
                 startActivity(nextIntent)
             }
                 .addOnFailureListener {

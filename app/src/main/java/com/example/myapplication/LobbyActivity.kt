@@ -1,11 +1,11 @@
 package com.example.myapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.example.myapplication.databinding.ActivityLobbyBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +23,7 @@ class LobbyActivity : AppCompatActivity() {
     var roomPk = ""
     var myPk = ""
     var masterName = ""
+    var myID = ""
 
     val database = Firebase.database
     lateinit var myRoomRef : DatabaseReference
@@ -38,12 +39,23 @@ class LobbyActivity : AppCompatActivity() {
         lobbyAdapter = LobbyAdapter(this)
         binding.rvUsers.adapter = lobbyAdapter
 
-        roomPk = intent.getStringExtra("roomPk").toString()
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+
+        /*roomPk = intent.getStringExtra("roomPk").toString()
         myPk = intent.getStringExtra("myPk").toString()
-        masterName = intent.getStringExtra("masterName").toString()
+        masterName = intent.getStringExtra("masterName").toString()*/
         myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
         dbListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child("gameInfo").child("gameData").value != null)
+                    startGame()
+
                 userDatas.clear()
                 masterName = snapshot.child("master").value.toString()
                 val memberCnt = snapshot.child("memberCnt").value.toString().toInt()
@@ -56,7 +68,7 @@ class LobbyActivity : AppCompatActivity() {
                         readyState = false
                     userDatas.add(UserData(name = name, imageID = R.drawable.ic_launcher_foreground, readyState = readyState))
                 }
-                if (masterName == prefs.getSharedPrefs("myID", ""))
+                if (masterName == myID)
                     binding.btnReady.isEnabled = (memberCnt - 1 == readyCnt) && (memberCnt != 1)
                 setVisibility()
                 binding.tvSelectedGame.text = snapshot.child("gameInfo").child("gameTitle").value.toString()
@@ -75,16 +87,8 @@ class LobbyActivity : AppCompatActivity() {
             var readyFlag = false
             val btnReady = binding.btnReady
             if (btnReady.text == "시작") {
-                /*myRoomRef.get().addOnSuccessListener {
-                    if (it.child("readyCnt").value.toString()
-                            .toInt() == it.child("memberCnt").value.toString().toInt() - 1
-                    )
-                    //startGame()
-                        Toast.makeText(this@LobbyActivity, "SUCCESS", Toast.LENGTH_SHORT).show()
-                    else {
-                        Toast.makeText(this@LobbyActivity, "FAIL", Toast.LENGTH_SHORT).show()
-                    }
-                }*/
+                //masterStartGame()
+                startGame()
             } else {
                 myRoomRef.get().addOnSuccessListener {
                     var readyCnt: Int = it.child("readyCnt").value.toString().toInt()
@@ -102,19 +106,14 @@ class LobbyActivity : AppCompatActivity() {
                 }
             }
         }
-        /*if (masterName == prefs.getSharedPrefs("myID", ""))
-            initSpinner()
-        else
-            binding.spinnerGameList.visibility = View.GONE
-
-         */
         initSpinner()
         setVisibility()
     }
 
     private fun setVisibility() {
-        if (masterName == prefs.getSharedPrefs("myID", "")) {
+        if (masterName == myID) {
             binding.btnReady.text = "시작"
+            //binding.btnReady.isEnabled = false
             binding.spinnerGameList.visibility = View.VISIBLE
             binding.tvSelectedGame.visibility = View.GONE
         }
@@ -148,7 +147,39 @@ class LobbyActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
+        var gameTitle : String
+        if (masterName == myID)
+            gameTitle = binding.spinnerGameList.selectedItem.toString()
+        else
+            gameTitle = binding.tvSelectedGame.text.toString()
 
+        var nextIntent = Intent(this@LobbyActivity, MainActivity::class.java)
+        if (gameTitle == "Balloon")
+            nextIntent = Intent(this@LobbyActivity, TaptapActivity::class.java)
+        else if (gameTitle == "FindNumber")
+            nextIntent = Intent(this@LobbyActivity, FindNumberActivity::class.java)
+        else if (gameTitle == "InitialQuiz")
+            nextIntent = Intent(this@LobbyActivity, InitialQuizActivity::class.java)
+        else if (gameTitle == "LeftRight")
+            nextIntent = Intent(this@LobbyActivity, LeftRightActivity::class.java)
+        else if (gameTitle == "Math")
+            nextIntent = Intent(this@LobbyActivity, MathActivity::class.java)
+        else if (gameTitle == "MemoryCardGame")
+            nextIntent = Intent(this@LobbyActivity, MemoryCardGameActivity::class.java)
+        else if (gameTitle == "Taptap")
+            nextIntent = Intent(this@LobbyActivity, TaptapActivity::class.java)
+        else if (gameTitle == "WhackAMole")
+            nextIntent = Intent(this@LobbyActivity, WhackAMoleActivity::class.java)
+
+        val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = masterName)
+        /*nextIntent.putExtra("masterName", masterName)
+        nextIntent.putExtra("roomPk", roomPk)
+        nextIntent.putExtra("myPk", myPk)*/
+
+        finish()
+        nextIntent.putExtra("roomInfoData", roomInfoData)
+        nextIntent.putExtra("time", 10 * 100)
+        startActivity(nextIntent)
     }
 
     override fun onBackPressed() {

@@ -66,6 +66,7 @@
             android:id="@+id/btn_submit"
             android:layout_margin="15dp"
             android:layout_centerHorizontal="true"
+            android:enabled="false"
             android:layout_below="@+id/et_answer"/>
     </RelativeLayout>
 

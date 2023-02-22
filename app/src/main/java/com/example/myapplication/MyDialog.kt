@@ -11,7 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import org.w3c.dom.Text
 import scavDatas
 
 class MyDialog(context: Context){
@@ -29,7 +34,7 @@ class MyDialog(context: Context){
         */
 
     // score
-    fun myDig(title: String, cnt: Int = -1, roomInfoData: RoomInfoData? = null) {
+    fun myDig(title: String, cnt: Int = -1) {
         mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_tv_dialog, null)
 
         mDialogView.findViewById<TextView>(R.id.my_tv).text = cnt.toString()
@@ -44,18 +49,125 @@ class MyDialog(context: Context){
 
         val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
         okButton.setOnClickListener {
-            if (roomInfoData != null) {
-                nextIntent = Intent(mContext, LobbyActivity::class.java)
-                nextIntent.putExtra("roomInfoData", roomInfoData)
-                mContext.startActivity(nextIntent)
-            }
-            else {
-                nextIntent = Intent(mContext, GameListActivity::class.java)
-                mContext.startActivity(nextIntent)
-            }
+            nextIntent = Intent(mContext, GameListActivity::class.java)
+            mContext.startActivity(nextIntent)
 
             (mContext as Activity).finish()
             mAlertDialog.dismiss()
+        }
+    }
+
+    // rv, rank
+    fun myDig(title: String, roomInfoData: RoomInfoData, pickOne: Boolean = false) {
+        val userRankAdapter = UserRankAdapter(mContext)
+
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_user_rank_dialog, null)
+        mDialogView.findViewById<RecyclerView>(R.id.my_rv).adapter = userRankAdapter
+
+        val database = FirebaseDatabase.getInstance()
+
+        var roomPk = ""
+        var masterName = ""
+        val prefs = PreferenceUtil(mContext)
+        var myID = prefs.getSharedPrefs("myID", "")
+
+        var flag = false
+
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            //myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+
+        val myRoomRef = database.getReference("room").child(roomPk)
+        mBuilder.setView(mDialogView)
+            .setTitle(title)
+            .setCancelable(false)
+        mAlertDialog = mBuilder.create()
+
+        var dbListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val memberCnt = snapshot.child("memberCnt").value.toString().toInt()
+                val myTv = mDialogView.findViewById<TextView>(R.id.my_tv)
+                val myRv = mDialogView.findViewById<RecyclerView>(R.id.my_rv)
+
+                if (pickOne) {
+                    var gameWinner : String? = null
+                    if (!flag && masterName == myID && snapshot.child("gameInfo").child("gameScore").childrenCount.toString().toInt() == memberCnt) {
+                        flag = true
+                        val tmpDatas = mutableListOf<String>()
+                        tmpDatas.apply {
+                            for (data in snapshot.child("gameInfo").child("gameScore").children)
+                                if (data.value.toString().toBoolean())
+                                    add(data.key.toString())
+                        }
+                        gameWinner = if (tmpDatas.isEmpty()) "NONE" else tmpDatas.random()
+                        myRoomRef.child("gameInfo").child("gameWinner").setValue(gameWinner)
+                    }
+                    else if (masterName != myID && snapshot.child("gameInfo").child("gameWinner") != null) {
+                        gameWinner = snapshot.child("gameInfo").child("gameWinner").value.toString()
+                    }
+
+                    if (gameWinner != null && gameWinner != "null") {
+                        myTv.text = gameWinner
+                        myRv.visibility = View.GONE
+                        myTv.visibility = View.VISIBLE
+                        mAlertDialog.show()
+                    }
+                }
+                else {
+                    if (snapshot.child("gameInfo").child("gameScore").childrenCount.toString().toInt() == memberCnt) {
+                        val tmpDatas = mutableListOf<UserRankData>()
+                        tmpDatas.apply {
+                            clear()
+                            for (data in snapshot.child("gameInfo").child("gameScore").children)
+                                //add(UserRankData(data.key.toString(), data.value.toString().toInt()))
+                                add(UserRankData(data.key.toString(), 1))
+                            val comparator: Comparator<UserRankData> = compareBy { it.score }
+                            sortWith(comparator)
+                            reverse()
+                        }
+                        userRankAdapter.datas = tmpDatas
+                        userRankAdapter.notifyDataSetChanged()
+
+                        myRv.visibility = View.VISIBLE
+                        myTv.visibility = View.GONE
+                        mAlertDialog.show()
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        }
+        myRoomRef.addValueEventListener(dbListener)
+
+        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        okButton.setOnClickListener {
+            nextIntent = Intent(mContext, LobbyActivity::class.java)
+            nextIntent.putExtra("roomInfoData", roomInfoData)
+            mContext.startActivity(nextIntent)
+
+            (mContext as Activity).finish()
+            mAlertDialog.dismiss()
+
+            if (dbListener != null) {
+                myRoomRef.removeEventListener(dbListener)
+                //dbListener = null
+            }
+
+            myRoomRef.child("gameInfo").child("gameScore").removeValue()
+            myRoomRef.child("gameInfo").child("gameData").removeValue()
+            myRoomRef.child("gameInfo").child("gameWinner").removeValue()
+            myRoomRef.child("readyCnt").setValue(0)
+            myRoomRef.child("memberList").addListenerForSingleValueEvent(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (data in snapshot.children)
+                        data.child("readyState").ref.setValue(false)
+                }
+                override fun onCancelled(error: DatabaseError) { }
+            })
         }
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import com.bumptech.glide.disklrucache.DiskLruCache.Value
 import com.example.myapplication.databinding.ActivityTaptapBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,7 +23,7 @@ class TaptapActivity : AppCompatActivity() {
 
     var timerTask: Timer?= null
     var time = 0
-    var cnt = 0
+    var score = 0
     var isOver = false
 
     var myID = ""
@@ -69,8 +68,8 @@ class TaptapActivity : AppCompatActivity() {
             startActivity(nextIntent)
         }
         binding.btnTap.setOnClickListener {
-            cnt += 1
-            countTextView.text = cnt.toString()
+            score += 1
+            countTextView.text = score.toString()
         }
         binding.btnPause.setOnClickListener {
             pauseTimer()
@@ -113,12 +112,14 @@ class TaptapActivity : AppCompatActivity() {
             if (time <= 0 && !isOver) {
                 isOver = true
                 runOnUiThread {
-                    updateMyBestScore(this@TaptapActivity, gameName, cnt.toString())
-                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, cnt.toString())}"
+                    updateMyBestScore(this@TaptapActivity, gameName, score.toString())
+                    binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@TaptapActivity)
-                    mDialog.myDig("Score", cnt, intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+                    mDialog.myDig("Score", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     myRoomRef.child("gameInfo").child("gameData").removeValue()
                     myRoomRef.child("readyCnt").setValue(0)
@@ -150,7 +151,7 @@ class TaptapActivity : AppCompatActivity() {
         }
 
         //time = 0
-        cnt = 0
+        score = 0
         isOver = false
         binding.tvScoreTaptap.text = "0"
         binding.layTime.tvTime.text = "0초"
@@ -169,7 +170,7 @@ class TaptapActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun removeListener() {
+    private fun removeListener() {
         if (dbListener != null) {
             myRoomRef.removeEventListener(dbListener!!)
             dbListener = null

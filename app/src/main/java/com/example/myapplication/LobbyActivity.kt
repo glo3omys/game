@@ -30,6 +30,7 @@ class LobbyActivity : AppCompatActivity() {
     var dbListener: ValueEventListener? = null
     private val userDatas = mutableListOf<UserData>()
     var startFlag = false
+    var gameData = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,8 @@ class LobbyActivity : AppCompatActivity() {
         dbListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!startFlag && snapshot.child("gameInfo").child("gameData").value != null) {
+                    if (snapshot.child("gameInfo").child("gameData").value is String)
+                        gameData = snapshot.child("gameInfo").child("gameData").value.toString()
                     startFlag = true
                     startGame()
                 }
@@ -127,8 +130,8 @@ class LobbyActivity : AppCompatActivity() {
         val spinner = binding.spinnerGameList
         val gameList = resources.getStringArray(R.array.games).toMutableList()
         val spinnerAdapter = ArrayAdapter<String>(this, R.layout.recycler_spinner, gameList)
-
         spinner.adapter = spinnerAdapter
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //binding.tvSelectedGame.text = gameList[position]
@@ -138,6 +141,10 @@ class LobbyActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
+        }
+        myRoomRef.child("gameInfo").child("gameTitle").get().addOnSuccessListener {
+            if (it.value.toString() != null)
+                spinner.setSelection(spinnerAdapter.getPosition(it.value.toString()))
         }
     }
 
@@ -176,6 +183,8 @@ class LobbyActivity : AppCompatActivity() {
         this@LobbyActivity.finish()
         nextIntent.putExtra("roomInfoData", roomInfoData)
         nextIntent.putExtra("time", 10 * 100)
+        if (gameData != "")
+            nextIntent.putExtra("gameData", gameData)
         startActivity(nextIntent)
     }
 

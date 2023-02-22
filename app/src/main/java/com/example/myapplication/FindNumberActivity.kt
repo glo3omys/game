@@ -155,10 +155,12 @@ class FindNumberActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    val mDialog = MyDialog(this@FindNumberActivity)
-                    mDialog.myDig("Score", score, intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
 
-                    myRoomRef.child("gameInfo").child("gameData").removeValue()
+                    val mDialog = MyDialog(this@FindNumberActivity)
+                    mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+
+                    /*myRoomRef.child("gameInfo").child("gameData").removeValue()
                     myRoomRef.child("readyCnt").setValue(0)
                     myRoomRef.child("memberList").addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
@@ -169,7 +171,7 @@ class FindNumberActivity : AppCompatActivity() {
                         override fun onCancelled(error: DatabaseError) {
 
                         }
-                    })
+                    })*/
 
                     timerTask?.cancel()
                     init()

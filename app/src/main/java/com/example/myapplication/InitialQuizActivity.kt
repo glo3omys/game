@@ -1,20 +1,14 @@
 package com.example.myapplication
 
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import com.example.myapplication.databinding.ActivityInitialQuizBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
@@ -74,6 +68,7 @@ class InitialQuizActivity : AppCompatActivity() {
 
          */
 
+        myID = prefs.getSharedPrefs("myID", "")
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
         val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
@@ -83,16 +78,16 @@ class InitialQuizActivity : AppCompatActivity() {
             masterName = roomInfoData.masterName
         }
         myRoomRef = database.getReference("room").child(roomPk)
-        myID = prefs.getSharedPrefs("myID", "")
+
+        if (masterName != "" && masterName != myID)
+            questString = intent.getStringExtra("gameData").toString()
+        else
+            allocQuest()
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.btnStart.setOnClickListener {
-            allocQuest()
-            runTimer()
-        }*/
         binding.etAnswer.addTextChangedListener(object: TextWatcher {
             val etAnswer = binding.etAnswer
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -107,6 +102,8 @@ class InitialQuizActivity : AppCompatActivity() {
                     etAnswer.setText(res)
                     etAnswer.setSelection(res.length)
                 }
+                binding.btnSubmit.isEnabled = !s.toString().equals("")
+
                 if (!s.toString().equals("") && s.toString()[s!!.length - 1].toString() == "\n") {
                     val res = s.toString().replace("\n", "")
                     if (!s.toString().equals(res)) {
@@ -119,8 +116,8 @@ class InitialQuizActivity : AppCompatActivity() {
                     imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
                     etAnswer.isEnabled = false
                     binding.btnSubmit.isEnabled = false
-                    questCheck()
-                    dictionaryCheck()
+                    //resQ = questCheck()
+                    //resD = dictionaryCheck()
                 }
             }
 
@@ -140,8 +137,8 @@ class InitialQuizActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
             etAnswer.isEnabled = false
             binding.btnSubmit.isEnabled = false
-            questCheck()
-            dictionaryCheck()
+            //questCheck()
+            //dictionaryCheck()
         }
         init()
     }
@@ -164,45 +161,13 @@ class InitialQuizActivity : AppCompatActivity() {
                 runOnUiThread {
                     secTextView.text = "0초"
 
-                    var rrr = 0
-                    if (!resQ)
-                        rrr = 1
-                    else if (!resD)
-                        rrr = 2
-                    else
-                        rrr = 3
+                    resQ = questCheck()
+                    dictionaryCheck()
+
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(resD && resQ)
 
                     val mDialog = MyDialog(this@InitialQuizActivity)
-                    mDialog.myDig("Score", rrr, intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
-                    /*if (!resQ)
-                        resTextView.text = "Wrong Initial"
-                    else if (!resD)
-                        resTextView.text = "Wrong Word"
-                    else
-                        resTextView.text = "Correct"
-
-                    mAlertDialog.show()
-                    val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
-                    okButton.setOnClickListener {
-                        init()
-                        mAlertDialog.dismiss()
-                    }
-                     */
-
-
-                    myRoomRef.child("gameInfo").child("gameData").removeValue()
-                    myRoomRef.child("readyCnt").setValue(0)
-                    myRoomRef.child("memberList").addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (data in snapshot.children)
-                                data.child("readyState").ref.setValue(false)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-
-                        }
-                    })
+                    mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData, true)
 
                     timerTask?.cancel()
                 }
@@ -211,19 +176,16 @@ class InitialQuizActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        allocQuest()
+        //allocQuest()
 
         //time = 0
         isOver = false
         //binding.layTime.pgBar.max = 1000
         binding.layTime.pgBar.max = time
-        //binding.tvItem.text = "_______"
+        binding.tvItem.text = questString
         binding.layTime.tvTime.text = "0초"
         binding.etAnswer.text = null
         binding.etAnswer.clearFocus()
-        //binding.etAnswer.isEnabled = false
-        //binding.btnSubmit.isEnabled = false
-        //binding.btnStart.isEnabled = true
         resD = false
         resQ = false
         wordLength = -1
@@ -235,35 +197,26 @@ class InitialQuizActivity : AppCompatActivity() {
     private fun allocQuest() {
         questString = ""
         wordLength = 2
-        //wordLength = (2 .. 4).random()
-        if (masterName == myID) {
-            for (i in 1..wordLength)
-                questString += defaultInitials[(0 until defaultInitialsCnt).random()]
-            myRoomRef.child("gameInfo").child("gameData").setValue(questString)
-        }
-        else if (masterName != "") {
-            myRoomRef.child("gameInfo").child("gameData").get().addOnSuccessListener {
-                questString = it.value.toString()
-            }
-        }
-        else {
-            for (i in 1..wordLength)
-                questString += defaultInitials[(0 until defaultInitialsCnt).random()]
-        }
-        binding.tvItem.text = questString
 
-        //binding.etAnswer.isEnabled = true
-        //binding.btnSubmit.isEnabled = true
+        //wordLength = (2 .. 4).random()
+
+        for (i in 1..wordLength)
+            questString += defaultInitials[(0 until defaultInitialsCnt).random()]
+
+        if (masterName == myID)
+            myRoomRef.child("gameInfo").child("gameData").setValue(questString)
     }
 
-    private fun questCheck() {
+    private fun questCheck() : Boolean {
         val ansString = binding.etAnswer.text
         val questString = binding.tvItem.text
+        if (ansString.length != questString.length)
+            return false
         for (i in 0 until wordLength) {
             if ((Integer.parseInt(ansString[i]+"") < 0xAC00) || ((Integer.parseInt(ansString[i] + "") - 0xAC00) / 28 / 21) != defaultInitials.indexOf(questString[i]))
-                return
+                return false
         }
-        resQ = true
+        return true
     }
 
     private fun dictionaryCheck() {
@@ -274,7 +227,7 @@ class InitialQuizActivity : AppCompatActivity() {
                 response: Response<ResultGetSearchDict>
             ) {
                 val bodyTotal = response.body()?.total
-                var foundflag = false
+                var foundFlag = false
                 var tmpTitle: String
                 for (i in 0 until min(10, bodyTotal!!.toInt())) {
                     tmpTitle = response.body()!!.items[i].name
@@ -283,13 +236,11 @@ class InitialQuizActivity : AppCompatActivity() {
                     else
                         tmpTitle = Html.fromHtml(tmpTitle).toString();
                     if (tmpTitle == keyword) {
-                        foundflag = true
+                        foundFlag = true
                         break
                     }
                 }
-
-                if (bodyTotal != 0 && foundflag)
-                    resD = true
+                resD = bodyTotal != 0 && foundFlag
             }
 
             override fun onFailure(call: Call<ResultGetSearchDict>, t: Throwable) {

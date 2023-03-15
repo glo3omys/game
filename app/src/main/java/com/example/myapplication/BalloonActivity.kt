@@ -10,6 +10,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityBalloonBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -27,6 +31,16 @@ class BalloonActivity: AppCompatActivity() {
     var time = 0
     var isOver = false
 
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<FindNumberData>()
+    private var myRandom = Random(1)
+
     var score = 0
     var leftBalloonCnt = 2
 
@@ -38,57 +52,30 @@ class BalloonActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balloon)
-
         prefs = PreferenceUtil(applicationContext)
 
         mBinding = ActivityBalloonBinding.inflate(layoutInflater)
         setContentView(binding.root)
         balloonAdapter = BalloonAdapter(this)
 
-        val countTextView = binding.tvScoreBalloon
-        val secTextView = binding.layTime.tvTime
+        var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
+        binding.rvBalloon.layoutManager = gridLayoutManager
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
-
-        var gridLayoutManager = GridLayoutManager(applicationContext, SPAN_COUNT)
-        binding.rvBalloon.layoutManager = gridLayoutManager
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-            //setRadioStyle(group)
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@BalloonActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                allocProb()
-                setRadioState(false, binding.layBottom.radioGroup)
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.rvBalloon.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener() {
-            score = 0
-            time = 0
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
@@ -139,10 +126,17 @@ class BalloonActivity: AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@BalloonActivity)
-                    mDialog.myDig("Score", score)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
+                    binding.layBalloonQuest.visibility = View.INVISIBLE
+                    binding.rvBalloon.visibility = View.INVISIBLE
                 }
             }
         }
@@ -152,13 +146,25 @@ class BalloonActivity: AppCompatActivity() {
         binding.rvBalloon.adapter = balloonAdapter
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
 
-        datas.apply {
-            val range = (0..SPAN_COUNT)
-            for (i in 0 until SPAN_COUNT * SPAN_COUNT)
-               add(BalloonData(name = defaultBalloons[range.random()]))
-            balloonAdapter.datas = datas
-            balloonAdapter.notifyDataSetChanged()
+        if (masterName == myID || masterName == "") {
+            // generate
+            val seedValue = System.currentTimeMillis()
+            myRandom.setSeed(1)
+            // upload
+            if (masterName == myID)
+                myRoomRef.child("gameInfo").child("gameData").setValue(seedValue)
+            allocProb()
         }
+        else {
+            // download
+            myRoomRef.child("gameInfo").child("gameData").get().addOnSuccessListener {
+                //myRandom = Random(it.value.toString().toLong())
+                val seedValue = it.value.toString().toLong()
+                myRandom.setSeed(1)
+                allocProb()
+            }
+        }
+
         //setRadioState(true, binding.layBottom.radioGroup)
         init()
     }
@@ -185,10 +191,14 @@ class BalloonActivity: AppCompatActivity() {
         val balloon1: TextView = binding.tvBalloon1
         val balloon2: TextView = binding.tvBalloon2
 
-        if (balloon1.text == colorName)
-            balloon1.text = "..."
-        else if (balloon2.text == colorName)
-            balloon2.text = "..."
+        if (balloon1.text == colorName) {
+            balloon1.text = "${balloon1.text}."
+            balloon1.visibility = View.INVISIBLE
+        }
+        else if (balloon2.text == colorName) {
+            balloon2.text = "${balloon2.text}."
+            balloon2.visibility = View.INVISIBLE
+        }
         else
             return
 
@@ -205,28 +215,26 @@ class BalloonActivity: AppCompatActivity() {
     }
     private fun allocProb() {
         val tmpDatas = mutableListOf<BalloonData>()
-        tmpDatas.apply {
-            val range = (0..SPAN_COUNT)
-            for (i in 0 until SPAN_COUNT * SPAN_COUNT) {
-                add(BalloonData(name = defaultBalloons[range.random()])) }
-            balloonAdapter.datas = tmpDatas
-            balloonAdapter.notifyDataSetChanged()
-        }
+        for (i in 0 until SPAN_COUNT * SPAN_COUNT)
+            tmpDatas.add(BalloonData(name = defaultBalloons[myRandom.nextInt(defaultBalloons.size)]))
+        balloonAdapter.datas = tmpDatas
+        balloonAdapter.notifyDataSetChanged()
 
-        var range = (0 until SPAN_COUNT * SPAN_COUNT)
         val balloon1 = binding.tvBalloon1
         val balloon2 = binding.tvBalloon2
-        val rdmIdx1 = range.random()
-        var rdmIdx2 = range.random()
+        val rdmIdx1 = myRandom.nextInt(defaultBalloons.size)
+        var rdmIdx2 = myRandom.nextInt(defaultBalloons.size)
         while (rdmIdx1 == rdmIdx2)
-            rdmIdx2 = range.random()
+            rdmIdx2 = myRandom.nextInt(defaultBalloons.size)
 
         balloon1.text = tmpDatas[rdmIdx1].name
         balloon2.text = tmpDatas[rdmIdx2].name
 
-        range = (0..SPAN_COUNT)
-        balloon1.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[range.random()]).RGB.toString()))
-        balloon2.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[range.random()]).RGB.toString()))
+        balloon1.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[myRandom.nextInt(defaultBalloons.size)]).RGB))
+        balloon2.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[myRandom.nextInt(defaultBalloons.size)]).RGB))
+
+        balloon1.visibility = View.VISIBLE
+        balloon2.visibility = View.VISIBLE
     }
 
     fun init() {

@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ActivityLeftRightBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -33,6 +37,13 @@ class LeftRightActivity : AppCompatActivity() {
     val startIdx = 0
     var lastIdx = 0 // size = 7(0 .. 6)
     val gameName = "LeftRight"
+
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -55,6 +66,14 @@ class LeftRightActivity : AppCompatActivity() {
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.rvLeftright.addItemDecoration(object: RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -68,40 +87,6 @@ class LeftRightActivity : AppCompatActivity() {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*
-        binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@LeftRightActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                init()
-                setDatas()
-                setRadioState(false, binding.layBottom.radioGroup)
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.btnLeft.isEnabled = true
-                binding.btnRight.isEnabled = true
-                binding.rvLeftright.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener {
-            score = 0
-            time = 0
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
@@ -199,28 +184,30 @@ class LeftRightActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@LeftRightActivity)
-                    mDialog.myDig("Score", score)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
-                    //init()
                 }
             }
         }
     }
     private fun setDatas() {
         val tmpDatas = mutableListOf<LeftRightData>()
-        tmpDatas.apply {
-            val range = (0..1)
-            for (i in 0 .. lastIdx)
-                if (range.random() % 2 == 0)
-                    add(LeftRightData(name = defaultItems[0].toString(), imageID = R.drawable.mushroom_b))
-                else
-                    add(LeftRightData(name = defaultItems[1].toString(), imageID = R.drawable.mushroom_z))
+        val range = (0..1)
+        for (i in 0 .. lastIdx)
+            if (range.random() % 2 == 0)
+                tmpDatas.add(LeftRightData(name = defaultItems[0].toString(), imageID = R.drawable.mushroom_b))
+            else
+                tmpDatas.add(LeftRightData(name = defaultItems[1].toString(), imageID = R.drawable.mushroom_z))
 
-            leftRightAdapter.datas = tmpDatas
-            leftRightAdapter.notifyDataSetChanged()
-        }
+        leftRightAdapter.datas = tmpDatas
+        leftRightAdapter.notifyDataSetChanged()
     }
     private fun initRecycler() {
         init()

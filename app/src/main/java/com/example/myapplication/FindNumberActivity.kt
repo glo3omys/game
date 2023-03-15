@@ -158,20 +158,10 @@ class FindNumberActivity : AppCompatActivity() {
                     myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
 
                     val mDialog = MyDialog(this@FindNumberActivity)
-                    mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
-                    /*myRoomRef.child("gameInfo").child("gameData").removeValue()
-                    myRoomRef.child("readyCnt").setValue(0)
-                    myRoomRef.child("memberList").addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (data in snapshot.children)
-                                data.child("readyState").ref.setValue(false)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-
-                        }
-                    })*/
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
                     init()
@@ -224,14 +214,11 @@ class FindNumberActivity : AppCompatActivity() {
     }
 
     fun init() {
-        //time = 0
         score = 0
         nextNumber = 1
         isOver = false
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreFindnum.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time

@@ -121,8 +121,8 @@ class MyDialog(context: Context){
                         tmpDatas.apply {
                             clear()
                             for (data in snapshot.child("gameInfo").child("gameScore").children)
-                                //add(UserRankData(data.key.toString(), data.value.toString().toInt()))
-                                add(UserRankData(data.key.toString(), 1))
+                                add(UserRankData(data.key.toString(), data.value.toString().toInt()))
+                                //add(UserRankData(data.key.toString(), 1))
                             val comparator: Comparator<UserRankData> = compareBy { it.score }
                             sortWith(comparator)
                             reverse()
@@ -156,18 +156,21 @@ class MyDialog(context: Context){
                 //dbListener = null
             }
 
-            myRoomRef.child("gameInfo").child("gameScore").removeValue()
-            myRoomRef.child("gameInfo").child("gameData").removeValue()
-            myRoomRef.child("gameInfo").child("gameWinner").removeValue()
-            myRoomRef.child("readyCnt").setValue(0)
-            myRoomRef.child("memberList").addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children)
-                        data.child("readyState").ref.setValue(false)
-                }
-                override fun onCancelled(error: DatabaseError) { }
-            })
+            //if (masterName == myID) {
+                myRoomRef.child("gameInfo").child("gameScore").removeValue()
+                myRoomRef.child("gameInfo").child("gameData").removeValue()
+                myRoomRef.child("gameInfo").child("gameWinner").removeValue()
+                myRoomRef.child("readyCnt").setValue(0)
+                myRoomRef.child("memberList").addListenerForSingleValueEvent(object :
+                    ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (data in snapshot.children)
+                            data.child("readyState").ref.setValue(false)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            //}
         }
     }
 
@@ -208,6 +211,7 @@ class MyDialog(context: Context){
         val btnPlay = mDialogView.findViewById<Button>(R.id.btn_ok)
         val btnBack = mDialogView.findViewById<Button>(R.id.btn_cancel)
         btnPlay.text = "Play"
+        btnPlay.isEnabled = false
 
         mBuilder.setView(mDialogView)
             .setTitle(title)

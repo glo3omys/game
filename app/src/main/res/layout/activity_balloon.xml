@@ -60,32 +60,40 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:id="@+id/lay_balloon_quest"
+        android:layout_margin="15dp"
         android:layout_below="@+id/tv_score_balloon" >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_balloon1"
-            android:textSize="40dp"
-            android:text="..."
-            android:layout_margin="20dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_balloon2"
-            android:textSize="40dp"
-            android:text="..."
-            android:layout_toRightOf="@id/tv_balloon1"
-            android:layout_margin="20dp"
-            />
+            android:weightSum="2" >
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_balloon1"
+                android:textSize="40dp"
+                android:text="..."
+                android:textAlignment="center"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_balloon2"
+                android:textSize="40dp"
+                android:text="..."
+                android:textAlignment="center"
+                />
+        </LinearLayout>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_balloon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:overScrollMode="never"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"

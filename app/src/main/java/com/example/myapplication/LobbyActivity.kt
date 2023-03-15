@@ -145,6 +145,8 @@ class LobbyActivity : AppCompatActivity() {
         myRoomRef.child("gameInfo").child("gameTitle").get().addOnSuccessListener {
             if (it.value.toString() != null)
                 spinner.setSelection(spinnerAdapter.getPosition(it.value.toString()))
+            else
+                spinner.setSelection(0)
         }
     }
 

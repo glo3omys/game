@@ -119,20 +119,10 @@ class TaptapActivity : AppCompatActivity() {
                     myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
 
                     val mDialog = MyDialog(this@TaptapActivity)
-                    mDialog.myDig("Score", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
-                    myRoomRef.child("gameInfo").child("gameData").removeValue()
-                    myRoomRef.child("readyCnt").setValue(0)
-                    myRoomRef.child("memberList").addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (data in snapshot.children)
-                                data.child("readyState").ref.setValue(false)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-
-                        }
-                    })
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
                     //init()

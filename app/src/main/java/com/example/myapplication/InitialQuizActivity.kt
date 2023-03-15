@@ -44,7 +44,9 @@ class InitialQuizActivity : AppCompatActivity() {
 
     var resQ = false
     var resD = false
-    var wordLength = -1
+    var qChecked = false
+    var dChecked = false
+    val wordLength = 2
     var questString = ""
 
     //val gameName = "InitialQuiz"
@@ -57,16 +59,6 @@ class InitialQuizActivity : AppCompatActivity() {
 
         mBinding = ActivityInitialQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        /*
-        mDialogView = LayoutInflater.from(this).inflate(R.layout.result_custom_dialog, null)
-        var mBuilder = AlertDialog.Builder(this)
-        mBuilder.setView(mDialogView)
-            .setTitle("Result")
-            .setCancelable(false)
-        mAlertDialog =  mBuilder.create()
-
-         */
 
         myID = prefs.getSharedPrefs("myID", "")
         val intent = intent
@@ -116,8 +108,6 @@ class InitialQuizActivity : AppCompatActivity() {
                     imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
                     etAnswer.isEnabled = false
                     binding.btnSubmit.isEnabled = false
-                    //resQ = questCheck()
-                    //resD = dictionaryCheck()
                 }
             }
 
@@ -137,8 +127,6 @@ class InitialQuizActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
             etAnswer.isEnabled = false
             binding.btnSubmit.isEnabled = false
-            //questCheck()
-            //dictionaryCheck()
         }
         init()
     }
@@ -161,13 +149,20 @@ class InitialQuizActivity : AppCompatActivity() {
                 runOnUiThread {
                     secTextView.text = "0초"
 
-                    resQ = questCheck()
-                    dictionaryCheck()
+                    while (!qChecked)
+                        questCheck()
+                    while (!dChecked) {
+                        dictionaryCheck()
+                        //Thread.sleep(1000)
+                    }
 
                     myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(resD && resQ)
 
                     val mDialog = MyDialog(this@InitialQuizActivity)
-                    mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData, true)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score")
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData, true)
 
                     timerTask?.cancel()
                 }
@@ -188,7 +183,7 @@ class InitialQuizActivity : AppCompatActivity() {
         binding.etAnswer.clearFocus()
         resD = false
         resQ = false
-        wordLength = -1
+        //wordLength = -1
         timerTask?.cancel()
 
         runTimer()
@@ -196,7 +191,7 @@ class InitialQuizActivity : AppCompatActivity() {
 
     private fun allocQuest() {
         questString = ""
-        wordLength = 2
+        //wordLength = 2
 
         //wordLength = (2 .. 4).random()
 
@@ -207,16 +202,21 @@ class InitialQuizActivity : AppCompatActivity() {
             myRoomRef.child("gameInfo").child("gameData").setValue(questString)
     }
 
-    private fun questCheck() : Boolean {
+    private fun questCheck() {
         val ansString = binding.etAnswer.text
         val questString = binding.tvItem.text
-        if (ansString.length != questString.length)
-            return false
-        for (i in 0 until wordLength) {
-            if ((Integer.parseInt(ansString[i]+"") < 0xAC00) || ((Integer.parseInt(ansString[i] + "") - 0xAC00) / 28 / 21) != defaultInitials.indexOf(questString[i]))
-                return false
+        if (ansString.length != questString.length) {
+            qChecked = true
+            return
         }
-        return true
+        for (i in 0 until wordLength) {
+            if ((ansString[i].toString().toIntOrNull()?.let { it < 0xAC00 } ?: false) || (ansString[i].toInt() - 0xAC00) / 28 / 21 != defaultInitials.indexOf(questString[i]) ) {
+                qChecked = true
+                return
+            }
+        }
+        resQ = true
+        qChecked = true
     }
 
     private fun dictionaryCheck() {
@@ -241,10 +241,12 @@ class InitialQuizActivity : AppCompatActivity() {
                     }
                 }
                 resD = bodyTotal != 0 && foundFlag
+                dChecked = true
             }
 
             override fun onFailure(call: Call<ResultGetSearchDict>, t: Throwable) {
                 Toast.makeText(this@InitialQuizActivity, "ERROR", Toast.LENGTH_SHORT).show()
+                dChecked = true
             }
         })
     }

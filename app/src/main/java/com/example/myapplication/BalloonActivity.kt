@@ -237,6 +237,10 @@ class BalloonActivity: AppCompatActivity() {
         balloon2.visibility = View.VISIBLE
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     fun init() {
         //time = 0
         score = 0

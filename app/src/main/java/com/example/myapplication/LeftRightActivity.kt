@@ -209,6 +209,11 @@ class LeftRightActivity : AppCompatActivity() {
         leftRightAdapter.datas = tmpDatas
         leftRightAdapter.notifyDataSetChanged()
     }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     private fun initRecycler() {
         init()
         setDatas()

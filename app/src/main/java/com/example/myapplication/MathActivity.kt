@@ -9,6 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityMathBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -24,6 +28,15 @@ class MathActivity: AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<MathData>()
 
     var score = 0
     var numCnt = 0
@@ -48,41 +61,20 @@ class MathActivity: AppCompatActivity() {
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@MathActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                setDatas()
-                allocQuest()
-                setRadioState(false, binding.layBottom.radioGroup)
 
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.rvMath.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener() {
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
@@ -128,10 +120,16 @@ class MathActivity: AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@MathActivity)
-                    mDialog.myDig("Score", score)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
+
                     //init()
                 }
             }
@@ -146,14 +144,26 @@ class MathActivity: AppCompatActivity() {
     }
 
     private fun setDatas() {
-        val tmpDatas = mutableListOf<MathData>()
-        tmpDatas.apply {
-            for (i in -7 .. 7)
-                add(MathData(num = i, selected = false))
-            tmpDatas.shuffle()
-            mathAdapter.datas = tmpDatas
-            mathAdapter.notifyDataSetChanged()
+        if (masterName != "" && masterName != myID) {
+            myRoomRef.child("gameInfo").child("gameData").get().addOnSuccessListener {
+                    for (data in it.children)
+                        gameData.add(MathData(num = data.value.toString().toInt(), selected = false))
+            }
         }
+        else {
+            val tmpData = mutableListOf<Int>()
+            for (i in -7 .. 7)
+                tmpData.add(i)
+            tmpData.shuffle()
+            for (data in tmpData)
+                gameData.add(MathData(num = data, selected = false))
+
+            if (masterName == myID) {
+                myRoomRef.child("gameInfo").child("gameData").setValue(tmpData)
+            }
+        }
+        mathAdapter.datas = gameData
+        mathAdapter.notifyDataSetChanged()
     }
 
     private fun allocQuest() {
@@ -248,6 +258,10 @@ class MathActivity: AppCompatActivity() {
             duration = Toast.LENGTH_SHORT
             view = customToastLayout
         }
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
     }
 
     fun init() {

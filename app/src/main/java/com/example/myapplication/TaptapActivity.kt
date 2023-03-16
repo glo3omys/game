@@ -155,6 +155,10 @@ class TaptapActivity : AppCompatActivity() {
         runTimer()
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     override fun onDestroy() {
         removeListener()
         super.onDestroy()

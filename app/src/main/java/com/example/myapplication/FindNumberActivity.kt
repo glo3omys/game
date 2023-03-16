@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewmodel.InitializerViewModelFactoryBuilder
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityFindNumberBinding
 import com.google.firebase.database.DataSnapshot
@@ -164,7 +165,8 @@ class FindNumberActivity : AppCompatActivity() {
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
-                    init()
+                    //init()
+                    binding.rvFindnum.visibility = View.INVISIBLE
                 }
             }
         }
@@ -211,6 +213,10 @@ class FindNumberActivity : AppCompatActivity() {
         findNumberAdapter.notifyDataSetChanged()
 
         runTimer()
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
     }
 
     fun init() {

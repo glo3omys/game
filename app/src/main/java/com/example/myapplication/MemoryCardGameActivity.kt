@@ -196,6 +196,11 @@ class MemoryCardGameActivity : AppCompatActivity() {
             leftCardCnt = 12
         }
     }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     private fun initDefaultCards() {
         for (card in memoryCardGameDatas) {
             card.invisible = false

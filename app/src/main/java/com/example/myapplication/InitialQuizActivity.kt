@@ -189,6 +189,10 @@ class InitialQuizActivity : AppCompatActivity() {
         runTimer()
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     private fun allocQuest() {
         questString = ""
         //wordLength = 2

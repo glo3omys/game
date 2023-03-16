@@ -246,6 +246,10 @@ class WhackAMoleActivity : AppCompatActivity() {
         timerTask?.cancel()
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+    }
+
     fun popMole(moleScore: Int, position: Int) {
         score += moleScore
 

@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lay_menu"
+        android:visibility="gone"
         >
 
         <ImageButton
@@ -58,6 +59,8 @@
             android:hint="answer"
             android:textSize="30dp"
             android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:layout_below="@+id/tv_item" />
         <Button
             android:layout_width="wrap_content"

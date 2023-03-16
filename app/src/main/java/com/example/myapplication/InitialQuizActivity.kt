@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.Html
+import android.text.InputFilter
 import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.example.myapplication.databinding.ActivityInitialQuizBinding
@@ -17,6 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import java.util.regex.Pattern
 import kotlin.concurrent.timer
 import kotlin.math.min
 
@@ -80,6 +83,31 @@ class InitialQuizActivity : AppCompatActivity() {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
+
+        var filterKor = InputFilter { src, _, _, _, _, _ ->
+            val ps = Pattern.compile("^[ㄱ-ㅣ가-힣]")
+            if (!ps.matcher(src).matches())
+                ""
+            else
+                src
+        }
+        binding.etAnswer.filters = arrayOf(filterKor)
+        binding.etAnswer.setOnEditorActionListener { _, action, _ ->
+            var handled = false
+            var etTitle = binding.etAnswer
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                if (etTitle.text.toString() == "") {
+                    Toast.makeText(this, "답을 입력해주세요", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    binding.btnSubmit.performClick()
+                    handled = true
+                }
+            }
+            handled
+        }
+
+        /*
         binding.etAnswer.addTextChangedListener(object: TextWatcher {
             val etAnswer = binding.etAnswer
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -121,6 +149,8 @@ class InitialQuizActivity : AppCompatActivity() {
                  */
             }
         })
+        */
+
         binding.btnSubmit.setOnClickListener {
             val etAnswer = binding.etAnswer
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

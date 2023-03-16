@@ -3,21 +3,29 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.app.AlertDialog
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import org.w3c.dom.Text
 import scavDatas
+import java.util.regex.Pattern
 
 class MyDialog(context: Context){
     var mContext = context
@@ -281,7 +289,9 @@ class MyDialog(context: Context){
 
         mDialogView = LayoutInflater.from(mContext).inflate(R.layout.my_et_dialog, null)
 
-        mDialogView.findViewById<EditText>(R.id.et_name).hint = "방제"
+        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        val etTitle = mDialogView.findViewById<EditText>(R.id.et_name)
+        etTitle.hint = "방제"
         mDialogView.findViewById<EditText>(R.id.et_score).visibility = View.GONE
 
         mBuilder.setView(mDialogView)
@@ -290,7 +300,29 @@ class MyDialog(context: Context){
         mAlertDialog =  mBuilder.create()
         mAlertDialog.show()
 
-        val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
+        var filterKor = InputFilter { src, _, _, _, _, _ ->
+            val ps = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z0-9]")
+            if (!ps.matcher(src).matches())
+                ""
+            else
+                src
+        }
+        etTitle.filters = arrayOf(filterKor)
+        etTitle.setOnEditorActionListener { _, action, _ ->
+            var handled = false
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                if (etTitle.text.toString() == "") {
+                    Toast.makeText(mContext, "방제를 입력해주세요", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    okButton.performClick()
+                    handled = true
+                }
+            }
+            handled
+        }
+
+        okButton.isEnabled = false
         okButton.setOnClickListener {
             val roomSeed = genSeed()
             val memberList = mutableListOf<String>()

@@ -9,6 +9,10 @@ import android.os.Looper
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityMemoryCardGameBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -24,6 +28,16 @@ class MemoryCardGameActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<MemoryCardGameData>()
+    var gameStart = false
 
     var score = 0
 
@@ -49,46 +63,23 @@ class MemoryCardGameActivity : AppCompatActivity() {
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                setDatas()
-                setRadioState(false, binding.layBottom.radioGroup)
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.rvMemoryCardGame.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener() {
-            score = 0
-            time = 0
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
         initRecycler()
-        runTimer()
     }
     private fun pauseTimer() {
         var pauseBtn = binding.btnPause
@@ -125,8 +116,13 @@ class MemoryCardGameActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@MemoryCardGameActivity)
-                    mDialog.myDig("Score", score)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
                     //init()
@@ -141,22 +137,26 @@ class MemoryCardGameActivity : AppCompatActivity() {
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setDatas() {
+        if (masterName == myID && !gameStart)
+            myRoomRef.child("gameInfo").child("gameData").setValue("0")
         val tmpDatas = mutableListOf<MemoryCardGameData>()
         val tmpDefault = mutableListOf<MemoryCardGameData>()
         tmpDefault.addAll(memoryCardGameDatas.shuffled())
 
-        tmpDatas.apply {
-            for (i in (0 until 6))
-                for (j in (0..1))
-                    add(MemoryCardGameData(name = tmpDefault[i].name, imageID = tmpDefault[i].imageID, selected = false, invisible = false))
-            shuffle()
-            memoryCardGameAdapter.datas = tmpDatas
-        }
+        for (i in 0 until 6)
+            for (j in 0 .. 1)
+                tmpDatas.add(MemoryCardGameData(name = tmpDefault[i].name, imageID = tmpDefault[i].imageID, selected = false, invisible = false))
+        tmpDatas.shuffle()
+        memoryCardGameAdapter.datas = tmpDatas
 
         runOnUiThread() {
             memoryCardGameAdapter.notifyDataSetChanged()
+        }
+
+        if (!gameStart) {
+            gameStart = true
+            runTimer()
         }
     }
     fun flipCard(position: Int) {

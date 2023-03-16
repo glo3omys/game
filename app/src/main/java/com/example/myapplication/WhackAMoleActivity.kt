@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityWhackAMoleBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import updateMyBestScore
 import java.util.*
 import kotlin.concurrent.timer
@@ -27,6 +31,15 @@ class WhackAMoleActivity : AppCompatActivity() {
     var questTime = 0
     var questIsOver = false
     var questTimerStarted = false
+
+    var myID = ""
+    var masterName = ""
+    var roomPk = ""
+    var myPk = ""
+    val database = Firebase.database
+    lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<FindNumberData>()
 
     var score = 0
 
@@ -52,41 +65,19 @@ class WhackAMoleActivity : AppCompatActivity() {
 
         val intent = intent
         time = intent.getIntExtra("time", 0) /* default value check */
+        val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
+        if (roomInfoData != null) {
+            roomPk = roomInfoData.roomPk
+            myPk = roomInfoData.myPk
+            masterName = roomInfoData.masterName
+        }
+        myRoomRef = database.getReference("room").child(roomPk)
+        myID = prefs.getSharedPrefs("myID", "")
 
         binding.btnHome.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
             startActivity(nextIntent)
         }
-        /*binding.layBottom.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.sec_10 -> time = 10
-                R.id.sec_20 -> time = 20
-                R.id.sec_30 -> time = 30
-            }
-            if (binding.layBottom.radioGroup.checkedRadioButtonId != -1)
-                binding.layBottom.btnStart.isEnabled = true
-        }
-        binding.layBottom.btnStart.setOnClickListener {
-            if (binding.layBottom.radioGroup.checkedRadioButtonId == -1)
-                Toast.makeText(this@WhackAMoleActivity, "CHECK ERROR", Toast.LENGTH_SHORT).show()
-            else {
-                setDatas()
-                setRadioState(false, binding.layBottom.radioGroup)
-                time *= 100
-                binding.layTime.pgBar.max = time
-                binding.btnPause.isEnabled = true
-                binding.layBottom.btnStart.isEnabled = false
-                binding.rvWhackAMole.visibility = View.VISIBLE
-                runTimer()
-            }
-        }
-        binding.layBottom.btnReset.setOnClickListener() {
-            score = 0
-            time = 0
-            stopTimer()
-        }
-
-         */
         binding.btnPause.setOnClickListener {
             pauseTimer()
         }
@@ -95,10 +86,10 @@ class WhackAMoleActivity : AppCompatActivity() {
             startActivity(nextIntent)
         }
         initRecycler()
-        runTimer()
+        //runTimer()
     }
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
+        /*var pauseBtn = binding.btnPause
         if (pauseBtn.text == "PAUSE") {
             binding.rvWhackAMole.visibility = View.GONE
             pauseBtn.text = "PLAY"
@@ -108,7 +99,7 @@ class WhackAMoleActivity : AppCompatActivity() {
             binding.rvWhackAMole.visibility = View.VISIBLE
             pauseBtn.text = "PAUSE"
             runTimer()
-        }
+        }*/
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -137,8 +128,13 @@ class WhackAMoleActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
+                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+
                     val mDialog = MyDialog(this@WhackAMoleActivity)
-                    mDialog.myDig("Score", score)
+                    if (roomPk.isEmpty())
+                        mDialog.myDig("Score", score)
+                    else
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
 
                     timerTask?.cancel()
                     //init()
@@ -218,8 +214,13 @@ class WhackAMoleActivity : AppCompatActivity() {
             moleTimer.add(Timer())
         binding.rvWhackAMole.adapter = whackAMoleAdapter
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
+
+        runTimer()
     }
     private fun setDatas() {
+        if (masterName == myID)
+            myRoomRef.child("gameInfo").child("gameData").setValue("0")
+
         val tmpDatas = mutableListOf<WhackAMoleData>()
         tmpDatas.apply {
             for (i in (0 until SPAN_COUNT * SPAN_COUNT))
@@ -236,7 +237,7 @@ class WhackAMoleActivity : AppCompatActivity() {
         //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreWam.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.text = "PAUSE"
+        //binding.btnPause.text = "PAUSE"
         binding.btnPause.isEnabled = false
         //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"

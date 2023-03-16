@@ -33,17 +33,19 @@ class LeftRightActivity : AppCompatActivity() {
     var time = 0
     var isOver = false
 
-    var score = 0
-    val startIdx = 0
-    var lastIdx = 0 // size = 7(0 .. 6)
-    val gameName = "LeftRight"
-
     var myID = ""
     var masterName = ""
     var roomPk = ""
     var myPk = ""
     val database = Firebase.database
     lateinit var myRoomRef : DatabaseReference
+    var dbListener: ValueEventListener? = null
+    var gameData = mutableListOf<LeftRightData>()
+
+    var score = 0
+    val startIdx = 0
+    var lastIdx = 0 // size = 7(0 .. 6)
+    val gameName = "LeftRight"
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -105,7 +107,6 @@ class LeftRightActivity : AppCompatActivity() {
 
         mToast = createToast()
         initRecycler()
-        runTimer()
     }
 
     private fun popItem() {
@@ -198,6 +199,9 @@ class LeftRightActivity : AppCompatActivity() {
         }
     }
     private fun setDatas() {
+        if (masterName == myID)
+            myRoomRef.child("gameInfo").child("gameData").setValue("0")
+
         val tmpDatas = mutableListOf<LeftRightData>()
         val range = (0..1)
         for (i in 0 .. lastIdx)
@@ -208,6 +212,8 @@ class LeftRightActivity : AppCompatActivity() {
 
         leftRightAdapter.datas = tmpDatas
         leftRightAdapter.notifyDataSetChanged()
+
+        runTimer()
     }
 
     override fun onBackPressed() {

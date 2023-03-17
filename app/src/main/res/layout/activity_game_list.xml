@@ -4,76 +4,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_lay_quit"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentLeft="true" >
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_quit"
+            android:scaleType="fitCenter"
+            android:src="@drawable/quit_button"
+            android:clickable="false"
+            android:background="@null" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ㅌㅌ"
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/btn_quit" />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/btn_lay_quit"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
         >
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/find_room"
-            android:visibility="gone"
-            android:text="방찾기" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/testbtn"
-            android:text="alert test"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/goto_taptap"
-            android:text="Taptap"/>
+            android:layout_margin="3dp"
+            android:text="탭탭"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_balloon"
-            android:text="Balloon"/>
+            android:layout_margin="3dp"
+            android:text="풍선 터뜨리기"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_scav"
-            android:text="Scavenger Hunt"/>
+            android:layout_margin="3dp"
+            android:text="보물 찾기"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_math"
-            android:text="Mathematics"/>
+            android:layout_margin="3dp"
+            android:text="사칙연산"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_choice"
+            android:layout_margin="3dp"
             android:text="Finger Choice"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_initial"
-            android:text="Initial Quiz" />
+            android:layout_margin="3dp"
+            android:text="초성 퀴즈" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_leftright"
-            android:text="Left Right" />
+            android:layout_margin="3dp"
+            android:text="좌로 우로" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_findnum"
-            android:text="Find Number" />
+            android:layout_margin="3dp"
+            android:text="숫자 차례로 찾기" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_wam"
-            android:text="Whack a Mole" />
+            android:layout_margin="3dp"
+            android:text="두더지 잡기" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/goto_memory"
-            android:text="Memory Card Game" />
+            android:layout_margin="3dp"
+            android:text="짝 찾아 뒤집기" />
 
     </LinearLayout>
 

@@ -15,20 +15,24 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true" />
 
-    <Button
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_play_alone"
-        android:layout_margin="10dp"
-        android:layout_centerVertical="true"
-        android:text="혼자하기" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_play_together"
-        android:layout_toRightOf="@+id/btn_play_alone"
-        android:layout_centerVertical="true"
-        android:layout_margin="10dp"
-        android:text="같이하기" />
+        android:layout_centerInParent="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_play_alone"
+            android:layout_margin="10dp"
+            android:text="혼자하기" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_play_together"
+            android:layout_below="@+id/btn_play_alone"
+            android:layout_margin="10dp"
+            android:text="같이하기" />
+    </RelativeLayout>
 
 </RelativeLayout>

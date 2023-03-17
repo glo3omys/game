@@ -21,6 +21,7 @@ class BalloonAdapter(private val context: BalloonActivity) :
     override fun getItemCount(): Int = datas.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position], position)
+        holder.itemView.visibility = View.VISIBLE
         when (datas[position].name.toString()) {
             "RED" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.RED.RGB.toString()))
             "ORANGE" -> holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.ORANGE.RGB.toString()))
@@ -32,7 +33,8 @@ class BalloonAdapter(private val context: BalloonActivity) :
         holder.itemView.setOnClickListener() {
             /* compare color, score++ */
             //Toast.makeText(this.context, position.toString(), Toast.LENGTH_SHORT).show()
-            holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.BLACK.RGB.toString()))
+            //holder.itemView.setBackgroundColor(Color.parseColor(BalloonColors.BLACK.RGB.toString()))
+            holder.itemView.visibility = View.INVISIBLE
             context.popBalloon(datas[position].name)
         }
     }

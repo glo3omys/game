@@ -173,11 +173,11 @@ class BalloonActivity: AppCompatActivity() {
         val balloon2: TextView = binding.tvBalloon2
 
         if (balloon1.text == colorName) {
-            balloon1.text = "${balloon1.text}."
+            balloon1.text = "..."
             balloon1.visibility = View.INVISIBLE
         }
         else if (balloon2.text == colorName) {
-            balloon2.text = "${balloon2.text}."
+            balloon2.text = "..."
             balloon2.visibility = View.INVISIBLE
         }
         else

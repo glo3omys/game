@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
@@ -12,21 +13,10 @@ class GameListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_list)
 
-        val findroombtn = findViewById<Button>(R.id.find_room)
-        findroombtn.setOnClickListener {
-            val nextIntent = Intent(this, SearchRoomActivity::class.java)
-            startActivity(nextIntent)
-            /*val dialog = MyDialog(this)
-            dialog.createRoom("master")
-            dialog.findRoom()*/
+        val backBtn = findViewById<View>(R.id.btn_lay_quit)
+        backBtn.setOnClickListener() {
+            onBackPressed()
         }
-
-        val testbtn = findViewById<Button>(R.id.testbtn)
-        testbtn.setOnClickListener {
-            val dialog = MyDialog(this)
-            dialog.myDig("test")
-        }
-
         val tapbtn = findViewById<Button>(R.id.goto_taptap)
         tapbtn.setOnClickListener() {
             val dialog = MyDialog(this)

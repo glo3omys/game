@@ -6,29 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ScavengerHuntActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <include
         android:id="@+id/lay_menu"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HOME"
-            android:id="@+id/btn_home"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PAUSE"
-            android:id="@+id/btn_pause"
-            android:enabled="false"
-            android:layout_below="@+id/btn_home"
-            android:visibility="gone"
-            tools:ignore="MissingConstraints" />
-    </RelativeLayout>
+        layout="@layout/view_lay_top" />
 
     <RelativeLayout
         android:layout_width="match_parent"

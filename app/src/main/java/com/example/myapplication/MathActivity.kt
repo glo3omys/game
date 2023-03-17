@@ -28,6 +28,11 @@ class MathActivity: AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    var numCnt = 0
+    val SPAN_COUNT = 5
+    val gameName = "Math"
 
     var myID = ""
     var masterName = ""
@@ -37,12 +42,6 @@ class MathActivity: AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<MathData>()
-
-    var score = 0
-    var numCnt = 0
-    val SPAN_COUNT = 5
-
-    val gameName = "Math"
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -66,16 +65,19 @@ class MathActivity: AppCompatActivity() {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@MathActivity.finish()
             startActivity(nextIntent)
         }
-
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
 
@@ -85,17 +87,16 @@ class MathActivity: AppCompatActivity() {
     }
 
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
+        if (!paused) {
+            paused = true
             binding.rvMath.visibility = View.GONE
-            pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
+            paused = false
             binding.rvMath.visibility = View.VISIBLE
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -265,22 +266,16 @@ class MathActivity: AppCompatActivity() {
     }
 
     fun init() {
-        //time = 0
         score = 0
         isOver = false
         numCnt = 0
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvHistory.text = ""
         binding.tvScoreMath.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
         binding.tvNum1.text = "  "
         binding.tvNum2.text = "  "
         binding.tvNum3.text = "  "
-        binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvMath.visibility = View.VISIBLE
         timerTask?.cancel()

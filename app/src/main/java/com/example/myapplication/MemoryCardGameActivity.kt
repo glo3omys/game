@@ -28,6 +28,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    var flippedCnt = 0
+    var leftCardCnt = 12
+    var flippedCards = mutableListOf<Int>()
+    val SPAN_COUNT = 4
+    var gameStart = false
+    val gameName = "MemoryCardGame"
 
     var myID = ""
     var masterName = ""
@@ -37,16 +45,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<MemoryCardGameData>()
-    var gameStart = false
 
-    var score = 0
-
-    var flippedCnt = 0
-    var leftCardCnt = 12
-    var flippedCards = mutableListOf<Int>()
-    val SPAN_COUNT = 4
-
-    val gameName = "MemoryCardGame"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memory_card_game)
@@ -68,31 +67,34 @@ class MemoryCardGameActivity : AppCompatActivity() {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@MemoryCardGameActivity.finish()
             startActivity(nextIntent)
         }
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
         initRecycler()
     }
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
+        if (!paused) {
+            paused = true
             binding.rvMemoryCardGame.visibility = View.GONE
-            pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
+            paused = false
             binding.rvMemoryCardGame.visibility = View.VISIBLE
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -208,18 +210,12 @@ class MemoryCardGameActivity : AppCompatActivity() {
         }
     }
     fun init() {
-        //time = 0
         score = 0
         isOver = false
         leftCardCnt = 12
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreMemory.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
-        binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         initDefaultCards()
         binding.layTime.pgBar.max = time
         binding.rvMemoryCardGame.visibility = View.VISIBLE

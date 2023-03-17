@@ -30,6 +30,11 @@ class BalloonActivity: AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    var leftBalloonCnt = 2
+    val SPAN_COUNT = 4
+    val gameName = "Balloon"
 
     var myID = ""
     var masterName = ""
@@ -40,13 +45,6 @@ class BalloonActivity: AppCompatActivity() {
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<FindNumberData>()
     private var myRandom = Random(1)
-
-    var score = 0
-    var leftBalloonCnt = 2
-
-    val SPAN_COUNT = 4
-
-    val gameName = "Balloon"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,21 +60,25 @@ class BalloonActivity: AppCompatActivity() {
         binding.rvBalloon.layoutManager = gridLayoutManager
 
         val intent = intent
-        time = intent.getIntExtra("time", 0) /* default value check */
+        time = intent.getIntExtra("time", 0)
         val roomInfoData = intent.getSerializableExtra("roomInfoData") as? RoomInfoData
         if (roomInfoData != null) {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@BalloonActivity.finish()
             startActivity(nextIntent)
         }
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
 
@@ -87,25 +89,24 @@ class BalloonActivity: AppCompatActivity() {
     }
 
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
-            binding.rvBalloon.visibility = View.GONE
-            pauseBtn.text = "PLAY"
+        if (!paused) {
+            paused = true
+            binding.layBalloonQuest.visibility = View.INVISIBLE
+            binding.rvBalloon.visibility = View.INVISIBLE
             timerTask?.cancel()
         }
         else {
-            //binding.cntButton.isVisible = true
+            paused = false
+            binding.layBalloonQuest.visibility = View.VISIBLE
             binding.rvBalloon.visibility = View.VISIBLE
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
         init()
     }
     fun runTimer() {
-        //binding.btnCnt.isEnabled = true
         val secTextView = binding.layTime.tvTime
         val progressBar = binding.layTime.pgBar
 
@@ -164,29 +165,9 @@ class BalloonActivity: AppCompatActivity() {
                 allocProb()
             }
         }
-
-        //setRadioState(true, binding.layBottom.radioGroup)
         init()
     }
 
-    private fun allocQuest() {
-        var range = (0 until SPAN_COUNT * SPAN_COUNT)
-        val balloon1 = binding.tvBalloon1
-        val balloon2 = binding.tvBalloon2
-        val rdmIdx1 = range.random()
-        Toast.makeText(this, datas[rdmIdx1].name, Toast.LENGTH_SHORT).show()
-
-        var rdmIdx2 = range.random()
-        while (rdmIdx1 == rdmIdx2)
-            rdmIdx2 = range.random()
-
-        balloon1.text = datas[rdmIdx1].name
-        balloon2.text = datas[rdmIdx2].name
-
-        range = (0..SPAN_COUNT)
-        balloon1.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[range.random()]).RGB.toString()))
-        balloon2.setTextColor(Color.parseColor(BalloonColors.valueOf(defaultBalloons[range.random()]).RGB.toString()))
-    }
     fun popBalloon(colorName: String) {
         val balloon1: TextView = binding.tvBalloon1
         val balloon2: TextView = binding.tvBalloon2
@@ -210,8 +191,6 @@ class BalloonActivity: AppCompatActivity() {
             leftBalloonCnt = 2
             allocProb()
         }
-        //Toast.makeText(this, text.toString(), Toast.LENGTH_SHORT).show()
-        //Toast.makeText(this, colorName, Toast.LENGTH_SHORT).show()
     }
     private fun allocProb() {
         val tmpDatas = mutableListOf<BalloonData>()
@@ -242,20 +221,15 @@ class BalloonActivity: AppCompatActivity() {
     }
 
     fun init() {
-        //time = 0
         score = 0
         isOver = false
+        paused = false
         leftBalloonCnt = 2
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreBalloon.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
         binding.tvBalloon1.text = "..."
         binding.tvBalloon2.text = "..."
-        binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvBalloon.visibility = View.VISIBLE
         timerTask?.cancel()

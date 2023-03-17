@@ -26,11 +26,15 @@ class WhackAMoleActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    val SPAN_COUNT = 4
     val moleTimer = arrayListOf<Timer?>()
     var questTimer: Timer?= null
     var questTime = 0
     var questIsOver = false
     var questTimerStarted = false
+    val gameName = "WhackAMole"
 
     var myID = ""
     var masterName = ""
@@ -40,12 +44,6 @@ class WhackAMoleActivity : AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<FindNumberData>()
-
-    var score = 0
-
-    val SPAN_COUNT = 4
-
-    val gameName = "WhackAMole"
 
     //val displayMetrics = DisplayMetrics()
 
@@ -74,32 +72,28 @@ class WhackAMoleActivity : AppCompatActivity() {
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
-            val nextIntent = Intent(this, GameListActivity::class.java)
-            startActivity(nextIntent)
-        }
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@WhackAMoleActivity.finish()
             startActivity(nextIntent)
         }
         initRecycler()
         //runTimer()
     }
     private fun pauseTimer() {
-        /*var pauseBtn = binding.btnPause
-        if (pauseBtn.text == "PAUSE") {
+        if (!paused) {
+            paused = true
             binding.rvWhackAMole.visibility = View.GONE
-            pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
+            paused = false
             binding.rvWhackAMole.visibility = View.VISIBLE
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -231,17 +225,11 @@ class WhackAMoleActivity : AppCompatActivity() {
     }
 
     fun init() {
-        //time = 0
         score = 0
         isOver = false
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreWam.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
-        binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvWhackAMole.visibility = View.VISIBLE
         timerTask?.cancel()

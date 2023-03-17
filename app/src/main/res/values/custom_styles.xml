@@ -6,11 +6,18 @@
         <item name="android:textSize">40dp</item>
         <item name="android:background">@drawable/custom_button</item>
         <item name="android:fontFamily">@font/custom_font_family</item>
+        <item name="elevation">10dp</item>
     </style>
 
     <style name="defaultRadioGroupStyle">
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/custom_radiogroup</item>
+    </style>
+
+    <style name="myCustomDialog">
+        <item name="android:windowBackground">@color/my_theme_color</item>
+        <item name="background">@drawable/custom_dialog</item>
+        <item name="elevation">10dp</item>
     </style>
 
 </resources>

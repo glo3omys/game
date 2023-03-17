@@ -35,6 +35,11 @@ class FindNumberActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    var nextNumber = 1
+    val SPAN_COUNT = 4
+    val gameName = "FindNumber"
 
     var myID = ""
     var masterName = ""
@@ -45,14 +50,6 @@ class FindNumberActivity : AppCompatActivity() {
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<FindNumberData>()
 
-    var score = 0
-    var nextNumber = 1
-
-    val SPAN_COUNT = 4
-
-    val gameName = "FindNumber"
-
-    //@SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_number)
@@ -72,15 +69,19 @@ class FindNumberActivity : AppCompatActivity() {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@FindNumberActivity.finish()
             startActivity(nextIntent)
         }
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
 
@@ -122,17 +123,16 @@ class FindNumberActivity : AppCompatActivity() {
     }
 
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
+        if (!paused) {
+            paused = true
             binding.rvFindnum.visibility = View.GONE
-            pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
+            paused = false
             binding.rvFindnum.visibility = View.VISIBLE
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -225,7 +225,6 @@ class FindNumberActivity : AppCompatActivity() {
         isOver = false
         binding.tvScoreFindnum.text = "0"
         binding.layTime.tvTime.text = "0초"
-        binding.btnPause.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
         binding.rvFindnum.visibility = View.VISIBLE

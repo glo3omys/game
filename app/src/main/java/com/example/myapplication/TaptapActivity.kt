@@ -24,7 +24,9 @@ class TaptapActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var score = 0
+    var paused = false
     var isOver = false
+    val gameName = "Taptap"
 
     var myID = ""
     var masterName = ""
@@ -35,8 +37,6 @@ class TaptapActivity : AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     lateinit var gameData : String
-
-    val gameName = "Taptap"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,16 +63,17 @@ class TaptapActivity : AppCompatActivity() {
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@TaptapActivity.finish()
             startActivity(nextIntent)
+        }
+        binding.layMenu.btnPause.setOnClickListener {
+            pauseTimer()
         }
         binding.btnTap.setOnClickListener {
             score += 1
             countTextView.text = score.toString()
-        }
-        binding.btnPause.setOnClickListener {
-            pauseTimer()
         }
 
         init()
@@ -80,16 +81,15 @@ class TaptapActivity : AppCompatActivity() {
     }
 
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
-            pauseBtn.text = "PLAY"
+        if (!paused) {
+            paused = true
             timerTask?.cancel()
-            binding.btnCnt.isEnabled = false
+            binding.btnTap.isEnabled = false
         }
         else {
-            pauseBtn.text = "PAUSE"
+            paused = false
             runTimer()
-        }*/
+        }
     }
 
     private fun stopTimer() {
@@ -140,13 +140,10 @@ class TaptapActivity : AppCompatActivity() {
             }
         }
 
-        //time = 0
         score = 0
         isOver = false
         binding.tvScoreTaptap.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
-        binding.btnPause.isEnabled = false
         binding.btnTap.isEnabled = false
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time

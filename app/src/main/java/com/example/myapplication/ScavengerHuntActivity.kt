@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.example.myapplication.databinding.ActivityScavengerHuntBinding
 import scavDatas
 
@@ -33,8 +34,10 @@ class ScavengerHuntActivity : AppCompatActivity() {
             binding.tvItemName.text = scavDatas[idx].name
             binding.tvItemScore.text = scavDatas[idx].score.toString()
         }
-        binding.btnHome.setOnClickListener() {
+        binding.layMenu.btnPause.visibility = View.GONE
+        binding.layMenu.btnLayQuit.setOnClickListener() {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@ScavengerHuntActivity.finish()
             startActivity(nextIntent)
         }
     }

@@ -257,6 +257,7 @@ class MyDialog(context: Context){
 
             (mContext as Activity).finish()
             nextIntent.putExtra("time", time * 100)
+            mAlertDialog.dismiss()
             mContext.startActivity(nextIntent)
         }
         btnBack.setOnClickListener() {

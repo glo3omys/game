@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.Html
 import android.text.InputFilter
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -36,6 +37,14 @@ class InitialQuizActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var resQ = false
+    var resD = false
+    var qChecked = false
+    var dChecked = false
+    val wordLength = 2
+    var questString = ""
+    //val gameName = "InitialQuiz"
+    val api = NaverAPI.create()
 
     var myID = ""
     var masterName = ""
@@ -44,16 +53,6 @@ class InitialQuizActivity : AppCompatActivity() {
     val database = Firebase.database
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
-
-    var resQ = false
-    var resD = false
-    var qChecked = false
-    var dChecked = false
-    val wordLength = 2
-    var questString = ""
-
-    //val gameName = "InitialQuiz"
-    val api = NaverAPI.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +78,10 @@ class InitialQuizActivity : AppCompatActivity() {
         else
             allocQuest()
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnPause.visibility = View.GONE
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@InitialQuizActivity.finish()
             startActivity(nextIntent)
         }
 

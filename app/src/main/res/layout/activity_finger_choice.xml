@@ -6,11 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".FingerChoiceActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HOME"
-        android:id="@+id/btn_home" />
+    <include
+        android:id="@+id/lay_menu"
+        layout="@layout/view_lay_top" />
 
     <TextView
         android:layout_width="match_parent"

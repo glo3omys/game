@@ -33,8 +33,10 @@ class FingerChoiceActivity : AppCompatActivity() {
 
         thisContext = this
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnPause.visibility = View.GONE
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@FingerChoiceActivity.finish()
             startActivity(nextIntent)
         }
         binding.cvFinger.setOnTouchListener(View.OnTouchListener { v, event ->

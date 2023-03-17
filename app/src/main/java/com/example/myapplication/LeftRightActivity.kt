@@ -32,6 +32,11 @@ class LeftRightActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
+    var paused = false
+    val startIdx = 0
+    var lastIdx = 0 // size = 7(0 .. 6)
+    val gameName = "LeftRight"
 
     var myID = ""
     var masterName = ""
@@ -41,11 +46,6 @@ class LeftRightActivity : AppCompatActivity() {
     lateinit var myRoomRef : DatabaseReference
     var dbListener: ValueEventListener? = null
     var gameData = mutableListOf<LeftRightData>()
-
-    var score = 0
-    val startIdx = 0
-    var lastIdx = 0 // size = 7(0 .. 6)
-    val gameName = "LeftRight"
 
     lateinit var mToast: Toast
     lateinit var customToastLayout: View
@@ -73,7 +73,10 @@ class LeftRightActivity : AppCompatActivity() {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
         myID = prefs.getSharedPrefs("myID", "")
 
@@ -85,11 +88,12 @@ class LeftRightActivity : AppCompatActivity() {
             }
         })
 
-        binding.btnHome.setOnClickListener {
+        binding.layMenu.btnLayQuit.setOnClickListener {
             val nextIntent = Intent(this, GameListActivity::class.java)
+            this@LeftRightActivity.finish()
             startActivity(nextIntent)
         }
-        binding.btnPause.setOnClickListener {
+        binding.layMenu.btnPause.setOnClickListener {
             pauseTimer()
         }
         binding.btnLeft.setOnClickListener {
@@ -145,23 +149,20 @@ class LeftRightActivity : AppCompatActivity() {
     }
 
     private fun pauseTimer() {
-        var pauseBtn = binding.btnPause
-        /*if (pauseBtn.text == "PAUSE") {
-            //binding.rvLeftright.visibility = View.GONE
+        if (!paused) {
+            paused = true
             binding.rvLeftright.visibility = View.INVISIBLE
             binding.btnLeft.isEnabled = false
             binding.btnRight.isEnabled = false
-            pauseBtn.text = "PLAY"
             timerTask?.cancel()
         }
         else {
-            //binding.cntButton.isVisible = true
+            paused = false
             binding.rvLeftright.visibility = View.VISIBLE
             binding.btnLeft.isEnabled = true
             binding.btnRight.isEnabled = true
-            pauseBtn.text = "PAUSE"
             runTimer()
-        }*/
+        }
     }
     private fun stopTimer() {
         timerTask?.cancel()
@@ -227,19 +228,13 @@ class LeftRightActivity : AppCompatActivity() {
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
     fun init() {
-        //time = 0
         score = 0
         isOver = false
-        //binding.layBottom.radioGroup.clearCheck()
         binding.tvScoreLeftright.text = "0"
         binding.layTime.tvTime.text = "0초"
-        //binding.btnPause.text = "PAUSE"
-        binding.btnPause.isEnabled = false
-        //binding.layBottom.btnStart.isEnabled = false
         binding.btnLeft.isEnabled = true
         binding.btnRight.isEnabled = true
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-        //setRadioState(true, binding.layBottom.radioGroup)
         binding.layTime.pgBar.max = time
         binding.rvLeftright.visibility = View.VISIBLE
         timerTask?.cancel()

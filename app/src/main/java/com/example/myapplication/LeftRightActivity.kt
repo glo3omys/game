@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -146,6 +148,13 @@ class LeftRightActivity : AppCompatActivity() {
         tstScore.setTextColor(Color.RED)
         tstScore.setTextSize(TypedValue.COMPLEX_UNIT_SP, 300F) // check: params
         mToast.show()
+
+        binding.btnLeft.visibility = View.INVISIBLE
+        binding.btnRight.visibility = View.INVISIBLE
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.btnLeft.visibility = View.VISIBLE
+            binding.btnRight.visibility = View.VISIBLE
+        }, 1000)
     }
 
     private fun pauseTimer() {

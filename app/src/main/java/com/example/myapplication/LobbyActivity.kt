@@ -109,8 +109,14 @@ class LobbyActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.btnGameList.setOnClickListener() {
+            //val mDialog = MyDialog(this)
+            //mDialog.gameHelp()
+            val dialog = GameHelpDialog(this)
+            dialog.gameHelp()
+        }
 
-        initSpinner()
+        //initSpinner()
         setVisibility()
     }
 

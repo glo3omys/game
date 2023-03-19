@@ -15,11 +15,17 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RadioGroup
+import android.widget.RelativeLayout
+import android.widget.RelativeLayout.LayoutParams
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -476,4 +482,20 @@ class MyDialog(context: Context){
         return res
     }
 
+    fun gameHelp() {
+        mDialogView = LayoutInflater.from(mContext).inflate(R.layout.viewpager_game_help, null)
+
+        //val tabTextList = listOf("TapTap", "Balloon")
+        val tabIconList = R.drawable.help_icon
+        mDialogView.findViewById<ViewPager2>(R.id.vp_game_list).adapter = ViewPagerAdapter(mContext as FragmentActivity)
+        TabLayoutMediator(mDialogView.findViewById(R.id.vp_tab_lay), mDialogView.findViewById(R.id.vp_game_list)) { tab, pos ->
+            //tab.text = tabTextList[pos]
+            tab.setIcon(tabIconList)
+        }.attach()
+
+        mBuilder.setView(mDialogView)
+            .setTitle("")
+        mAlertDialog =  mBuilder.create()
+        mAlertDialog.show()
+    }
 }

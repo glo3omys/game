@@ -70,7 +70,10 @@ class InitialQuizActivity : AppCompatActivity() {
             roomPk = roomInfoData.roomPk
             myPk = roomInfoData.myPk
             masterName = roomInfoData.masterName
+            binding.layMenu.root.visibility = View.GONE
         }
+        else
+            binding.layMenu.root.visibility = View.VISIBLE
         myRoomRef = database.getReference("room").child(roomPk)
 
         if (masterName != "" && masterName != myID)

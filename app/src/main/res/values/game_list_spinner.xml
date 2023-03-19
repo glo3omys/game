@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="games">
-        <item>Balloon</item>
-        <item>FindNumber</item>
-        <item>InitialQuiz</item>
-        <item>LeftRight</item>
-        <item>Math</item>
-        <item>MemoryCardGame</item>
-        <item>Taptap</item>
-        <item>WhackAMole</item>
+        <item>탭탭</item>
+        <item>풍선 터뜨리기</item>
+        <item>사칙연산</item>
+        <item>초성 퀴즈</item>
+        <item>좌로 우로</item>
+        <item>숫자 찾기</item>
+        <item>두더지 잡기</item>
+        <item>짝 찾아 뒤집기</item>
+        <item>보물 찾기</item>
     </string-array>
 </resources>

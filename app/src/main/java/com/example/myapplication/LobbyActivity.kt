@@ -109,6 +109,7 @@ class LobbyActivity : AppCompatActivity() {
                 }
             }
         }
+
         initSpinner()
         setVisibility()
     }
@@ -148,6 +149,12 @@ class LobbyActivity : AppCompatActivity() {
             else
                 spinner.setSelection(0)
         }
+
+        var roomSeed = ""
+        myRoomRef.child("seed").get().addOnSuccessListener {
+            roomSeed = it.value.toString()
+            binding.tvSeed.text = "참여코드: $roomSeed"
+        }
     }
 
     override fun onDestroy() {
@@ -163,23 +170,17 @@ class LobbyActivity : AppCompatActivity() {
             gameTitle = binding.tvSelectedGame.text.toString()
 
         var nextIntent = Intent(this@LobbyActivity, MainActivity::class.java)
-        if (gameTitle == "Balloon")
-            nextIntent = Intent(this@LobbyActivity, BalloonActivity::class.java)
-        else if (gameTitle == "FindNumber")
-            nextIntent = Intent(this@LobbyActivity, FindNumberActivity::class.java)
-        else if (gameTitle == "InitialQuiz")
-            nextIntent = Intent(this@LobbyActivity, InitialQuizActivity::class.java)
-        else if (gameTitle == "LeftRight")
-            nextIntent = Intent(this@LobbyActivity, LeftRightActivity::class.java)
-        else if (gameTitle == "Math")
-            nextIntent = Intent(this@LobbyActivity, MathActivity::class.java)
-        else if (gameTitle == "MemoryCardGame")
-            nextIntent = Intent(this@LobbyActivity, MemoryCardGameActivity::class.java)
-        else if (gameTitle == "Taptap")
-            nextIntent = Intent(this@LobbyActivity, TaptapActivity::class.java)
-        else if (gameTitle == "WhackAMole")
-            nextIntent = Intent(this@LobbyActivity, WhackAMoleActivity::class.java)
-
+        when(gameTitle) {
+            "풍선 터뜨리기" -> nextIntent = Intent(this@LobbyActivity, BalloonActivity::class.java)
+            "숫자 찾기" -> nextIntent = Intent(this@LobbyActivity, FindNumberActivity::class.java)
+            "초성 퀴즈" -> nextIntent = Intent(this@LobbyActivity, InitialQuizActivity::class.java)
+            "좌로 우로" -> nextIntent = Intent(this@LobbyActivity, LeftRightActivity::class.java)
+            "사칙연산" -> nextIntent = Intent(this@LobbyActivity, MathActivity::class.java)
+            "짝 찾아 뒤집기" -> nextIntent = Intent(this@LobbyActivity, MemoryCardGameActivity::class.java)
+            "탭탭" -> nextIntent = Intent(this@LobbyActivity, TaptapActivity::class.java)
+            "두더지 잡기" -> nextIntent = Intent(this@LobbyActivity, WhackAMoleActivity::class.java)
+            "보물 찾기" -> nextIntent = Intent(this@LobbyActivity, ScavengerHuntActivity::class.java)
+        }
         val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = masterName)
 
         this@LobbyActivity.finish()

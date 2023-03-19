@@ -323,38 +323,39 @@ class MyDialog(context: Context){
             handled
         }
 
-        okButton.isEnabled = false
         okButton.setOnClickListener {
-            val roomSeed = genSeed()
-            val memberList = mutableListOf<String>()
-            //memberList.add(myID)
-            val newRoom = RoomData (
-                title = mDialogView.findViewById<EditText>(R.id.et_name).text.toString(),
-                master = myID,
-                seed = roomSeed,
-                memberCnt = 1,
-                memberList = memberList
-            )
+            if (etTitle.text.toString() == "")
+                Toast.makeText(mContext, "방제를 입력해주세요", Toast.LENGTH_SHORT).show()
+            else {
+                val roomSeed = genSeed()
+                val memberList = mutableListOf<String>()
+                //memberList.add(myID)
+                val newRoom = RoomData(
+                    title = mDialogView.findViewById<EditText>(R.id.et_name).text.toString(),
+                    master = myID,
+                    seed = roomSeed,
+                    memberCnt = 1,
+                    memberList = memberList
+                )
 
-            var newUser = UserData(name = myID, imageID = R.drawable.mushroom_z, readyState = false)
-            val roomPk = roomRef.push().key.toString()
-            roomRef.child(roomPk).setValue(newRoom)
-            val myPk = roomRef.child(roomPk).child("memberList").push().key.toString()
-            roomRef.child(roomPk).child("memberList").child(myPk).setValue(newUser)
-            roomRef.child(roomPk).child("readyCnt").setValue(0)
-            val seedRef = database.getReference("roomSeeds")
-            seedRef.child(roomSeed).setValue(roomPk)
+                var newUser =
+                    UserData(name = myID, imageID = R.drawable.mushroom_z, readyState = false)
+                val roomPk = roomRef.push().key.toString()
+                roomRef.child(roomPk).setValue(newRoom)
+                val myPk = roomRef.child(roomPk).child("memberList").push().key.toString()
+                roomRef.child(roomPk).child("memberList").child(myPk).setValue(newUser)
+                roomRef.child(roomPk).child("readyCnt").setValue(0)
+                val seedRef = database.getReference("roomSeeds")
+                seedRef.child(roomSeed).setValue(roomPk)
 
-            nextIntent = Intent(mContext, LobbyActivity::class.java)
-            val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = myID)
-            /*nextIntent.putExtra("roomPk", roomPk)
-            nextIntent.putExtra("myPk", myPk)
-            nextIntent.putExtra("masterName", myID)*/
-            nextIntent.putExtra("roomInfoData", roomInfoData)
+                nextIntent = Intent(mContext, LobbyActivity::class.java)
+                val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = myID)
+                nextIntent.putExtra("roomInfoData", roomInfoData)
 
-            //(mContext as SearchRoomActivity).finish()
-            mContext.startActivity(nextIntent)
-            mAlertDialog.dismiss()
+                //(mContext as SearchRoomActivity).finish()
+                mContext.startActivity(nextIntent)
+                mAlertDialog.dismiss()
+            }
         }
         val cancelButton = mDialogView.findViewById<Button>(R.id.btn_cancel)
         cancelButton.setOnClickListener() {

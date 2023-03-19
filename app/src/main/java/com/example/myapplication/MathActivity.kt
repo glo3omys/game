@@ -31,7 +31,7 @@ class MathActivity: AppCompatActivity() {
     var score = 0
     var paused = false
     var numCnt = 0
-    val SPAN_COUNT = 5
+    val SPAN_COUNT = 3
     val gameName = "Math"
 
     var myID = ""

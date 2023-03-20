@@ -487,7 +487,7 @@ class MyDialog(context: Context){
 
         //val tabTextList = listOf("TapTap", "Balloon")
         val tabIconList = R.drawable.help_icon
-        mDialogView.findViewById<ViewPager2>(R.id.vp_game_list).adapter = ViewPagerAdapter(mContext as FragmentActivity)
+        mDialogView.findViewById<ViewPager2>(R.id.vp_game_list).adapter = ViewPagerAdapter()
         TabLayoutMediator(mDialogView.findViewById(R.id.vp_tab_lay), mDialogView.findViewById(R.id.vp_game_list)) { tab, pos ->
             //tab.text = tabTextList[pos]
             tab.setIcon(tabIconList)

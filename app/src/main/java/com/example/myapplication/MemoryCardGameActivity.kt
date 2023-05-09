@@ -75,6 +75,7 @@ class MemoryCardGameActivity : AppCompatActivity() {
         myID = prefs.getSharedPrefs("myID", "")
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@MemoryCardGameActivity.finish()
             startActivity(nextIntent)
@@ -118,14 +119,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@MemoryCardGameActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
                     //init()
                 }
@@ -154,11 +155,6 @@ class MemoryCardGameActivity : AppCompatActivity() {
 
         runOnUiThread() {
             memoryCardGameAdapter.notifyDataSetChanged()
-        }
-
-        if (!gameStart) {
-            gameStart = true
-            runTimer()
         }
     }
     fun flipCard(position: Int) {
@@ -218,7 +214,14 @@ class MemoryCardGameActivity : AppCompatActivity() {
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         initDefaultCards()
         binding.layTime.pgBar.max = time
-        binding.rvMemoryCardGame.visibility = View.VISIBLE
+        //binding.rvMemoryCardGame.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@MemoryCardGameActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            binding.rvMemoryCardGame.visibility = View.VISIBLE
+            runTimer()
+        }, 3100)
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
@@ -34,11 +35,11 @@ class MathAdapter(private val context: MathActivity) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val number: Button = itemView.findViewById(R.id.btn_rv_math)
+        private val number: TextView = itemView.findViewById(R.id.btn_rv_math)
         fun bind(item: MathData, position: Int) {
             number.text = item.num.toString()
 
-            number.setOnClickListener() {
+            itemView.setOnClickListener {
                 datas[position].selected = !datas[position].selected
                 notifyItemChanged(position)
 

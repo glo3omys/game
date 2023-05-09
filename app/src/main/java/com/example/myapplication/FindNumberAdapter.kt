@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class FindNumberAdapter(private val context: FindNumberActivity) :
@@ -36,10 +37,10 @@ class FindNumberAdapter(private val context: FindNumberActivity) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val number: Button = itemView.findViewById(R.id.btn_rv_number)
+        private val number: TextView = itemView.findViewById(R.id.btn_rv_number)
         fun bind(item: FindNumberData, position: Int) {
             number.text = item.num.toString()
-            number.setOnClickListener() {
+            itemView.setOnClickListener {
                 val flag = context.popNumber(datas[position].num)
                 if (flag) {
                     datas[position].selected = !datas[position].selected

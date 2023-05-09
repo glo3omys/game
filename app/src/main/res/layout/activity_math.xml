@@ -57,7 +57,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:id="@+id/tv_op1"
-            android:text="+"
+            android:text="?"
             android:layout_toRightOf="@+id/tv_num1"
             android:gravity="center"
             android:autoSizeTextType="uniform" />
@@ -73,7 +73,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:id="@+id/tv_op2"
-            android:text="*"
+            android:text="?"
             android:layout_toRightOf="@+id/tv_num2"
             android:gravity="center"
             android:autoSizeTextType="uniform" />
@@ -105,6 +105,7 @@
         android:id="@+id/rv_math"
         android:overScrollMode="never"
         android:layout_below="@+id/tv_history"
+        android:visibility="invisible"
         tools:listitem="@layout/recycler_math"
         />
 

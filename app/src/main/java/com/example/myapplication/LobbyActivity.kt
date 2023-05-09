@@ -116,7 +116,7 @@ class LobbyActivity : AppCompatActivity() {
             dialog.gameHelp()
         }
 
-        //initSpinner()
+        initSpinner()
         setVisibility()
     }
 

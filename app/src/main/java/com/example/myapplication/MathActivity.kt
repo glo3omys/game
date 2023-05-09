@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -73,6 +74,7 @@ class MathActivity: AppCompatActivity() {
         myID = prefs.getSharedPrefs("myID", "")
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@MathActivity.finish()
             startActivity(nextIntent)
@@ -83,7 +85,6 @@ class MathActivity: AppCompatActivity() {
 
         mToast = createToast()
         initRecycler()
-        runTimer()
     }
 
     private fun pauseTimer() {
@@ -121,14 +122,14 @@ class MathActivity: AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@MathActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
 
                     //init()
@@ -138,8 +139,8 @@ class MathActivity: AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        init()
         setDatas()
+        init()
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.rvMath.adapter = mathAdapter
     }
@@ -277,7 +278,15 @@ class MathActivity: AppCompatActivity() {
         binding.tvNum3.text = "  "
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
-        binding.rvMath.visibility = View.VISIBLE
+        //binding.rvMath.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@MathActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            allocQuest()
+            binding.rvMath.visibility = View.VISIBLE
+            runTimer()
+        }, 3100)
     }
 }

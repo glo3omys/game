@@ -42,6 +42,7 @@ class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int = Int.MAX_VALUE /* CHECK */
+    //override fun getItemCount(): Int = 8 /* CHECK */
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position % datas.size], position)

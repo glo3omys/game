@@ -3,10 +3,9 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.os.Handler
 import android.text.Html
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -37,10 +36,9 @@ class InitialQuizActivity : AppCompatActivity() {
     var timerTask: Timer?= null
     var time = 0
     var isOver = false
+    var score = 0
     var resQ = false
     var resD = false
-    var qChecked = false
-    var dChecked = false
     val wordLength = 2
     var questString = ""
     //val gameName = "InitialQuiz"
@@ -83,24 +81,28 @@ class InitialQuizActivity : AppCompatActivity() {
 
         binding.layMenu.btnPause.visibility = View.GONE
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
+
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@InitialQuizActivity.finish()
             startActivity(nextIntent)
         }
 
+        // qwerty issue...
         var filterKor = InputFilter { src, _, _, _, _, _ ->
-            val ps = Pattern.compile("^[ㄱ-ㅣ가-힣]")
+            val ps = Pattern.compile("^[ㄱ-ㅎㅣ가-힣]+$")
             if (!ps.matcher(src).matches())
                 ""
             else
-                src
+                null
         }
+
         binding.etAnswer.filters = arrayOf(filterKor)
         binding.etAnswer.setOnEditorActionListener { _, action, _ ->
             var handled = false
-            var etTitle = binding.etAnswer
+            //binding.btnSubmit.isEnabled = (binding.etAnswer.text.toString() != "")
             if (action == EditorInfo.IME_ACTION_DONE) {
-                if (etTitle.text.toString() == "") {
+                if (binding.etAnswer.text.toString() == "") {
                     Toast.makeText(this, "답을 입력해주세요", Toast.LENGTH_SHORT).show()
                 }
                 else {
@@ -182,28 +184,32 @@ class InitialQuizActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     secTextView.text = "0초"
-
-                    while (!qChecked)
-                        questCheck()
-                    while (!dChecked) {
-                        dictionaryCheck()
-                        //Thread.sleep(1000)
-                    }
-
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(resD && resQ)
+                    questCheck()
 
                     val mDialog = MyDialog(this@InitialQuizActivity)
-                    if (roomPk.isEmpty())
-                        mDialog.myDig("Score")
-                    else
-                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData, true)
-
+                    if (roomPk.isEmpty()) {
+                        mDialog.myDig("Score", score)
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+                        mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+                    }
                     timerTask?.cancel()
                 }
             }
         }
     }
 
+    private fun result() {
+        if (resD && resQ)
+            score = 3
+        else if (resQ)
+            score = 2
+        else if (resD)
+            score = 1
+        else
+            score = 0
+    }
     private fun init() {
         //allocQuest()
 
@@ -217,10 +223,13 @@ class InitialQuizActivity : AppCompatActivity() {
         binding.etAnswer.clearFocus()
         resD = false
         resQ = false
-        //wordLength = -1
         timerTask?.cancel()
 
-        runTimer()
+        val mDialog = CountDownDialog(this@InitialQuizActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            runTimer()
+        }, 3100)
     }
 
     override fun onBackPressed() {
@@ -229,8 +238,6 @@ class InitialQuizActivity : AppCompatActivity() {
 
     private fun allocQuest() {
         questString = ""
-        //wordLength = 2
-
         //wordLength = (2 .. 4).random()
 
         for (i in 1..wordLength)
@@ -243,18 +250,18 @@ class InitialQuizActivity : AppCompatActivity() {
     private fun questCheck() {
         val ansString = binding.etAnswer.text
         val questString = binding.tvItem.text
-        if (ansString.length != questString.length) {
-            qChecked = true
-            return
-        }
-        for (i in 0 until wordLength) {
-            if ((ansString[i].toString().toIntOrNull()?.let { it < 0xAC00 } ?: false) || (ansString[i].toInt() - 0xAC00) / 28 / 21 != defaultInitials.indexOf(questString[i]) ) {
-                qChecked = true
-                return
+        var flag = false
+        if (ansString.length == questString.length) {
+            for (i in 0 until wordLength) {
+                if ((ansString[i].toString().toIntOrNull()?.let { it < 0xAC00 } ?: false) || (ansString[i].toInt() - 0xAC00) / 28 / 21 != defaultInitials.indexOf(questString[i]) ) {
+                    flag = true
+                    break;
+                }
             }
         }
-        resQ = true
-        qChecked = true
+        if (!flag)
+            resQ = true
+        dictionaryCheck()
     }
 
     private fun dictionaryCheck() {
@@ -279,12 +286,11 @@ class InitialQuizActivity : AppCompatActivity() {
                     }
                 }
                 resD = bodyTotal != 0 && foundFlag
-                dChecked = true
+                result()
             }
 
             override fun onFailure(call: Call<ResultGetSearchDict>, t: Throwable) {
                 Toast.makeText(this@InitialQuizActivity, "ERROR", Toast.LENGTH_SHORT).show()
-                dChecked = true
             }
         })
     }

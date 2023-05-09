@@ -91,6 +91,7 @@ class LeftRightActivity : AppCompatActivity() {
         })
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@LeftRightActivity.finish()
             startActivity(nextIntent)
@@ -195,14 +196,14 @@ class LeftRightActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@LeftRightActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
                 }
             }
@@ -222,8 +223,6 @@ class LeftRightActivity : AppCompatActivity() {
 
         leftRightAdapter.datas = tmpDatas
         leftRightAdapter.notifyDataSetChanged()
-
-        runTimer()
     }
 
     override fun onBackPressed() {
@@ -231,8 +230,8 @@ class LeftRightActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        init()
         setDatas()
+        init()
         binding.rvLeftright.adapter = leftRightAdapter
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
@@ -245,7 +244,14 @@ class LeftRightActivity : AppCompatActivity() {
         binding.btnRight.isEnabled = true
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
-        binding.rvLeftright.visibility = View.VISIBLE
+        //binding.rvLeftright.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@LeftRightActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            binding.rvLeftright.visibility = View.VISIBLE
+            runTimer()
+        }, 3100)
     }
 }

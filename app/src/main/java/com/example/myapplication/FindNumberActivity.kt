@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -77,6 +78,7 @@ class FindNumberActivity : AppCompatActivity() {
         myID = prefs.getSharedPrefs("myID", "")
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@FindNumberActivity.finish()
             startActivity(nextIntent)
@@ -156,14 +158,14 @@ class FindNumberActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@FindNumberActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
                     //init()
                     binding.rvFindnum.visibility = View.INVISIBLE
@@ -173,8 +175,8 @@ class FindNumberActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        init()
         setDatas()
+        init()
         binding.rvFindnum.adapter = findNumberAdapter
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
     }
@@ -211,8 +213,6 @@ class FindNumberActivity : AppCompatActivity() {
         }
         findNumberAdapter.datas = gameData
         findNumberAdapter.notifyDataSetChanged()
-
-        runTimer()
     }
 
     override fun onBackPressed() {
@@ -227,7 +227,14 @@ class FindNumberActivity : AppCompatActivity() {
         binding.layTime.tvTime.text = "0초"
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
-        binding.rvFindnum.visibility = View.VISIBLE
+        //binding.rvFindnum.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@FindNumberActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            binding.rvFindnum.visibility = View.VISIBLE
+            runTimer()
+        }, 3100)
     }
 }

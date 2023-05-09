@@ -29,7 +29,6 @@
         android:id="@+id/spinner_game_list"
         android:layout_centerInParent="true"
         android:background="@drawable/custom_button"
-        android:visibility="gone"
         android:spinnerMode="dropdown" />
 
     <Button
@@ -37,6 +36,7 @@
         android:layout_height="wrap_content"
         android:text="게임 선택"
         android:id="@+id/btn_game_list"
+        android:visibility="gone"
         android:layout_centerInParent="true" />
 
     <TextView

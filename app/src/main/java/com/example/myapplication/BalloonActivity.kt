@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -74,6 +75,7 @@ class BalloonActivity: AppCompatActivity() {
         myID = prefs.getSharedPrefs("myID", "")
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@BalloonActivity.finish()
             startActivity(nextIntent)
@@ -83,9 +85,7 @@ class BalloonActivity: AppCompatActivity() {
         }
 
         initRecycler()
-
-        allocProb()
-        runTimer()
+        //runTimer()
     }
 
     private fun pauseTimer() {
@@ -127,13 +127,14 @@ class BalloonActivity: AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@BalloonActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+                    }
 
                     timerTask?.cancel()
                     binding.layBalloonQuest.visibility = View.INVISIBLE
@@ -231,7 +232,15 @@ class BalloonActivity: AppCompatActivity() {
         binding.tvBalloon2.text = "..."
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
-        binding.rvBalloon.visibility = View.VISIBLE
+        //binding.rvBalloon.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@BalloonActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            binding.rvBalloon.visibility = View.VISIBLE
+            allocProb()
+            runTimer()
+        }, 3100)
     }
 }

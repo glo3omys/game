@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.databinding.ActivityWhackAMoleBinding
@@ -79,12 +80,15 @@ class WhackAMoleActivity : AppCompatActivity() {
             pauseTimer()
         }
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
+            for (timer in moleTimer)
+                timer?.cancel()
+
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@WhackAMoleActivity.finish()
             startActivity(nextIntent)
         }
         initRecycler()
-        //runTimer()
     }
     private fun pauseTimer() {
         if (!paused) {
@@ -100,7 +104,6 @@ class WhackAMoleActivity : AppCompatActivity() {
     }
     private fun stopTimer() {
         timerTask?.cancel()
-
         init()
     }
     fun runTimer() {
@@ -125,16 +128,15 @@ class WhackAMoleActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@WhackAMoleActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
-                    //init()
                 }
             }
         }
@@ -176,7 +178,7 @@ class WhackAMoleActivity : AppCompatActivity() {
             if (p < 5) {
                 name = "gold"
                 imageID = R.drawable.mokoko_g
-                moleTime = 50
+                moleTime = 60
             }
             else if (p < 70) {
                 name = "mole"
@@ -205,14 +207,12 @@ class WhackAMoleActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        init()
         setDatas()
+        init()
         for (i in (0 until SPAN_COUNT * SPAN_COUNT))
             moleTimer.add(Timer())
         binding.rvWhackAMole.adapter = whackAMoleAdapter
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
-
-        runTimer()
     }
     private fun setDatas() {
         if (masterName == myID)
@@ -234,8 +234,16 @@ class WhackAMoleActivity : AppCompatActivity() {
         binding.layTime.tvTime.text = "0초"
         binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, "0")}"
         binding.layTime.pgBar.max = time
-        binding.rvWhackAMole.visibility = View.VISIBLE
+        //binding.rvWhackAMole.visibility = View.VISIBLE
         timerTask?.cancel()
+
+        val mDialog = CountDownDialog(this@WhackAMoleActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            binding.rvWhackAMole.visibility = View.VISIBLE
+            runTimer()
+        }, 3100)
+
     }
 
     override fun onBackPressed() {

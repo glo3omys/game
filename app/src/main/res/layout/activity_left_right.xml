@@ -50,6 +50,7 @@
             android:overScrollMode="never"
             android:orientation="vertical"
             android:layout_centerHorizontal="true"
+            android:visibility="invisible"
             tools:listitem="@layout/recycler_leftright" />
         <Button
             android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.example.myapplication.databinding.ActivityTaptapBinding
@@ -68,6 +69,7 @@ class TaptapActivity : AppCompatActivity() {
         myID = prefs.getSharedPrefs("myID", "")
 
         binding.layMenu.btnLayQuit.setOnClickListener {
+            timerTask?.cancel()
             val nextIntent = Intent(this, GameListActivity::class.java)
             this@TaptapActivity.finish()
             startActivity(nextIntent)
@@ -79,7 +81,7 @@ class TaptapActivity : AppCompatActivity() {
             score += 1
             countTextView.text = score.toString()
         }
-
+//
         init()
         //runTimer()
     }
@@ -120,14 +122,14 @@ class TaptapActivity : AppCompatActivity() {
                     binding.tvBestScore.text = "최고기록: ${prefs.getSharedPrefs(gameName, score.toString())}"
                     secTextView.text = "0초"
 
-                    myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
-
                     val mDialog = MyDialog(this@TaptapActivity)
-                    if (roomPk.isEmpty())
+                    if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
-                    else
+                    }
+                    else {
+                        myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-
+                    }
                     timerTask?.cancel()
                     //init()
                 }
@@ -153,7 +155,11 @@ class TaptapActivity : AppCompatActivity() {
         binding.layTime.pgBar.max = time
         timerTask?.cancel()
 
-        runTimer()
+        val mDialog = CountDownDialog(this@TaptapActivity)
+        mDialog.countDown()
+        Handler().postDelayed({
+            runTimer()
+        }, 3100)
     }
 
     override fun onBackPressed() {

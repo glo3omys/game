@@ -38,6 +38,7 @@ class GameHelpDialog(context: LobbyActivity){
         setDatas()
         initViewForHorizontal()
 
+
         TabLayoutMediator(vpTabLay, vpGameList) { tab, pos ->
             // tab.text = tabTextList[pos]
             tab.setIcon(tabIconList)

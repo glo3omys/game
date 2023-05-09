@@ -3,26 +3,17 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.app.AlertDialog
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
-import android.text.Editable
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.RadioGroup
-import android.widget.RelativeLayout
-import android.widget.RelativeLayout.LayoutParams
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -347,12 +338,61 @@ class MyDialog(context: Context){
                 var newUser =
                     UserData(name = myID, imageID = R.drawable.mushroom_z, readyState = false)
                 val roomPk = roomRef.push().key.toString()
-                roomRef.child(roomPk).setValue(newRoom)
+                if (roomPk == "") {
+                    Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                    return@setOnClickListener
+                }
+                var failFlag = false
+                roomRef.child(roomPk).setValue(newRoom) { error, ref ->
+                    if (error != null) {
+                        Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                        failFlag = true
+                    }
+                }
+                if (failFlag) {
+                    roomRef.child(roomPk).removeValue()
+                    return@setOnClickListener
+                }
+
                 val myPk = roomRef.child(roomPk).child("memberList").push().key.toString()
-                roomRef.child(roomPk).child("memberList").child(myPk).setValue(newUser)
-                roomRef.child(roomPk).child("readyCnt").setValue(0)
+                if (myPk == "") {
+                    roomRef.child(roomPk).removeValue()
+                    Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                    return@setOnClickListener
+                }
+                roomRef.child(roomPk).child("memberList").child(myPk).setValue(newUser) { error, ref ->
+                    if (error != null) {
+                        Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                        failFlag = true
+                    }
+                }
+                if (failFlag) {
+                    roomRef.child(roomPk).removeValue()
+                    return@setOnClickListener
+                }
+
+                roomRef.child(roomPk).child("readyCnt").setValue(0) { error, ref ->
+                    if (error != null) {
+                        Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                        failFlag = true
+                    }
+                }
+                if (failFlag) {
+                    roomRef.child(roomPk).removeValue()
+                    return@setOnClickListener
+                }
+
                 val seedRef = database.getReference("roomSeeds")
-                seedRef.child(roomSeed).setValue(roomPk)
+                seedRef.child(roomSeed).setValue(roomPk) { error, ref ->
+                    if (error != null) {
+                        Toast.makeText(mContext, "연결상태 확인", Toast.LENGTH_SHORT)
+                        failFlag = true
+                    }
+                }
+                if (failFlag) {
+                    roomRef.child(roomPk).removeValue()
+                    return@setOnClickListener
+                }
 
                 nextIntent = Intent(mContext, LobbyActivity::class.java)
                 val roomInfoData = RoomInfoData(roomPk = roomPk, myPk = myPk, masterName = myID)

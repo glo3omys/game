@@ -14,9 +14,8 @@
         <item name="android:background">@drawable/custom_radiogroup</item>
     </style>
 
-    <style name="myCustomDialog">
-        <item name="android:windowBackground">@color/my_theme_color</item>
-        <item name="background">@drawable/custom_dialog</item>
+    <style name="myCustomDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/custom_dialog</item>
         <item name="elevation">10dp</item>
     </style>
 

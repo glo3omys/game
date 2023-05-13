@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
 import android.text.Html
 import android.text.InputFilter
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -39,6 +41,7 @@ class InitialQuizActivity : AppCompatActivity() {
     var score = 0
     var resQ = false
     var resD = false
+    var submitted = false
     val wordLength = 2
     var questString = ""
     //val gameName = "InitialQuiz"
@@ -112,6 +115,19 @@ class InitialQuizActivity : AppCompatActivity() {
             }
             handled
         }
+        binding.etAnswer.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                binding.btnSubmit.isEnabled = (s != null && !s.toString().equals(""))
+            }
+        })
 
         /*
         binding.etAnswer.addTextChangedListener(object: TextWatcher {
@@ -163,6 +179,7 @@ class InitialQuizActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(etAnswer.windowToken, 0)
             etAnswer.isEnabled = false
             binding.btnSubmit.isEnabled = false
+            submitted = true
         }
         init()
     }
@@ -184,16 +201,17 @@ class InitialQuizActivity : AppCompatActivity() {
                 isOver = true
                 runOnUiThread {
                     secTextView.text = "0초"
-                    questCheck()
+                    //if (submitted)
+                        questCheck()
 
-                    val mDialog = MyDialog(this@InitialQuizActivity)
+                    /*val mDialog = MyDialog(this@InitialQuizActivity)
                     if (roomPk.isEmpty()) {
                         mDialog.myDig("Score", score)
                     }
                     else {
                         myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
                         mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
-                    }
+                    }*/
                     timerTask?.cancel()
                 }
             }
@@ -201,14 +219,26 @@ class InitialQuizActivity : AppCompatActivity() {
     }
 
     private fun result() {
-        if (resD && resQ)
+        /*if (resQ && resD)
             score = 3
         else if (resQ)
             score = 2
         else if (resD)
             score = 1
         else
-            score = 0
+            score = 0*/
+
+        if (resQ && resD)
+            score = 1
+
+        val mDialog = MyDialog(this@InitialQuizActivity)
+        if (roomPk.isEmpty()) {
+            mDialog.myDig("Score", score)
+        }
+        else {
+            myRoomRef.child("gameInfo").child("gameScore").child(myID).setValue(score)
+            mDialog.myDig("Rank", intent.getSerializableExtra("roomInfoData") as RoomInfoData)
+        }
     }
     private fun init() {
         //allocQuest()
@@ -258,9 +288,10 @@ class InitialQuizActivity : AppCompatActivity() {
                     break;
                 }
             }
+            if (!flag)
+                resQ = true
         }
-        if (!flag)
-            resQ = true
+
         dictionaryCheck()
     }
 
@@ -271,7 +302,12 @@ class InitialQuizActivity : AppCompatActivity() {
                 call: Call<ResultGetSearchDict>,
                 response: Response<ResultGetSearchDict>
             ) {
-                val bodyTotal = response.body()?.total
+                var bodyTotal = if (response.body() != null) {
+                     response.body()!!.total
+                } else {
+                    0
+                }
+
                 var foundFlag = false
                 var tmpTitle: String
                 for (i in 0 until min(10, bodyTotal!!.toInt())) {
@@ -285,8 +321,12 @@ class InitialQuizActivity : AppCompatActivity() {
                         break
                     }
                 }
-                resD = bodyTotal != 0 && foundFlag
+                resD = (bodyTotal != 0 && foundFlag)
                 result()
+
+          /*      Handler().postDelayed({
+                    result()
+                }, 3100)*/
             }
 
             override fun onFailure(call: Call<ResultGetSearchDict>, t: Throwable) {

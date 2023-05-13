@@ -26,7 +26,7 @@ import java.util.regex.Pattern
 
 class MyDialog(context: Context){
     var mContext = context
-    var mBuilder = AlertDialog.Builder(mContext)
+    var mBuilder = AlertDialog.Builder(mContext, R.style.myCustomDialog)
     lateinit var mDialogView: View
     lateinit var mAlertDialog: AlertDialog
     lateinit var nextIntent: Intent
@@ -425,7 +425,8 @@ class MyDialog(context: Context){
         val okButton = mDialogView.findViewById<Button>(R.id.btn_ok)
         var mySeed : String
         okButton.setOnClickListener() {
-            mySeed = mDialogView.findViewById<EditText>(R.id.et_name).text.toString()
+            mySeed = mDialogView.findViewById<EditText>(R.id.et_name).text.toString() /* NOT CAPTURED */
+            //mySeed.uppercase()
             mActivity.searchRoomBySeed(mySeed)
             mAlertDialog.dismiss()
         }
